@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Yourney</string>
+    <string name="duracion">"Duration: "</string>
+    <string name="velocidad">"Speed: "</string>
+    <string name="distancia">"Distance: "</string>
+    <string name="aviso">Warning:</string>
+    <string name="ubicacionPermisosDenegados">The permission of location is necessary to record a route.</string>
+    <string name="pasos">"Steps: "</string>
+    <string name="calorias">"Calories (kcal): "</string>
+</resources>

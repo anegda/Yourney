@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Yourney</string>
+    <string name="duracion">"Duración: "</string>
+    <string name="velocidad">"Velocidad: "</string>
+    <string name="distancia">"Distancia: "</string>
+    <string name="aviso">Aviso:</string>
+    <string name="ubicacionPermisosDenegados">Los permisos de ubicación son necesarios para poder grabar nuecas rutas.</string>
+    <string name="pasos">"Pasos: "</string>
+    <string name="calorias">"Calorías (kcal): "</string>
+</resources>
