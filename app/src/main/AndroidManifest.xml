@@ -15,7 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
-
+        <activity
+            android:name=".RegisterActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity1"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
         <activity
             android:name=".MapsActivity"
             android:exported="false" />
@@ -32,7 +40,6 @@
         <activity
             android:name=".GrabarRuta"
             android:exported="false" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true">

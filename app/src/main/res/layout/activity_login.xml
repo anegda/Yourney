@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:background="@drawable/fondoarbol">
+
+    <EditText
+        android:id="@+id/editUsuario"
+        android:layout_width="292dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/edittext_rounded_background"
+        android:gravity="center"
+        android:hint="Usuario"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="12dp"
+        android:textColorHint="#99FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/tvFrase"
+        app:layout_constraintHorizontal_bias="0.457"
+        app:layout_constraintStart_toStartOf="@+id/tvFrase"
+        app:layout_constraintTop_toBottomOf="@+id/tvFrase" />
+
+    <EditText
+        android:id="@+id/editPass"
+        android:gravity="center"
+        android:layout_width="292dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/edittext_rounded_background"
+        android:hint="Contraseña"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="12dp"
+        android:textColorHint="#99FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/editUsuario"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editUsuario"
+        app:layout_constraintTop_toBottomOf="@+id/editUsuario" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="292dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/round_btn_marron_transp"
+        android:onClick="login"
+        android:text="Iniciar sesion"
+        android:textColor="#99FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/editPass"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editPass"
+        app:layout_constraintTop_toBottomOf="@+id/editPass" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="154dp"
+        android:layout_height="106dp"
+        android:layout_marginTop="100dp"
+        android:alpha=".45"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logoblanco" />
+
+    <TextView
+        android:id="@+id/tvFrase"
+        style="@style/blanco1"
+        android:alpha=".65"
+        android:layout_width="327dp"
+        android:layout_height="84dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:text="¡Bienvenido otra vez! Prepara tus zapatos y cámara, ¡estás a punto de explorar el mundo de nuevo!"
+        app:layout_constraintEnd_toEndOf="@+id/logo"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/logo"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

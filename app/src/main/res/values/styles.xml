@@ -8,6 +8,12 @@
         <item name="android:textSize">16dp</item>
     </style>
 
+    <style name="blancoXL">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">30dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
 
 </resources>

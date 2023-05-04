@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:background="@drawable/fondoarbol">
+
+    <EditText
+        android:id="@+id/editUsuario"
+        android:layout_width="292dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/edittext_rounded_background"
+        android:gravity="center"
+        android:hint="Email"
+        android:inputType="text"
+        android:maxLines="1"
+        android:padding="12dp"
+        android:textColorHint="#99FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/tvFrase2"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/tvFrase2"
+        app:layout_constraintTop_toBottomOf="@+id/tvFrase2" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="292dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="170dp"
+        android:background="@drawable/round_btn_marron_transp"
+        android:onClick="login"
+        android:text="Iniciar sesion"
+        android:textColor="#99FFFFFF" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="154dp"
+        android:layout_height="106dp"
+        android:layout_marginTop="136dp"
+        android:alpha=".45"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logoblanco" />
+
+    <TextView
+        android:id="@+id/tvFrase"
+        style="@style/blancoXL"
+        android:layout_width="359dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="20dp"
+        android:alpha=".65"
+        android:gravity="center"
+        android:text="Bienvenido a Yourney"
+        app:layout_constraintEnd_toEndOf="@+id/logo"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/logo"
+        app:layout_constraintTop_toBottomOf="@+id/logo" />
+
+
+
+    <TextView
+        android:id="@+id/tvFrase2"
+        style="@style/blanco1"
+        android:layout_width="227dp"
+        android:layout_height="84dp"
+        android:alpha=".65"
+        android:gravity="center"
+        android:text="Puedes añadir una foto de perfil haciendo click sobre la imagen"
+        app:layout_constraintEnd_toEndOf="@+id/tvFrase"
+        app:layout_constraintHorizontal_bias="0.468"
+        app:layout_constraintStart_toStartOf="@+id/tvFrase"
+        app:layout_constraintTop_toBottomOf="@+id/tvFrase" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="136dp"
+        android:layout_height="105dp"
+        app:layout_constraintEnd_toEndOf="@+id/tvFrase2"
+        app:layout_constraintHorizontal_bias="0.538"
+        app:layout_constraintStart_toStartOf="@+id/tvFrase2"
+        app:srcCompat="@drawable/perfil"
+        tools:layout_editor_absoluteY="402dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

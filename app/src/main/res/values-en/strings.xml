@@ -8,4 +8,10 @@
     <string name="ubicacionPermisosDenegados">The permission of location is necessary to record a route.</string>
     <string name="pasos">"Steps: "</string>
     <string name="calorias">"Calories (kcal): "</string>
+    <string name="str0">I already have an account</string>
+    <string name="str1">Register</string>
+    <string name="str2">Log in</string>
+    <string name="str4">Password</string>
+    <string name="str3">User</string>
+    <string name="str5">Repeat password</string>
 </resources>

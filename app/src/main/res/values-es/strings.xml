@@ -8,4 +8,10 @@
     <string name="ubicacionPermisosDenegados">Los permisos de ubicación son necesarios para poder grabar nuecas rutas.</string>
     <string name="pasos">"Pasos: "</string>
     <string name="calorias">"Calorías (kcal): "</string>
+    <string name="str0">Ya tengo cuenta</string>
+    <string name="str1">Registrarse</string>
+    <string name="str2">Iniciar sesión</string>
+    <string name="str3">Usuario</string>
+    <string name="str4">Contraseña</string>
+    <string name="str5">Repetir contraseña</string>
 </resources>
