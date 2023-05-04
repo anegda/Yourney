@@ -14,7 +14,7 @@
         android:layout_marginTop="40dp"
         android:background="@drawable/edittext_rounded_background"
         android:gravity="center"
-        android:hint="Email"
+        android:hint="Emagil"
         android:inputType="text"
         android:maxLines="1"
         android:padding="12dp"
