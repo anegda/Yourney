@@ -13,4 +13,9 @@
     <string name="str3">Usuario</string>
     <string name="str4">Contraseña</string>
     <string name="str5">Repetir contraseña</string>
+    <string name="str6">Seleccionar imagen</string>
+    <string name="str7">Tomar foto</string>
+    <string name="str8">Abrir galería</string>
+    <string name="str9">Hay campos vacíos o las contraseñas no coinciden</string>
+    <string name="str10">La dirección de email no es válido</string>
 </resources>

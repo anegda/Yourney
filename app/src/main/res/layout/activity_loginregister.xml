@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".LoginRegisterActivity"
     android:background="@drawable/fondoarbol2">
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="87dp"
         android:layout_height="76dp"
-        android:layout_marginTop="152dp"
+        android:layout_marginTop="216dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.172"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
         style="@style/blanco1"
         android:layout_width="297dp"
         android:layout_height="84dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="Registreate o inicia sesion para poder disfrutar y compartir aventuras increibles al aire libre"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,12 +42,12 @@
 
     <Button
         android:id="@+id/btnRegistro"
-        android:layout_width="197dp"
-        android:layout_height="33dp"
+        android:layout_width="265dp"
+        android:layout_height="28dp"
         android:background="@drawable/round_btn_marron"
         android:onClick="registrarse"
-        android:text="Registrarse"
-        android:textColor="#FFFFFF"
+        android:text="@string/str1"
+        android:textColor="#CCFFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -57,12 +57,12 @@
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="197dp"
-        android:layout_height="33dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="265dp"
+        android:layout_height="28dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/round_btn_blanco"
         android:onClick="login"
-        android:text="Ya tengo cuenta"
+        android:text="@string/str0"
         app:layout_constraintBottom_toTopOf="@+id/btnRegistro"
         app:layout_constraintStart_toStartOf="@+id/btnRegistro" />
 

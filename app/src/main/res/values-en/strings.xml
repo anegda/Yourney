@@ -14,4 +14,9 @@
     <string name="str4">Password</string>
     <string name="str3">User</string>
     <string name="str5">Repeat password</string>
+    <string name="str6">"Select image "</string>
+    <string name="str7">"Take photo "</string>
+    <string name="str8">"Open gallery "</string>
+    <string name="str9">There are empty fields or passwords do not match</string>
+    <string name="str10">The email adress is not valid</string>
 </resources>

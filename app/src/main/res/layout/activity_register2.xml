@@ -8,39 +8,29 @@
     android:background="@drawable/fondoarbol">
 
     <EditText
-        android:id="@+id/editUsuario"
+        android:id="@+id/editEmail"
         android:layout_width="292dp"
         android:layout_height="43dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="170dp"
         android:background="@drawable/edittext_rounded_background"
         android:gravity="center"
-        android:hint="Emagil"
+        android:hint="Email"
         android:inputType="text"
         android:maxLines="1"
         android:padding="12dp"
         android:textColorHint="#99FFFFFF"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/tvFrase2"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="@+id/tvFrase2"
         app:layout_constraintTop_toBottomOf="@+id/tvFrase2" />
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="292dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="170dp"
-        android:background="@drawable/round_btn_marron_transp"
-        android:onClick="login"
-        android:text="Iniciar sesion"
-        android:textColor="#99FFFFFF" />
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="154dp"
         android:layout_height="106dp"
-        android:layout_marginTop="136dp"
-        android:alpha=".45"
+        android:layout_marginTop="112dp"
+        android:alpha=".65"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +42,7 @@
         style="@style/blancoXL"
         android:layout_width="359dp"
         android:layout_height="46dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="28dp"
         android:alpha=".65"
         android:gravity="center"
         android:text="Bienvenido a Yourney"
@@ -69,6 +59,7 @@
         android:layout_width="227dp"
         android:layout_height="84dp"
         android:alpha=".65"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="Puedes añadir una foto de perfil haciendo click sobre la imagen"
         app:layout_constraintEnd_toEndOf="@+id/tvFrase"
@@ -76,15 +67,48 @@
         app:layout_constraintStart_toStartOf="@+id/tvFrase"
         app:layout_constraintTop_toBottomOf="@+id/tvFrase" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="136dp"
-        android:layout_height="105dp"
-        app:layout_constraintEnd_toEndOf="@+id/tvFrase2"
-        app:layout_constraintHorizontal_bias="0.538"
-        app:layout_constraintStart_toStartOf="@+id/tvFrase2"
-        app:srcCompat="@drawable/perfil"
-        tools:layout_editor_absoluteY="402dp" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="15dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="250dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvFrase2">
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            app:cardCornerRadius="250dp">
+
+            <ImageView
+                android:id="@+id/fotoperfil"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@drawable/perfil"
+                android:onClick="setFotopPerfil"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="292dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/round_btn_marron_transp"
+        android:onClick="login"
+        android:text="@string/str2"
+        android:textColor="#99FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/editEmail"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editEmail"
+        app:layout_constraintTop_toBottomOf="@+id/editEmail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
