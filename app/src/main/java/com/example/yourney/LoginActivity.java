@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
         editUser = findViewById(R.id.editUsuario);
 
     }
-    public void siguiente (View v){
+    public void login (View v){
 
         String pass = editPass.getText().toString();
         String user = editUser.getText().toString();
@@ -35,8 +35,8 @@ public class LoginActivity extends AppCompatActivity {
 
             // comprobar credenciales contra la bbdd
 
-            //Intent intent = new Intent(this, ALGO.class);
-            //startActivity(intent);
+            Intent intent = new Intent(this, PublicRoutesActivity.class);
+            startActivity(intent);
         }else{
             Toast.makeText(this, R.string.str9, Toast.LENGTH_LONG).show();
         }
