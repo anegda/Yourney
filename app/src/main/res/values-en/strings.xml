@@ -8,6 +8,10 @@
     <string name="ubicacionPermisosDenegados">The permission of location is necessary to record a route.</string>
     <string name="pasos">"Steps: "</string>
     <string name="calorias">"Calories (kcal): "</string>
+    <string name="publico">Public</string>
+    <string name="privado">Private</string>
+    <string name="titulo">Title</string>
+    <string name="guardar">SAVE</string>
     <string name="str0">I already have an account</string>
     <string name="str1">Register</string>
     <string name="str2">Log in</string>
@@ -19,4 +23,7 @@
     <string name="str8">"Open gallery "</string>
     <string name="str9">There are empty fields or passwords do not match</string>
     <string name="str10">The email adress is not valid</string>
+    <string name="editar">Edit</string>
+    <string name="fotos">Photos</string>
+    <string name="otros">Others</string>
 </resources>

@@ -20,6 +20,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "fotoDesc LONGBLOB," +
                 "duracion BIGINT NOT NULL," +
                 "distancia REAL NOT NULL," +
+                "pasos BIGINT NOT NULL," +
+                "dificultad varchar(256),"+
                 "fecha DATETIME NOT NULL," +
                 "visibilidad BOOLEAN NOT NULL DEFAULT 1," +
                 "creador varchar(255));"

@@ -73,10 +73,10 @@ public class LocationService extends Service {
 
     //GUARDAR RUTA y RESETEAR LOS PARAMETROS
     protected void guardarRuta() {
-        //AQUÍ SE HACE LA LLAMADA A LA BD
+        //AQUÍ SE HACE LA LLAMADA A LA BD LOCAL
         DBHelper GestorBD = new DBHelper(getApplicationContext(), "Yourney", null, 1);
         SQLiteDatabase bd = GestorBD.getWritableDatabase();
-        bd.execSQL("INSERT INTO Rutas ('nombre', 'descripcion', 'fotoDesc', 'duracion', 'distancia', 'fecha', 'visibilidad', 'creador') VALUES ('rutaPrueba', 'prueba', 'dasdsad',"+getDuracion()+","+getDistancia()+",'2023-05-01',1,'anegda')");
+        bd.execSQL("INSERT INTO Rutas ('nombre', 'descripcion', 'fotoDesc', 'duracion', 'distancia', 'pasos', 'dificultad', 'fecha', 'visibilidad', 'creador') VALUES ('rutaPrueba', 'prueba', 'dasdsad',"+getDuracion()+","+getDistancia()+", '2000', 'facil', '2023-05-01', 1,'anegda')");
 
         for (Location location : locationListener.getLocations()){
             bd.execSQL("INSERT INTO Ubicaciones ('idRuta', 'altitud', 'longitud', 'latitud') VALUES ('1',"+location.getAltitude()+","+location.getLongitude()+","+location.getLatitude()+")");
