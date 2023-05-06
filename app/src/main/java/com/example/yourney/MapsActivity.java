@@ -27,6 +27,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
+    int idRuta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +36,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        idRuta = getIntent().getIntExtra("idRuta",0);
+
         //OBTENEMOS LOS GENERALES DE LA RUTA
         DBHelper GestorBD = new DBHelper(this, "Yourney", null, 1);
         SQLiteDatabase bd = GestorBD.getWritableDatabase();
         String[] campos = new String[] {"nombre", "fotoDesc", "duracion", "distancia", "pasos", "dificultad", "fecha", "visibilidad", "creador"};
-        //String[] argumentos = {"0"};
-        Cursor c = bd.query("Rutas",campos,null,null, null,null,null);
+        String[] argumentos = {String.valueOf(idRuta)};
+        Cursor c = bd.query("Rutas",campos,"idRuta=?",argumentos, null,null,null);
         c.moveToFirst();
         String titulo = c.getString(0);
-        String fotoDesc = c.getString(1);
+        String fotoDesc = String.valueOf(c.getBlob(1));
         float duracion = c.getFloat(2);
         float distancia = c.getFloat(3);
         int pasos = c.getInt(4);
@@ -80,10 +83,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //ESTABLECEMOS LOS TEXTS y LA IMAGEN
         if(fotoDesc!=null) {
-            byte[] encodeByte = Base64.getDecoder().decode(fotoDesc);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            fotoDescR.setImageBitmap(bitmap);
+            //byte[] encodeByte = Base64.getDecoder().decode(fotoDesc);
+            //Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            //fotoDescR.setImageBitmap(bitmap);
         }
+
         tituloRText.setText(titulo);
         creadorRText.setText(creador);
         fechaRText.setText(fecha);

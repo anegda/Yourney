@@ -7,7 +7,7 @@
     <string name="ubicacionPermisosDenegados">Los permisos de ubicación son necesarios para poder grabar nuecas rutas.</string>
     <string name="pasos">Pasos:</string>
     <string name="calorias">Calorias (kcal):</string>
-    <string name="publico">Publico</string>
+    <string name="publico">Público</string>
     <string name="privado">Privado</string>
     <string name="titulo">Título</string>
     <string name="guardar">GUARDAR</string>
@@ -25,4 +25,10 @@
     <string name="editar">Editar</string>
     <string name="fotos">Fotos</string>
     <string name="otros">Otros</string>
+    <string name="dificultad">Dificultad</string>
+    <string name="facil">Fácil</string>
+    <string name="medio">Medio</string>
+    <string name="dificil">Difícil</string>
+    <string name="infoExtra">Información Extra</string>
+    <string name="visibilidad">Visibilidad</string>
 </resources>

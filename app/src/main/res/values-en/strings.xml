@@ -26,4 +26,10 @@
     <string name="editar">Edit</string>
     <string name="fotos">Photos</string>
     <string name="otros">Others</string>
+    <string name="dificultad">Dificulty</string>
+    <string name="facil">Easy</string>
+    <string name="medio">Medium</string>
+    <string name="dificil">Difficult</string>
+    <string name="infoExtra">Extra Information</string>
+    <string name="visibilidad">Visibility</string>
 </resources>

@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationManager;
@@ -14,6 +15,8 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
+
+import java.time.LocalDate;
 
 public class LocationService extends Service {
     private final IBinder binder = new LocationServiceBinder();
@@ -72,21 +75,32 @@ public class LocationService extends Service {
     }
 
     //GUARDAR RUTA y RESETEAR LOS PARAMETROS
-    protected void guardarRuta() {
+    protected int guardarRuta(String pasos, String creador) {
+        //OBTENEMOS LAS FECHA
+        LocalDate currentdate = LocalDate.now();
+        String fecha = Integer.toString(currentdate.getYear()) + "-" + Integer.toString(currentdate.getMonthValue()) + "-" + Integer.toString(currentdate.getDayOfMonth());
+
         //AQUÍ SE HACE LA LLAMADA A LA BD LOCAL
         DBHelper GestorBD = new DBHelper(getApplicationContext(), "Yourney", null, 1);
         SQLiteDatabase bd = GestorBD.getWritableDatabase();
-        bd.execSQL("INSERT INTO Rutas ('nombre', 'descripcion', 'fotoDesc', 'duracion', 'distancia', 'pasos', 'dificultad', 'fecha', 'visibilidad', 'creador') VALUES ('rutaPrueba', 'prueba', 'dasdsad',"+getDuracion()+","+getDistancia()+", '2000', 'facil', '2023-05-01', 1,'anegda')");
+        bd.execSQL("INSERT INTO Rutas ('nombre', 'descripcion', 'fotoDesc', 'duracion', 'distancia', 'pasos', 'dificultad', 'fecha', 'visibilidad', 'creador') VALUES ('unnamed', '', '',"+getDuracion()+","+getDistancia()+","+pasos+", 'facil', '"+fecha+"', 1,'"+creador+"')");
+        Cursor c = bd.rawQuery("SELECT max(idRuta) FROM Rutas", null);
+        c.moveToFirst();
+        int idRuta = c.getInt(0);
+        c.close();
 
         for (Location location : locationListener.getLocations()){
-            bd.execSQL("INSERT INTO Ubicaciones ('idRuta', 'altitud', 'longitud', 'latitud') VALUES ('1',"+location.getAltitude()+","+location.getLongitude()+","+location.getLatitude()+")");
+            bd.execSQL("INSERT INTO Ubicaciones ('idRuta', 'altitud', 'longitud', 'latitud') VALUES ("+idRuta+","+location.getAltitude()+","+location.getLongitude()+","+location.getLatitude()+")");
         }
+        bd.close();
 
         //AQUI RESETEAMOS LOS PARÁMETROS
         locationListener.grabando = false;
         fin = SystemClock.elapsedRealtime();
         comienzo = 0;
         locationListener = new MyLocationListener();
+
+        return idRuta;
     }
 
     //DEVUELVE UN BOOLEANO INDICANDO SI SE ESTA GRABANDO UNA RUTA
@@ -107,7 +121,10 @@ public class LocationService extends Service {
         public double getDuracion() {return LocationService.this.getDuracion();}
         public boolean grabando() {return LocationService.this.grabando();}
         public void grabarRuta() {LocationService.this.grabarRuta();}
-        public void guardarRuta() {LocationService.this.guardarRuta();}
+        public int guardarRuta(String pasos, String creador) {
+            int idRuta = LocationService.this.guardarRuta(pasos, creador);
+            return idRuta;
+        }
         public void gpsDisponible() {LocationService.this.gpsDisponible();}
     }
 }

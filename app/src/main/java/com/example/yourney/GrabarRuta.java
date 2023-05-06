@@ -58,9 +58,16 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
         parar_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                locationService.guardarRuta();
+                TextView pasosNum = (TextView) findViewById(R.id.pasosNum);
+                String pasos = pasosNum.getText().toString();
+                String creador = "anegda";
+                int idRuta = locationService.guardarRuta(pasos, creador);
+
                 empezar_btn.setEnabled(true);
                 parar_btn.setEnabled(false);
+
+                startActivity(new Intent(GrabarRuta.this, DatosRuta.class).putExtra("idRuta", idRuta));
+                finish();
             }
         });
 
