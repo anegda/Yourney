@@ -31,4 +31,5 @@
     <string name="dificil">Difícil</string>
     <string name="infoExtra">Información Extra</string>
     <string name="visibilidad">Visibilidad</string>
+    <string name="prefs_idioma">Idioma de la aplicación</string>
 </resources>
