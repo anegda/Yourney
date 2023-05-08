@@ -20,6 +20,9 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31" >
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditarRuta"
             android:exported="false" />
         <activity
@@ -46,10 +49,13 @@
         <activity
             android:name=".VerRuta"
             android:exported="false" />
+        <activity
+            android:name=".PublicRoutesActivity"
+            android:exported="true" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
+            android:value="AIzaSyBcZcLL5gGsYQ6Sn83I0KP4Lx4SA5B874M" />
 
         <service
             android:name=".LocationService"

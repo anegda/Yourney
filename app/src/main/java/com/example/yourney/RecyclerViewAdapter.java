@@ -19,11 +19,15 @@ import java.util.Base64;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
     private final Context context;
     private final ArrayList<String> imageBlobArrayList;
+    private final ArrayList<String> listaOriginal;
+
     public static String fotoElegidaBlob;
 
     public RecyclerViewAdapter(Context context, ArrayList<String> imagePathArrayList) {
         this.context = context;
         this.imageBlobArrayList = imagePathArrayList;
+        listaOriginal = new ArrayList<>();
+        listaOriginal.addAll(imagePathArrayList);
     }
 
     @NonNull

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ElViewHolder extends RecyclerView.ViewHolder {
     public TextView nombre;
     public TextView descripcion;
-
     public ImageView laimagen;
     String user;
 

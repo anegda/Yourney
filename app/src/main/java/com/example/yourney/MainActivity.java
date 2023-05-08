@@ -6,12 +6,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycler.RecyclerItemClick {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +35,27 @@ public class MainActivity extends AppCompatActivity {
             int id = getResources().getIdentifier(nombreImagen, "drawable", getPackageName());
             imagenes.add(id);
         }
-
-        ElAdaptadorRecycler eladaptador = new ElAdaptadorRecycler(nombreRutas, imagenes.stream().mapToInt(i -> i).toArray(), descrRutas);
+        List<ItemListRuta> items = getItems();
+        ElAdaptadorRecycler eladaptador = new ElAdaptadorRecycler(items, this);
         lalista.setAdapter(eladaptador);
 
         /** definir el aspecto del RecyclerView --> horizontal, vertical, grid... **/
         LinearLayoutManager elLayoutLineal= new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(elLayoutLineal);
+    }
+
+    private List<ItemListRuta> getItems() {
+        List<ItemListRuta> itemListRutas = new ArrayList<>();
+        itemListRutas.add(new ItemListRuta("Monte Aventura", "Una emocionante caminata de día completo a través de los senderos del monte, con impresionantes vistas panorámicas y desafiantes ascensos.", R.drawable.fotoruta));
+        itemListRutas.add(new ItemListRuta("Bicicleta Salvaje", "Una emocionante ruta de mountain bike de medio día a través de bosques y senderos sinuosos, con saltos y obstáculos desafiantes.", R.drawable.fotoruta2));
+        itemListRutas.add(new ItemListRuta("Cascada Misteriosa", "Una relajante caminata de medio día a través de un hermoso bosque y un río cristalino, hasta llegar a una impresionante cascada rodeada de un ambiente natural y tranquilo.", R.drawable.fotoruta3));
+        return itemListRutas;
+    }
+
+    @Override
+    public void itemClick(ItemListRuta item) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("itemDetail", item);
+        startActivity(intent);
     }
 }
