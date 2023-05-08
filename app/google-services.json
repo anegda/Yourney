@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "152672517584",
+    "project_id": "yourney-9c4b7",
+    "storage_bucket": "yourney-9c4b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152672517584:android:c9d76524512f45ec790dd5",
+        "android_client_info": {
+          "package_name": "com.example.yourney"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152672517584-1440r53p5ekbq60crvc84ier6lsrh64c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbXOpRG0JU13sKBawfTGchaTyrgsa6nfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152672517584-1440r53p5ekbq60crvc84ier6lsrh64c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

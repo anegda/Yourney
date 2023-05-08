@@ -35,6 +35,9 @@
             android:name=".GaleriaFotosRuta"
             android:exported="false" />
         <activity
+            android:name=".zzPrueba"
+            android:exported="false" />
+        <activity
             android:name=".Ajustes"
             android:exported="false" />
         <activity

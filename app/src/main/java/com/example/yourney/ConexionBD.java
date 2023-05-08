@@ -185,6 +185,14 @@ public class ConexionBD extends Worker {
 
                     break;
 
+                case "Tokens":
+
+                    params.put("username", datos.getString("username"));
+                    params.put("token", datos.getString("token"));
+
+                    out.print(params.toString());
+                    out.close();
+
                 default:
                     break;
             }
@@ -345,8 +353,11 @@ public class ConexionBD extends Worker {
         try {
             Data output = null;
 
-            // En este caso todas las consultas usan los mismos parametros
+            // En este caso todas las consultas usan los mismos parametros (menos Login que requiere contraseña)
             String params = "?consulta=" + datos.getString("consulta") + "&username=" + datos.getString("username");
+            if(datos.getString("consulta").equals("Login")) {
+                params += datos.getString("password");
+            }
 
             URL urlFinal = new URL(url + params);
             urlConnection = (HttpURLConnection) urlFinal.openConnection();
@@ -407,6 +418,10 @@ public class ConexionBD extends Worker {
 
                 case "RutasGuardadas":
                     params = "?consulta=" + consulta + "&idRuta=" + datos.getString("idRuta") + "&username=" + datos.getString("username");
+                    break;
+
+                case "Tokens":
+                    params = "?consulta=" + consulta + "&username=" + datos.getString("username");
                     break;
 
                 default:
