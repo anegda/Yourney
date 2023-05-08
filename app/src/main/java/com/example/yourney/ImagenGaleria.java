@@ -2,14 +2,27 @@ package com.example.yourney;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ImagenGaleria extends AppCompatActivity {
     private ScaleGestureDetector scaleGestureDetector;
@@ -28,6 +41,38 @@ public class ImagenGaleria extends AppCompatActivity {
         byte[] encodeByte = Base64.getDecoder().decode(imgBlob);
         Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         imgView.setImageBitmap(bitmap);
+
+        Button btn_descargar = findViewById(R.id.btn_descargar_img);
+        btn_descargar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //CONVERTIMOS EL STRING A BITMAP
+                byte[] encodeByte = Base64.getDecoder().decode(imgBlob);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+
+                //COGEMOS LA FECHA DE HOY PARA EL NOMBRE DEL ARCHIVO
+                Date date = Calendar.getInstance().getTime();
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd_hh.mm.ss");
+                String strDate = dateFormat.format(date);
+
+                //CREAMOS EL ARCHIVO EN NUESTRO DISPOSITIVO
+                File storageLoc = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                File file = new File(storageLoc, "nombreRuta"+strDate+".jpg");
+                try{
+                    FileOutputStream fos = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    fos.close();
+                    Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    scanIntent.setData(Uri.fromFile(file));
+                    ImagenGaleria.this.sendBroadcast(scanIntent);
+                    Toast.makeText(ImagenGaleria.this, getString(R.string.descargaCorrecta), Toast.LENGTH_SHORT);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(ImagenGaleria.this, "ERROR", Toast.LENGTH_SHORT);
+                }
+            }
+        });
     }
 
     @Override
