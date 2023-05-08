@@ -50,6 +50,7 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
     }
 
     @Override
+    /** Cada vez que el texto cambia se filtran las busquedas **/
     public boolean onQueryTextChange(String s) {
         adapter.filter(s);
         return false;
