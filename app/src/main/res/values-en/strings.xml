@@ -33,4 +33,9 @@
     <string name="infoExtra">Extra Information</string>
     <string name="visibilidad">Visibility</string>
     <string name="prefs_idioma">App language</string>
+    <string name="descargar">Download</string>
+    <string name="descargaCorrecta">Images downloaded succesfully.</string>
+    <string name="anadir">Add</string>
+    <string name="eliminar">Delete</string>
+    <string name="ruta">ROUTE</string>
 </resources>

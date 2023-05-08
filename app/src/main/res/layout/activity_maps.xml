@@ -70,6 +70,16 @@
             android:layout_height="60dp"
             android:orientation="horizontal">
             <Button
+                android:id="@+id/btn_ruta"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/ruta" />
+            <Button
                 android:id="@+id/btn_imagenes"
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
@@ -110,6 +120,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/datosNumRuta"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
@@ -228,4 +239,10 @@
                 app:layout_constraintTop_toBottomOf="@+id/pasosRText" />
         </LinearLayout>
     </LinearLayout>
+    <TextView
+        android:id="@+id/descripcionRText"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
 </LinearLayout>

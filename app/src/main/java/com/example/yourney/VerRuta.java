@@ -5,11 +5,11 @@ import androidx.fragment.app.FragmentActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,9 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.yourney.databinding.ActivityMapsBinding;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.util.Base64;
-
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
@@ -41,19 +39,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //OBTENEMOS LOS GENERALES DE LA RUTA
         DBHelper GestorBD = new DBHelper(this, "Yourney", null, 1);
         SQLiteDatabase bd = GestorBD.getWritableDatabase();
-        String[] campos = new String[] {"nombre", "fotoDesc", "duracion", "distancia", "pasos", "dificultad", "fecha", "visibilidad", "creador"};
+        String[] campos = new String[] {"nombre", "descripcion", "fotoDesc", "duracion", "distancia", "pasos", "dificultad", "fecha", "visibilidad", "creador"};
         String[] argumentos = {String.valueOf(idRuta)};
         Cursor c = bd.query("Rutas",campos,"idRuta=?",argumentos, null,null,null);
         c.moveToFirst();
         String titulo = c.getString(0);
-        String fotoDesc = String.valueOf(c.getBlob(1));
-        float duracion = c.getFloat(2);
-        float distancia = c.getFloat(3);
-        int pasos = c.getInt(4);
-        String dificultad = c.getString(5);
-        String fecha = c.getString(6);
-        int visibilidad = c.getInt(7);
-        String creador = c.getString(8);
+        String descripcion = c.getString(1);
+        String fotoDesc = String.valueOf(c.getBlob(2));
+        float duracion = c.getFloat(3);
+        float distancia = c.getFloat(4);
+        int pasos = c.getInt(5);
+        String dificultad = c.getString(6);
+        String fecha = c.getString(7);
+        int visibilidad = c.getInt(8);
+        String creador = c.getString(9);
 
         //ESTABLECEMOS EL FORMATO NECESARIO
         long duracionSec = (long) duracion;
@@ -71,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //OBTENEMOS LOS TEXTVIEWS y el IMAGEVIEW
         ImageView fotoDescR = (ImageView) findViewById(R.id.fotoDescR);
         TextView tituloRText = (TextView) findViewById(R.id.tituloRText);
+        TextView descripcionRText = (TextView) findViewById(R.id.descripcionRText);
         TextView creadorRText = (TextView) findViewById(R.id.creadorRText);
         TextView fechaRText = (TextView) findViewById(R.id.fechaRText);
         TextView dificultadRText = (TextView) findViewById(R.id.dificultadRText);
@@ -89,6 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         tituloRText.setText(titulo);
+        descripcionRText.setText(descripcion);
         creadorRText.setText(creador);
         fechaRText.setText(fecha);
         if (visibilidad==1){
@@ -102,6 +103,61 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         velocidadRNum.setText(velocidadFormato);
         pasosRNum.setText(String.valueOf(pasos));
         caloriasRNum.setText(String.valueOf(pasos/1000*35));
+
+        //AÑADIMOS LAS FUNCIONALIDADES A LOS BOTONES
+        //BOTÓN PARA DAR VISIBILIDAD A LA RUTA
+        Button btn_ruta = (Button) findViewById(R.id.btn_ruta);
+        btn_ruta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+                getSupportFragmentManager().beginTransaction().show(mapFragment).commit();
+
+                TextView descripcionRuta = findViewById(R.id.descripcionRText);
+                descripcionRuta.setVisibility(View.GONE);
+
+                LinearLayout datosNum = findViewById(R.id.datosNumRuta);
+                datosNum.setVisibility(View.VISIBLE);
+            }
+        });
+
+        //BOTÓN PARA ACCEDER A LA GALERÍA DE IMÁGENES
+        Button btn_imagenes = (Button) findViewById(R.id.btn_imagenes);
+        btn_imagenes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(VerRuta.this, GaleriaFotosRuta.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
+        //BOTÓN PARA ACCEDER A LA DESCRIPCIÓN / OTROS
+        Button btn_otros = findViewById(R.id.btn_otros);
+        btn_otros.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+                getSupportFragmentManager().beginTransaction().hide(mapFragment).commit();
+
+                TextView descripcionRuta = findViewById(R.id.descripcionRText);
+                descripcionRuta.setVisibility(View.VISIBLE);
+
+                LinearLayout datosNum = findViewById(R.id.datosNumRuta);
+                datosNum.setVisibility(View.GONE);
+            }
+        });
+
+        //BOTÓN PARA EDITAR LA INFORMACIÓN DE LA RUTA
+        Button btn_editarRuta = findViewById(R.id.btn_editar);
+        btn_editarRuta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(VerRuta.this, GaleriaFotosRuta.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         //OBTENEMOS EL MAPA Y CREAMOS LA RUTA
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
