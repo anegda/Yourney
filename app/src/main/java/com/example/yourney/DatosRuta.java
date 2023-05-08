@@ -17,10 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -76,7 +73,7 @@ public class DatosRuta extends AppCompatActivity {
                 bd.execSQL("UPDATE Rutas set nombre='"+titulo+"', descripcion='"+descr+"', fotoDesc='"+img+"', dificultad='"+dificultad+"', visibilidad="+visibilidad+" WHERE idRuta='"+idRuta+"'");
 
                 //ABRIMOS LA INTERFAZ PARA VISUALIZAR LA RUTA
-                startActivity(new Intent(DatosRuta.this, MapsActivity.class).putExtra("idRuta", idRuta));
+                startActivity(new Intent(DatosRuta.this, VerRuta.class).putExtra("idRuta", idRuta));
                 finish();
             }
         });

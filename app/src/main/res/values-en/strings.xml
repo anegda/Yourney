@@ -37,4 +37,5 @@
     <string name="descargaCorrecta">Images downloaded succesfully.</string>
     <string name="anadir">Add</string>
     <string name="eliminar">Delete</string>
+    <string name="ruta">ROUTE</string>
 </resources>
