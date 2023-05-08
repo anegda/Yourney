@@ -36,4 +36,5 @@
     <string name="descargar">Descargar</string>
     <string name="descargaCorrecta">Imágenes descargadas correctamente.</string>
     <string name="anadir">Añadir</string>
+    <string name="eliminar">Eliminar</string>
 </resources>

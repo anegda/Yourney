@@ -73,6 +73,18 @@ public class ImagenGaleria extends AppCompatActivity {
                 }
             }
         });
+
+        Button btn_eliminar = (Button) findViewById(R.id.btn_eliminar_img);
+        btn_eliminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: LLAMAR A LA BD CON UN DELETE
+
+                //CERRAMOS LA ACTIVIDAD Y VOLVEMOS A LA GALERÍA
+                startActivity(new Intent(ImagenGaleria.this, GaleriaFotosRuta.class));
+                finish();
+            }
+        });
     }
 
     @Override
