@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -91,6 +93,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
         if(fotoDesc!=null) {
             byte[] encodeByte = Base64.getDecoder().decode(fotoDesc);
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            Drawable d = new BitmapDrawable(getResources(), bitmap);
             fotoDescR.setImageBitmap(bitmap);
         }
 
