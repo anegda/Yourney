@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
 
             Sesion sesion = new Sesion(this);
             sesion.setUsername(editUser.getText().toString());
-            Intent intent = new Intent(this, zzPrueba.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
 
         }else{
