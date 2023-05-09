@@ -5,7 +5,10 @@ import androidx.fragment.app.FragmentActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -20,6 +23,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.yourney.databinding.ActivityMapsBinding;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.Base64;
 
 public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
 
@@ -45,7 +50,8 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
         c.moveToFirst();
         String titulo = c.getString(0);
         String descripcion = c.getString(1);
-        String fotoDesc = String.valueOf(c.getBlob(2));
+        String fotoDesc = c.getString(2);
+        Log.d("DAS",fotoDesc);
         float duracion = c.getFloat(3);
         float distancia = c.getFloat(4);
         int pasos = c.getInt(5);
@@ -83,9 +89,9 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
 
         //ESTABLECEMOS LOS TEXTS y LA IMAGEN
         if(fotoDesc!=null) {
-            //byte[] encodeByte = Base64.getDecoder().decode(fotoDesc);
-            //Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            //fotoDescR.setImageBitmap(bitmap);
+            byte[] encodeByte = Base64.getDecoder().decode(fotoDesc);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            fotoDescR.setImageBitmap(bitmap);
         }
 
         tituloRText.setText(titulo);

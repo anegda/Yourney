@@ -56,7 +56,7 @@ public class DatosRuta extends AppCompatActivity {
                 RadioButton visRadioButtonSelected = (RadioButton) findViewById(visRadioButtonID);
                 String visibilidadString = visRadioButtonSelected.getText().toString();
                 int visibilidad = 1;
-                if (visibilidadString.equals(R.string.privado)){
+                if (visibilidadString.equals(getString(R.string.privado))){
                     visibilidad = 0;
                 }
 
@@ -65,12 +65,14 @@ public class DatosRuta extends AppCompatActivity {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 img.compress(Bitmap.CompressFormat.PNG, 100, baos);
                 byte[] b = baos.toByteArray();
+                b = tratarImagen(b);
                 fotoRuta = Base64.getEncoder().encodeToString(b);
+                Log.d("DAS", fotoRuta);
 
                 //REALIZAMOS EL UPDATE EN LA BASE DE DATOS
                 DBHelper GestorBD = new DBHelper(getApplicationContext(), "Yourney", null, 1);
                 SQLiteDatabase bd = GestorBD.getWritableDatabase();
-                bd.execSQL("UPDATE Rutas set nombre='"+titulo+"', descripcion='"+descr+"', fotoDesc='"+img+"', dificultad='"+dificultad+"', visibilidad="+visibilidad+" WHERE idRuta='"+idRuta+"'");
+                bd.execSQL("UPDATE Rutas set nombre='"+titulo+"', descripcion='"+descr+"', fotoDesc='"+fotoRuta+"', dificultad='"+dificultad+"', visibilidad="+visibilidad+" WHERE idRuta='"+idRuta+"'");
 
                 //ABRIMOS LA INTERFAZ PARA VISUALIZAR LA RUTA
                 startActivity(new Intent(DatosRuta.this, VerRuta.class).putExtra("idRuta", idRuta));
@@ -127,6 +129,17 @@ public class DatosRuta extends AppCompatActivity {
         }else {
             Toast.makeText(DatosRuta.this, "ERROR",Toast.LENGTH_SHORT).show();
         }
+    }
+
+    protected byte[] tratarImagen(byte[] img){
+        while(img.length > 50000){
+            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+            Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            img = stream.toByteArray();
+        }
+        return img;
     }
 }
 
