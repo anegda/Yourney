@@ -118,6 +118,9 @@ public class RegisterActivity2 extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 login(view);
+                Intent intent = new Intent(RegisterActivity2.this, MainActivity.class);
+                intent.putExtra("user", getIntent().getStringExtra("user"));
+                startActivity(intent);
             }
         });
 
@@ -129,7 +132,6 @@ public class RegisterActivity2 extends AppCompatActivity {
         boolean isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
 
         if (isEmailValid) {
-
             // obtener bitmap del imageview actual --> comprimirla --> convertirlo en base64 para subirlo a la bbdd
             String fotoen64="";
             if (fotoperfil.getDrawable()!=null) {
@@ -139,6 +141,8 @@ public class RegisterActivity2 extends AppCompatActivity {
                 byte[] byteArray = byteArrayOutputStream.toByteArray();
                 fotoen64 = new String(Base64.getEncoder().encode(byteArray));
             }
+
+
 
         } else {
             Toast.makeText(this, R.string.str10, Toast.LENGTH_LONG).show();
