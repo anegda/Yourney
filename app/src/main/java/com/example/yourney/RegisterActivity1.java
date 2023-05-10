@@ -36,11 +36,13 @@ public class RegisterActivity1 extends AppCompatActivity {
 
         String pass1 = editPass.getText().toString();
         String pass2 = editPass2.getText().toString();
-        String user=editUser.getText().toString();
+        String user = editUser.getText().toString();
 
 
         if (pass1.equals(pass2) && !pass2.isEmpty() && !user.isEmpty()){
             Intent intent = new Intent(this, RegisterActivity2.class);
+            intent.putExtra("pass", pass1);
+            intent.putExtra("user", user);
             startActivity(intent);
         }else{
             Toast.makeText(this, R.string.str9, Toast.LENGTH_LONG).show();

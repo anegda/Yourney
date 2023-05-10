@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -46,6 +47,7 @@ public class RegisterActivity2 extends AppCompatActivity {
 
     private EditText editEmail;
     private ImageView fotoperfil;
+    private Button btnLogin;
     private Bitmap bitmapRedimensionado;
     private Bitmap bitmapOriginal;
 
@@ -89,6 +91,7 @@ public class RegisterActivity2 extends AppCompatActivity {
         // inicializar los elementos del layout
         editEmail = findViewById(R.id.editEmail);
         fotoperfil = findViewById(R.id.fotoperfil);
+        btnLogin = findViewById(R.id.button);
 
 
         // si hay alguna imagen colocada por el usuario recuperarla y colocarla; sino colocar la default
@@ -111,11 +114,16 @@ public class RegisterActivity2 extends AppCompatActivity {
         };
         orientationEventListener.enable();
 
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                login(view);
+            }
+        });
+
     }
 
     public void login(View v){
-
-
         // Validar si el correo electrónico es válido utilizando una expresión regular
         String email = editEmail.getText().toString().trim();
         boolean isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
