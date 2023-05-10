@@ -106,7 +106,7 @@ public class RegisterActivity2 extends AppCompatActivity {
 
         // obtener los datos del usuario ya introducidos
         Bundle extras = getIntent().getExtras();
-        if (extras != null && user.equals("") && pass.equals("")) {
+        if (extras != null) {
             user = extras.getString("user");
             pass = extras.getString("pass");
         }

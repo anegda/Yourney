@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:background="@drawable/fondobosqueblur">
+    android:background="@drawable/fondobosquelandblur">
 
     <EditText
         android:id="@+id/editUsuario"
         android:layout_width="292dp"
         android:layout_height="43dp"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/edittext_rounded_background"
         android:gravity="center"
         android:hint="@string/str3"
@@ -21,7 +21,7 @@
         android:textColorHint="#99FFFFFF"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/tvFrase"
-        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintHorizontal_bias="0.514"
         app:layout_constraintStart_toStartOf="@+id/tvFrase"
         app:layout_constraintTop_toBottomOf="@+id/tvFrase" />
 
@@ -30,7 +30,7 @@
         android:gravity="center"
         android:layout_width="292dp"
         android:layout_height="43dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="28dp"
         android:background="@drawable/edittext_rounded_background"
         android:hint="@string/str4"
         android:inputType="text"
@@ -47,7 +47,7 @@
         android:id="@+id/btnIniciarSesion"
         android:layout_width="292dp"
         android:layout_height="33dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="36dp"
         android:background="@drawable/round_btn_marron"
         android:onClick="login"
         android:text="@string/str2"
@@ -57,31 +57,18 @@
         app:layout_constraintStart_toStartOf="@+id/editPass"
         app:layout_constraintTop_toBottomOf="@+id/editPass" />
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="154dp"
-        android:layout_height="106dp"
-        android:layout_marginTop="100dp"
-        android:alpha=".45"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logoblanco" />
-
     <TextView
         android:id="@+id/tvFrase"
         style="@style/blanco1"
-        android:layout_width="278dp"
-        android:layout_height="79dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="327dp"
+        android:layout_height="84dp"
+        android:layout_marginTop="16dp"
         android:alpha=".65"
         android:gravity="center"
         android:text="@string/str11"
-        app:layout_constraintEnd_toEndOf="@+id/logo"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/logo"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

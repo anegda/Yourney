@@ -41,4 +41,9 @@
     <string name="añadirEditor">Add Editors</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
+    <string name="str11">"Welcome again! Get your shoes and camera ready, you are about to explore the world again! "</string>
+    <string name="str12">Register or log in to enjoy and share incredible outdoor adventures</string>
+    <string name="str13">Name</string>
+    <string name="str14">Surname</string>
+    <string name="str15">"You can add a profile photo by clicking on the image "</string>
 </resources>

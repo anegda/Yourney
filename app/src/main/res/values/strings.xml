@@ -40,4 +40,9 @@
     <string name="añadirEditor">Añadir Editores</string>
     <string name="nav_open">Abrir</string>
     <string name="nav_close">Cerrar</string>
+    <string name="str11">¡Bienvenido otra vez! Prepara tus zapatos y cámara, ¡estás a punto de explorar el mundo de nuevo!</string>
+    <string name="str12">Registreate o inicia sesion para poder disfrutar y compartir aventuras increibles al aire libre</string>
+    <string name="str13">Nombre</string>
+    <string name="str14">Apellido</string>
+    <string name="str15">Puedes añadir una foto de perfil haciendo click sobre la imagen</string>
 </resources>
