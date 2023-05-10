@@ -38,4 +38,7 @@
     <string name="anadir">Add</string>
     <string name="eliminar">Delete</string>
     <string name="ruta">ROUTE</string>
+    <string name="añadirEditor">Add Editors</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 </resources>

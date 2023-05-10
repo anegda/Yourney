@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item android:title="Buscar Rutas">
+        <menu>
+            <item
+                android:id="@+id/buscarRutas"
+                android:icon="@android:drawable/ic_btn_speak_now"
+                android:title="Buscar Rutas" />
+            <item
+                android:id="@+id/rutasFavoritas"
+                android:icon="@android:drawable/ic_btn_speak_now"
+                android:title="Rutas Favoritas" />
+            <item
+                android:id="@+id/crearRuta"
+                android:icon="@android:drawable/ic_btn_speak_now"
+                android:title="Crear Ruta" />
+        </menu>
+    </item>
+    <item android:title="Amigos">
+        <menu>
+            <item
+                android:id="@+id/solicitudesAmistad"
+                android:icon="@android:drawable/ic_btn_speak_now"
+                android:title="Solicitudes de Amistad" />
+            <item
+                android:id="@+id/misAmigos"
+                android:icon="@android:drawable/ic_btn_speak_now"
+                android:title="Mis Amigos" />
+        </menu>
+    </item>
+    <item android:title="Configuración">
+        <menu>
+            <item
+                android:id="@+id/editarPerfil"
+                android:icon="@android:drawable/ic_btn_speak_now"
+                android:title="Editar Perfil" />
+            <item
+                android:id="@+id/Preferencias"
+                android:icon="@android:drawable/ic_btn_speak_now"
+                android:title="Preferencias" />
+            <item
+                android:id="@+id/CerrarSesion"
+                android:icon="@android:drawable/ic_btn_speak_now"
+                android:title="Cerrar sesión" />
+        </menu>
+    </item>
+</menu>

@@ -1,21 +1,39 @@
 package com.example.yourney;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycler.RecyclerItemClick {
 
+    public ActionBarDrawerToggle  actionBarDrawerToggle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //AÑADIMOS EL ACTION BAR Y EL NAVIGATIONDRAWER
+        setSupportActionBar(findViewById(R.id.labarra));
+
+        final DrawerLayout elmenudesplegable = findViewById(R.id.drawer_layout);
+        NavigationView elnavigation = findViewById(R.id.elnavigationview);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, elmenudesplegable, R.string.nav_open, R.string.nav_close);
+        elmenudesplegable.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView lalista= findViewById(R.id.elreciclerview);
 
@@ -57,5 +75,14 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         Intent intent = new Intent(this, DetallesRuta.class);
         intent.putExtra("itemDetail", item);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

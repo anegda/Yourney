@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/labarra"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#FFFFFF"
+        android:elevation="4dp"
+        />
+
+    <TextView
+        android:id="@+id/tvRutinasPers"
+        android:layout_width="342dp"
+        android:textSize="32sp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="38dp"
+        android:layout_marginTop="38dp"
+        android:text="RUTAS" />
+
+    <TextView
+        android:id="@+id/tvDescrRutPers"
+        android:layout_width="313dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="38dp"
+        android:layout_marginTop="10dp"
+        android:text="blablablablablablablablablablablablablablablablablablablablablablablablablablablablablabla" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/elreciclerview"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_margin="10pt"
+        android:clipToPadding="true"
+        android:scrollbars="vertical"/>
+
+</LinearLayout>
