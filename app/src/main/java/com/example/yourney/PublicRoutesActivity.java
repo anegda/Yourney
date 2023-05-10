@@ -58,7 +58,7 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
 
     @Override
     public void itemClick(ItemListRuta item) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, DetallesRuta.class);
         intent.putExtra("itemDetail", item);
         startActivity(intent);
     }
