@@ -94,8 +94,8 @@ public class ConexionBD extends Worker {
                     params.put("nombre", datos.getString("nombre"));
                     params.put("apellidos", datos.getString("apellidos"));
                     params.put("password", datos.getString("password"));
-                    params.put("password", datos.getString("email"));
-                    //params.put("password", datos.getString(""));
+                    params.put("email", datos.getString("email"));
+                    params.put("fotoPerfil", RegisterActivity2.fotoen64);
 
                     out.print(params.toString());
                     out.close();

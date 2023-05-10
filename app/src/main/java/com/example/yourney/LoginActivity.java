@@ -43,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
 
         if (!pass.isEmpty() && !user.isEmpty()){
 
-            /**
             // Obtengo el nombre de usuario y contraseña introducidos
             String username = editUser.getText().toString();
             String password = editPass.getText().toString();
@@ -87,15 +86,14 @@ public class LoginActivity extends AppCompatActivity {
                                             .putString("token", token)
                                             .build();
 
-                                    OneTimeWorkRequest login = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                    OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
                                             .setInputData(datos)
                                             .build();
 
-                                    WorkManager.getInstance(LoginActivity.this).getWorkInfoByIdLiveData(login.getId()).observe(LoginActivity.this, new Observer<WorkInfo>() {
+                                    WorkManager.getInstance(LoginActivity.this).getWorkInfoByIdLiveData(insert.getId()).observe(LoginActivity.this, new Observer<WorkInfo>() {
                                         @Override
                                         public void onChanged(WorkInfo workInfo) {
                                             if (workInfo != null && workInfo.getState().isFinished()) {
-                                                // Paso a la siguiente actividad
                                                 // Guardo el usuario en la sesion
                                                 Sesion sesion = new Sesion(LoginActivity.this);
                                                 sesion.setUsername(editUser.getText().toString());
@@ -108,18 +106,22 @@ public class LoginActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
+                                    WorkManager.getInstance(LoginActivity.this).enqueue(insert);
+
                                 }
                             });
                         }
                     }
                 }
             });
-            **/
+            WorkManager.getInstance(LoginActivity.this).enqueue(selectLogin);
 
+            /**
             Sesion sesion = new Sesion(this);
             sesion.setUsername(editUser.getText().toString());
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            **/
 
         }else{
             Toast.makeText(this, R.string.str9, Toast.LENGTH_LONG).show();

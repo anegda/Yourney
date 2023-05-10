@@ -2,11 +2,17 @@ package com.example.yourney;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import android.Manifest;
 import android.app.Activity;
@@ -34,6 +40,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -44,9 +54,10 @@ public class RegisterActivity2 extends AppCompatActivity {
     private Context c = this;
     private Activity a = this;
     private String user;
-
+    private String pass;
     private EditText editEmail;
     private ImageView fotoperfil;
+    public static String fotoen64;
     private Button btnLogin;
     private Bitmap bitmapRedimensionado;
     private Bitmap bitmapOriginal;
@@ -93,6 +104,12 @@ public class RegisterActivity2 extends AppCompatActivity {
         fotoperfil = findViewById(R.id.fotoperfil);
         btnLogin = findViewById(R.id.button);
 
+        // obtener los datos del usuario ya introducidos
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && user.equals("") && pass.equals("")) {
+            user = extras.getString("user");
+            pass = extras.getString("pass");
+        }
 
         // si hay alguna imagen colocada por el usuario recuperarla y colocarla; sino colocar la default
         if (savedInstanceState != null) {
@@ -133,7 +150,6 @@ public class RegisterActivity2 extends AppCompatActivity {
 
         if (isEmailValid) {
             // obtener bitmap del imageview actual --> comprimirla --> convertirlo en base64 para subirlo a la bbdd
-            String fotoen64="";
             if (fotoperfil.getDrawable()!=null) {
                 Bitmap bitmap = ((BitmapDrawable) fotoperfil.getDrawable()).getBitmap();
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -142,10 +158,106 @@ public class RegisterActivity2 extends AppCompatActivity {
                 fotoen64 = new String(Base64.getEncoder().encode(byteArray));
             }
 
+            // Obtengo los datos a introducir en la BD
+            String nombre = "";
+            String apellidos = "";
 
+            // Comprobar credenciales contra la BD
+            Data datos = new Data.Builder()
+                     .putString("accion", "select")
+                     .putString("consulta", "Usuarios")
+                     .putString("username", user)
+                     .build();
+
+            // Peticion al Worker
+            OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                    .setInputData(datos)
+                    .build();
+
+            WorkManager.getInstance(RegisterActivity2.this).getWorkInfoByIdLiveData(select.getId()).observe(RegisterActivity2.this, new Observer<WorkInfo>() {
+                @Override
+                public void onChanged(WorkInfo workInfo) {
+                    // Gestiono la respuesta de la peticion
+                    if (workInfo != null && workInfo.getState().isFinished()) {
+                        Data output = workInfo.getOutputData();
+                        if (!output.getString("resultado").equals("El usuario no existe")) {
+                            Toast.makeText(RegisterActivity2.this, "El usuario introducido ya existe", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Data datos = new Data.Builder()
+                                    .putString("username", user)
+                                    .putString("nombre", nombre)
+                                    .putString("apellidos", apellidos)
+                                    .putString("password", pass)
+                                    .putString("email", email)
+                                    .build();
+
+                            OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                    .setInputData(datos)
+                                    .build();
+
+                            // Introduzco en la BD
+                            WorkManager.getInstance(RegisterActivity2.this).getWorkInfoByIdLiveData(insert.getId()).observe(RegisterActivity2.this, new Observer<WorkInfo>() {
+                                @Override
+                                public void onChanged(WorkInfo workInfo) {
+                                    if (workInfo != null && workInfo.getState().isFinished()) {
+                                        Data output = workInfo.getOutputData();
+                                        if (output.getBoolean("resultado", false)) {
+                                            // Guardo el usuario en la sesion
+                                            Sesion sesion = new Sesion(RegisterActivity2.this);
+                                            sesion.setUsername(user);
+
+                                            // Paso a la siguiente actividad
+                                            Intent intent = new Intent(RegisterActivity2.this, MainActivity.class);
+                                            startActivity(intent);
+
+                                            finish();
+                                        }
+                                    }
+                                }
+                            });
+
+
+                            // Obtengo el token del usuario registrado
+                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        String token = "";
+                                        return;
+                                    }
+                                    String token = task.getResult();
+
+                                    // Registro el token del usuario en la bd
+                                    Data datos = new Data.Builder()
+                                            .putString("accion", "insert")
+                                            .putString("consulta", "Tokens")
+                                            .putString("username", user)
+                                            .putString("token", token)
+                                            .build();
+
+                                    OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                            .setInputData(datos)
+                                            .build();
+
+                                    WorkManager.getInstance(RegisterActivity2.this).getWorkInfoByIdLiveData(insert.getId()).observe(RegisterActivity2.this, new Observer<WorkInfo>() {
+                                        @Override
+                                        public void onChanged(WorkInfo workInfo) {
+                                            if (workInfo != null && workInfo.getState().isFinished()) {
+                                            }
+                                        }
+                                    });
+                                    WorkManager.getInstance(RegisterActivity2.this).enqueue(insert);
+                                }
+                            });
+                            WorkManager.getInstance(RegisterActivity2.this).enqueue(insert);
+                        }
+                    }
+                }
+            });
+            WorkManager.getInstance(RegisterActivity2.this).enqueue(select);
 
         } else {
-            Toast.makeText(this, R.string.str10, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Registro incorrecto", Toast.LENGTH_LONG).show();
         }
 
     }
