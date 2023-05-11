@@ -14,14 +14,15 @@ public class LoginRegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginregister);
 
+        /**
         Sesion sesion = new Sesion(this);
         String username = sesion.getUsername();
         if (!username.equals("")) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
+        **/
     }
-
 
     public void login(View v) {
         Intent intent = new Intent(this, LoginActivity.class);

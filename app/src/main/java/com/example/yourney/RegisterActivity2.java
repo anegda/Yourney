@@ -27,17 +27,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.util.Log;
 import android.view.OrientationEventListener;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -56,6 +51,8 @@ public class RegisterActivity2 extends AppCompatActivity {
     private String user;
     private String pass;
     private EditText editEmail;
+    private EditText editNombre;
+    private EditText editApellido;
     private ImageView fotoperfil;
     public static String fotoen64;
     private Button btnLogin;
@@ -101,6 +98,8 @@ public class RegisterActivity2 extends AppCompatActivity {
 
         // inicializar los elementos del layout
         editEmail = findViewById(R.id.editEmail);
+        editNombre = findViewById(R.id.editNombre);
+        editApellido = findViewById(R.id.editApellido);
         fotoperfil = findViewById(R.id.fotoperfil);
         btnLogin = findViewById(R.id.button);
 
@@ -131,16 +130,6 @@ public class RegisterActivity2 extends AppCompatActivity {
         };
         orientationEventListener.enable();
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                login(view);
-                Intent intent = new Intent(RegisterActivity2.this, MainActivity.class);
-                intent.putExtra("user", getIntent().getStringExtra("user"));
-                startActivity(intent);
-            }
-        });
-
     }
 
     public void login(View v){
@@ -159,8 +148,8 @@ public class RegisterActivity2 extends AppCompatActivity {
             }
 
             // Obtengo los datos a introducir en la BD
-            String nombre = "";
-            String apellidos = "";
+            String nombre = editNombre.getText().toString();
+            String apellidos = editApellido.getText().toString();
 
             // Comprobar credenciales contra la BD
             Data datos = new Data.Builder()
@@ -180,10 +169,12 @@ public class RegisterActivity2 extends AppCompatActivity {
                     // Gestiono la respuesta de la peticion
                     if (workInfo != null && workInfo.getState().isFinished()) {
                         Data output = workInfo.getOutputData();
-                        if (!output.getString("resultado").equals("El usuario no existe")) {
+                        if (!output.getString("resultado").equals("Sin resultado")) {
                             Toast.makeText(RegisterActivity2.this, "El usuario introducido ya existe", Toast.LENGTH_SHORT).show();
                         } else {
                             Data datos = new Data.Builder()
+                                    .putString("accion", "insert")
+                                    .putString("consulta", "Usuarios")
                                     .putString("username", user)
                                     .putString("nombre", nombre)
                                     .putString("apellidos", apellidos)
@@ -202,6 +193,40 @@ public class RegisterActivity2 extends AppCompatActivity {
                                     if (workInfo != null && workInfo.getState().isFinished()) {
                                         Data output = workInfo.getOutputData();
                                         if (output.getBoolean("resultado", false)) {
+
+                                            // Obtengo el token del usuario registrado
+                                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<String> task) {
+                                                    if (!task.isSuccessful()) {
+                                                        String token = "";
+                                                        return;
+                                                    }
+                                                    String token = task.getResult();
+
+                                                    // Registro el token del usuario en la bd
+                                                    Data datos = new Data.Builder()
+                                                            .putString("accion", "insert")
+                                                            .putString("consulta", "Tokens")
+                                                            .putString("username", user)
+                                                            .putString("token", token)
+                                                            .build();
+
+                                                    OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                                            .setInputData(datos)
+                                                            .build();
+
+                                                    WorkManager.getInstance(RegisterActivity2.this).getWorkInfoByIdLiveData(insert.getId()).observe(RegisterActivity2.this, new Observer<WorkInfo>() {
+                                                        @Override
+                                                        public void onChanged(WorkInfo workInfo) {
+                                                            if (workInfo != null && workInfo.getState().isFinished()) {
+                                                            }
+                                                        }
+                                                    });
+                                                    WorkManager.getInstance(RegisterActivity2.this).enqueue(insert);
+                                                }
+                                            });
+
                                             // Guardo el usuario en la sesion
                                             Sesion sesion = new Sesion(RegisterActivity2.this);
                                             sesion.setUsername(user);
@@ -213,40 +238,6 @@ public class RegisterActivity2 extends AppCompatActivity {
                                             finish();
                                         }
                                     }
-                                }
-                            });
-
-
-                            // Obtengo el token del usuario registrado
-                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                                @Override
-                                public void onComplete(@NonNull Task<String> task) {
-                                    if (!task.isSuccessful()) {
-                                        String token = "";
-                                        return;
-                                    }
-                                    String token = task.getResult();
-
-                                    // Registro el token del usuario en la bd
-                                    Data datos = new Data.Builder()
-                                            .putString("accion", "insert")
-                                            .putString("consulta", "Tokens")
-                                            .putString("username", user)
-                                            .putString("token", token)
-                                            .build();
-
-                                    OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                                            .setInputData(datos)
-                                            .build();
-
-                                    WorkManager.getInstance(RegisterActivity2.this).getWorkInfoByIdLiveData(insert.getId()).observe(RegisterActivity2.this, new Observer<WorkInfo>() {
-                                        @Override
-                                        public void onChanged(WorkInfo workInfo) {
-                                            if (workInfo != null && workInfo.getState().isFinished()) {
-                                            }
-                                        }
-                                    });
-                                    WorkManager.getInstance(RegisterActivity2.this).enqueue(insert);
                                 }
                             });
                             WorkManager.getInstance(RegisterActivity2.this).enqueue(insert);
