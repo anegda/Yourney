@@ -118,7 +118,26 @@ public class ConexionBD extends Worker {
                     out.print(params.toString());
                     out.close();
 
-                    break;
+                    int status = urlConnection.getResponseCode();
+                    System.out.println(status);
+                    if (status == 200) {
+                        // La peticion ha tenido exito
+                        BufferedInputStream input = new BufferedInputStream(urlConnection.getInputStream());
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(input, "UTF-8"));
+                        String row = "";
+                        String resultado = "";
+
+                        // Recorro las lineas devueltas por la peticion SQL
+                        while ((row = reader.readLine()) != null) {
+                            resultado += row;
+                        }
+                        input.close();
+
+                        output = new Data.Builder().putString("resultado", resultado).build();
+                        return output;
+                    }
+                    output = new Data.Builder().putString("resultado", "Sin resultado").build();
+                    return output;
 
                 case "Ubicaciones":
 
@@ -356,7 +375,7 @@ public class ConexionBD extends Worker {
             // En este caso todas las consultas usan los mismos parametros (menos Login que requiere contraseña)
             String params = "?consulta=" + datos.getString("consulta") + "&username=" + datos.getString("username");
             if(datos.getString("consulta").equals("Login")) {
-                params += datos.getString("password");
+                params += "&password=" + datos.getString("password");
             }
 
             URL urlFinal = new URL(url + params);
@@ -376,7 +395,6 @@ public class ConexionBD extends Worker {
                     resultado += row;
                 }
                 input.close();
-
                 output = new Data.Builder().putString("resultado", resultado).build();
                 return output;
             }
