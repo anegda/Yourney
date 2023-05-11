@@ -66,7 +66,7 @@ public class ConexionBD extends Worker {
     }
 
     public Data insert() {
-        String url = "";
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/inserts.php";
         HttpURLConnection urlConnection = null;
 
         Data datos = this.getInputData();
@@ -214,7 +214,7 @@ public class ConexionBD extends Worker {
     }
 
     public Data update() {
-        String url = "";
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/updates.php";
         HttpURLConnection urlConnection = null;
 
         Data datos = this.getInputData();
@@ -280,7 +280,7 @@ public class ConexionBD extends Worker {
     }
 
     public Data selectRuta() {
-        String url = "";
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
         HttpURLConnection urlConnection = null;
 
         Data datos = this.getInputData();
@@ -345,7 +345,7 @@ public class ConexionBD extends Worker {
     }
 
     public Data select() {
-        String url = "";
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selects.php";
         HttpURLConnection urlConnection = null;
 
         Data datos = this.getInputData();
@@ -388,7 +388,7 @@ public class ConexionBD extends Worker {
     }
 
     public Data delete() {
-        String url = "";
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/deletes.php";
         HttpURLConnection urlConnection = null;
 
         Data datos = this.getInputData();
