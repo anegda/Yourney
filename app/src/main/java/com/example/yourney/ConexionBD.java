@@ -106,9 +106,9 @@ public class ConexionBD extends Worker {
 
                     params.put("nombre", datos.getString("nombre"));
                     params.put("descripcion", datos.getString("descripcion"));
-                    //params.put("fotoDesc", RegisterActivity2.fotoen64);
-                    params.put("duracion", datos.getInt("duracion", 0));
-                    params.put("distancia", datos.getInt("distancia", 0));
+                    params.put("fotoDesc", LocationService.fotoDesc);
+                    params.put("duracion", datos.getDouble("duracion", 0));
+                    params.put("distancia", datos.getFloat("distancia", 0));
                     params.put("pasos", datos.getString("pasos"));
                     params.put("dificultad", datos.getString("dificultad"));
                     params.put("fecha", datos.getString("fecha"));
