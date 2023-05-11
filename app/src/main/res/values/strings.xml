@@ -45,4 +45,5 @@
     <string name="str13">Nombre</string>
     <string name="str14">Apellido</string>
     <string name="str15">Puedes añadir una foto de perfil haciendo click sobre la imagen</string>
+    <string name="rutasFavoritas">Tus rutas favoritas a un solo click</string>
 </resources>

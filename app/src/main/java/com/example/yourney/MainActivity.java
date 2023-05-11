@@ -37,6 +37,56 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
 
         RecyclerView lalista= findViewById(R.id.elreciclerview);
 
+        //AÑADIMOS EL ACTION BAR Y EL NAVIGATIONDRAWER
+        setSupportActionBar(findViewById(R.id.labarra));
+
+        final DrawerLayout elmenudesplegable = findViewById(R.id.drawer_layout);
+        NavigationView elnavigation = findViewById(R.id.elnavigationview);
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, elmenudesplegable, R.string.nav_open, R.string.nav_close);
+        elmenudesplegable.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        elnavigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+           switch (item.getItemId()){
+               case R.id.buscarRutas:
+                   startActivity(new Intent(MainActivity.this, PublicRoutesActivity.class));
+                   finish();
+                   break;
+               case R.id.rutasFavoritas:
+                   startActivity(new Intent(MainActivity.this, RutasFavoritas.class));
+                   finish();
+                   break;
+               case R.id.crearRuta:
+                   startActivity(new Intent(MainActivity.this, GrabarRuta.class));
+                   finish();
+                   break;
+               case R.id.solicitudesAmistad:
+                   break;
+               case R.id.misAmigos:
+                   break;
+               case R.id.editarPerfil:
+                   break;
+               case R.id.Preferencias:
+                   startActivity(new Intent(MainActivity.this, Ajustes.class));
+                   finish();
+                   break;
+               case R.id.CerrarSesion:
+                   //FINALIZAMOS LA SESION
+                   Sesion sesion = new Sesion(MainActivity.this);
+                   sesion.deleteUsername();
+                   //VOLVEMOS A LA PANTALLA DE INICIO
+                   startActivity(new Intent(MainActivity.this, LoginRegisterActivity.class));
+                   finish();
+                   break;
+           }
+           elmenudesplegable.closeDrawers();
+           return false;
+       }
+   });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //las imagenes deben ser cuadradas
         String [] nombreImagenes = {"fotoruta","fotoruta2","fotoruta3"};
 
@@ -56,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
                 .putString("consulta", "MisRutas")
                 .putString("username", sesion.getUsername())
                 .build();
+
 
         OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
                 .setInputData(datos)
