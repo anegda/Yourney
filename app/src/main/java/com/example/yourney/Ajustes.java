@@ -13,7 +13,7 @@ import android.os.Bundle;
 import java.util.Locale;
 
 public class Ajustes extends AppCompatActivity {
-
+    //prueba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
