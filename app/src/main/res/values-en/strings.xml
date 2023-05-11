@@ -47,4 +47,8 @@
     <string name="str14">Surname</string>
     <string name="str15">"You can add a profile photo by clicking on the image "</string>
     <string name="rutasFavoritas">Your favorite routes in just one click</string>
+    <string name="login_incorrecto">Wrong credentials</string>
+    <string name="login_correcto">Welcome again</string>
+    <string name="registro_incorrecto">The username already exists</string>
+    <string name="registro_correcto">Welcome</string>
 </resources>

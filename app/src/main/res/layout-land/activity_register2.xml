@@ -9,7 +9,7 @@
 
 
     <EditText
-        android:id="@+id/editEmail"
+        android:id="@+id/editApellido"
         android:layout_width="292dp"
         android:layout_height="43dp"
         android:layout_marginTop="24dp"
@@ -21,13 +21,13 @@
         android:padding="12dp"
         android:textColorHint="#99FFFFFF"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/editEmail3"
+        app:layout_constraintEnd_toEndOf="@+id/editNombre"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editEmail3"
-        app:layout_constraintTop_toBottomOf="@+id/editEmail3" />
+        app:layout_constraintStart_toStartOf="@+id/editNombre"
+        app:layout_constraintTop_toBottomOf="@+id/editNombre" />
 
     <EditText
-        android:id="@+id/editEmail2"
+        android:id="@+id/editEmail"
         android:layout_width="292dp"
         android:layout_height="43dp"
         android:background="@drawable/edittext_rounded_background"
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toTopOf="@+id/tvFrase2" />
 
     <EditText
-        android:id="@+id/editEmail3"
+        android:id="@+id/editNombre"
         android:layout_width="292dp"
         android:layout_height="43dp"
         android:layout_marginTop="24dp"
@@ -56,10 +56,10 @@
         android:padding="12dp"
         android:textColorHint="#99FFFFFF"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/editEmail2"
+        app:layout_constraintEnd_toEndOf="@+id/editEmail"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editEmail2"
-        app:layout_constraintTop_toBottomOf="@+id/editEmail2" />
+        app:layout_constraintStart_toStartOf="@+id/editEmail"
+        app:layout_constraintTop_toBottomOf="@+id/editEmail" />
 
     <TextView
         android:id="@+id/tvFrase2"
@@ -114,10 +114,10 @@
         android:onClick="login"
         android:text="@string/str2"
         android:textColor="#99FFFFFF"
-        app:layout_constraintEnd_toEndOf="@+id/editEmail"
+        app:layout_constraintEnd_toEndOf="@+id/editApellido"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editEmail"
-        app:layout_constraintTop_toBottomOf="@+id/editEmail" />
+        app:layout_constraintStart_toStartOf="@+id/editApellido"
+        app:layout_constraintTop_toBottomOf="@+id/editApellido" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

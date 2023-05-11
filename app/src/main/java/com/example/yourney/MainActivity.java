@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         // Consulto la BD por mis rutas
         Sesion sesion = new Sesion(this);
 
+        /**
         Data datos = new Data.Builder()
                 .putString("accion", "selectRuta")
                 .putString("consulta", "MisRutas")
@@ -141,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
             }
         });
         WorkManager.getInstance(MainActivity.this).enqueue(select);
+        **/
 
         ArrayList<Integer> imagenes = new ArrayList<Integer>();
         for (String nombreImagen : nombreImagenes) {
