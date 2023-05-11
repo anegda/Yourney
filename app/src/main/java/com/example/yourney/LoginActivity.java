@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 sesion.setUsername(editUser.getText().toString());
 
                                                 // Paso a la siguiente actividad
-                                                Toast.makeText(LoginActivity.this, R.string.login_correcto + " " + sesion.getUsername() + "!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(LoginActivity.this, getString(R.string.login_correcto) + " " + user + "!", Toast.LENGTH_SHORT).show();
                                                 Intent intent = new Intent(LoginActivity.this, PublicRoutesActivity.class);
                                                 startActivity(intent);
 

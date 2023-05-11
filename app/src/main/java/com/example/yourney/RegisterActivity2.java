@@ -232,7 +232,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                             sesion.setUsername(user);
 
                                             // Paso a la siguiente actividad
-                                            Toast.makeText(RegisterActivity2.this, R.string.registro_correcto + " " + user + "!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(RegisterActivity2.this, getString(R.string.registro_correcto) + " " + user + "!", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(RegisterActivity2.this, MainActivity.class);
                                             startActivity(intent);
 
