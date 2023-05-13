@@ -1,6 +1,10 @@
 package com.example.yourney;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +30,7 @@ public class ElAdaptadorRecycler extends RecyclerView.Adapter<ElAdaptadorRecycle
     public ElAdaptadorRecycler (List<ItemListRuta> items, RecyclerItemClick itemClick) {
         this.items = items;
         this.itemClick = itemClick;
-        this.originalItems = new ArrayList<>();
+        this.originalItems = new ArrayList<ItemListRuta>();
         originalItems.addAll(items);
     }
 
@@ -39,7 +45,12 @@ public class ElAdaptadorRecycler extends RecyclerView.Adapter<ElAdaptadorRecycle
     /** Colocamos los datos y gestionamos la seleccion de un elemento **/
     public void onBindViewHolder(@NonNull RecyclerHolder holder, int position) {
         final ItemListRuta item = items.get(position);
-        holder.imgItem.setImageResource(item.getImgResource());
+
+        byte [] encodeByte = Base64.decode(item.getImgResource(), Base64.DEFAULT);
+        InputStream inputStream  = new ByteArrayInputStream(encodeByte);
+        Bitmap bitmap  = BitmapFactory.decodeStream(inputStream);
+
+        holder.imgItem.setImageBitmap(bitmap);
         holder.tvTitulo.setText(item.getTitulo());
         holder.tvDescripcion.setText(item.getDescripcion());
 

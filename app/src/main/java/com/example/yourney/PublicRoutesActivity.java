@@ -27,7 +27,9 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
     SearchView buscadorRutas;
     RecyclerView lalista;
     ElAdaptadorRecycler adapter;
-    private List<ItemListRuta> items;
+    List<ItemListRuta> items = new ArrayList<>();
+
+    String titulo, descripcion, imagen = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,15 +41,9 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
         LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(manager);
 
-        items = getItems();
-        adapter = new ElAdaptadorRecycler(items, PublicRoutesActivity.this);
-        lalista.setAdapter(adapter);
+
 
         buscadorRutas.setOnQueryTextListener(this);
-
-        ArrayList<String> nombreImagenes = new ArrayList<String>();
-        ArrayList<String> nombreRutas = new ArrayList<String>();
-        ArrayList<String> descrRutas = new ArrayList<String>();
 
         // Consulto la BD por las rutas publicas
         Data datos = new Data.Builder()
@@ -58,6 +54,7 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
         OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
                 .setInputData(datos)
                 .build();
+
 
         WorkManager.getInstance(PublicRoutesActivity.this).getWorkInfoByIdLiveData(select.getId()).observe(PublicRoutesActivity.this, new Observer<WorkInfo>() {
             @Override
@@ -76,11 +73,16 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
                                 JSONObject row = (JSONObject) jsonResultado.get(i);
                                 System.out.println("***** " + row + " *****");
                                 // Vuelco la informacion en las variables creadas anteriormente
-                                nombreImagenes.add((String) row.get("FotoDesc"));
-                                nombreRutas.add((String) row.get("Nombre"));
-                                descrRutas.add((String) row.get("Descripcion"));
+
+                                titulo = (String) row.get("FotoDesc");
+                                descripcion = (String) row.get("Nombre");
+                                imagen = (String) row.get("Descripcion");
+                                getItems(titulo, descripcion, imagen);
                                 i++;
                             }
+
+                            adapter = new ElAdaptadorRecycler(items, PublicRoutesActivity.this);
+                            lalista.setAdapter(adapter);
 
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
@@ -94,12 +96,8 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
     }
 
     /** Metodo para probar si funciona el reciclerView, luego se cambiara por una llamada a la BD **/
-    private List<ItemListRuta> getItems() {
-        List<ItemListRuta> itemListRutas = new ArrayList<>();
-        itemListRutas.add(new ItemListRuta("Monte Aventura", "Una emocionante caminata de día completo a través de los senderos del monte, con impresionantes vistas panorámicas y desafiantes ascensos.", R.drawable.fotoruta));
-        itemListRutas.add(new ItemListRuta("Bicicleta Salvaje", "Una emocionante ruta de mountain bike de medio día a través de bosques y senderos sinuosos, con saltos y obstáculos desafiantes.", R.drawable.fotoruta2));
-        itemListRutas.add(new ItemListRuta("Cascada Misteriosa", "Una relajante caminata de medio día a través de un hermoso bosque y un río cristalino, hasta llegar a una impresionante cascada rodeada de un ambiente natural y tranquilo.", R.drawable.fotoruta3));
-        return itemListRutas;
+    private void getItems(String titulo, String descripcion, String imagen) {
+        items.add(new ItemListRuta(titulo, descripcion, imagen));
     }
 
     @Override

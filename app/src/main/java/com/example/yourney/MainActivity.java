@@ -30,6 +30,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycler.RecyclerItemClick {
 
     public ActionBarDrawerToggle  actionBarDrawerToggle;
+    List<ItemListRuta> items = new ArrayList<>();
+    String titulo, descripcion, imagen = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,9 +135,10 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
                             while (i < jsonResultado.size()) {
                                 JSONObject row = (JSONObject) jsonResultado.get(i);
                                 // Vuelco la informacion en las variables creadas anteriormente
-                                nombreImagenes.add((String) row.get("FotoDesc"));
-                                nombreRutas.add((String) row.get("Nombre"));
-                                descrRutas.add((String) row.get("Descripcion"));
+                                titulo = (String) row.get("FotoDesc");
+                                descripcion = (String) row.get("Nombre");
+                                imagen = (String) row.get("Descripcion");
+                                getItems(titulo, descripcion, imagen);
                                 i++;
                             }
 
@@ -154,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
             int id = getResources().getIdentifier(nombreImagen, "drawable", getPackageName());
             imagenes.add(id);
         }
-        List<ItemListRuta> items = getItems();
+
         ElAdaptadorRecycler eladaptador = new ElAdaptadorRecycler(items, this);
         lalista.setAdapter(eladaptador);
 
@@ -163,12 +166,8 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         lalista.setLayoutManager(elLayoutLineal);
     }
 
-    private List<ItemListRuta> getItems() {
-        List<ItemListRuta> itemListRutas = new ArrayList<>();
-        itemListRutas.add(new ItemListRuta("Monte Aventura", "Una emocionante caminata de día completo a través de los senderos del monte, con impresionantes vistas panorámicas y desafiantes ascensos.", R.drawable.fotoruta));
-        itemListRutas.add(new ItemListRuta("Bicicleta Salvaje", "Una emocionante ruta de mountain bike de medio día a través de bosques y senderos sinuosos, con saltos y obstáculos desafiantes.", R.drawable.fotoruta2));
-        itemListRutas.add(new ItemListRuta("Cascada Misteriosa", "Una relajante caminata de medio día a través de un hermoso bosque y un río cristalino, hasta llegar a una impresionante cascada rodeada de un ambiente natural y tranquilo.", R.drawable.fotoruta3));
-        return itemListRutas;
+    private void getItems(String titulo, String descripcion, String imagen) {
+        items.add(new ItemListRuta(titulo, descripcion, imagen));
     }
 
     @Override

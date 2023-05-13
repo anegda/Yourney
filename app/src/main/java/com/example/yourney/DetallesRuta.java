@@ -7,12 +7,16 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.simple.ItemList;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 public class DetallesRuta extends AppCompatActivity {
     private ImageButton btnFavoritos;
@@ -37,8 +41,12 @@ public class DetallesRuta extends AppCompatActivity {
         // Conseguimmos los datos de la ruta seleccionada
         detallesItem = (ItemListRuta) getIntent().getExtras().getSerializable("itemDetail");
 
+        byte [] encodeByte = Base64.decode(detallesItem.getImgResource(), Base64.DEFAULT);
+        InputStream inputStream  = new ByteArrayInputStream(encodeByte);
+        Bitmap bitmap  = BitmapFactory.decodeStream(inputStream);
+
         // Colocamos los datos en el layout
-        detallesImagen.setImageResource(detallesItem.getImgResource());
+        detallesImagen.setImageBitmap(bitmap);
         detallesTitulo.setText(detallesItem.getTitulo());
         detallesDescripcion.setText(detallesItem.getDescripcion());
 

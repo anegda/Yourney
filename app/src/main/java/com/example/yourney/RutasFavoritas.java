@@ -26,7 +26,8 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
     SearchView buscadorRutas;
     RecyclerView lalista;
     ElAdaptadorRecycler adapter;
-    private List<ItemListRuta> items;
+    List<ItemListRuta> items = new ArrayList<>();
+    String titulo, descripcion, imagen = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +39,6 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
         LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(manager);
 
-        items = getItems();
         adapter = new ElAdaptadorRecycler(items, RutasFavoritas.this);
         lalista.setAdapter(adapter);
 
@@ -73,9 +73,10 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
                             while (i < jsonResultado.size()) {
                                 JSONObject row = (JSONObject) jsonResultado.get(i);
                                 // Vuelco la informacion en las variables creadas anteriormente
-                                nombreImagenes[i] = (String) row.get("ImgBlob");
-                                nombreRutas[i] = (String) row.get("Nombre");
-                                descrRutas[i] = (String) row.get("Descripcion");
+                                titulo = (String) row.get("FotoDesc");
+                                descripcion = (String) row.get("Nombre");
+                                imagen = (String) row.get("Descripcion");
+                                getItems(titulo, descripcion, imagen);
                                 i++;
                             }
 
@@ -91,12 +92,8 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
     }
 
     /** Metodo para probar si funciona el reciclerView, luego se cambiara por una llamada a la BD **/
-    private List<ItemListRuta> getItems() {
-        List<ItemListRuta> itemListRutas = new ArrayList<>();
-        itemListRutas.add(new ItemListRuta("Monte Aventura", "Una emocionante caminata de día completo a través de los senderos del monte, con impresionantes vistas panorámicas y desafiantes ascensos.", R.drawable.fotoruta));
-        itemListRutas.add(new ItemListRuta("Bicicleta Salvaje", "Una emocionante ruta de mountain bike de medio día a través de bosques y senderos sinuosos, con saltos y obstáculos desafiantes.", R.drawable.fotoruta2));
-        itemListRutas.add(new ItemListRuta("Cascada Misteriosa", "Una relajante caminata de medio día a través de un hermoso bosque y un río cristalino, hasta llegar a una impresionante cascada rodeada de un ambiente natural y tranquilo.", R.drawable.fotoruta3));
-        return itemListRutas;
+    private void getItems(String titulo, String descripcion, String imagen) {
+        items.add(new ItemListRuta(titulo, descripcion, imagen));
     }
 
     @Override

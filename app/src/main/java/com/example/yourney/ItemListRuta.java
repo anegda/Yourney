@@ -5,9 +5,9 @@ import java.io.Serializable;
 public class ItemListRuta implements Serializable {
     private String titulo;
     private String descripcion;
-    private int imgResource;
+    private String imgResource;
 
-    public ItemListRuta(String titulo, String descripcion, int imgResource) {
+    public ItemListRuta(String titulo, String descripcion, String imgResource) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.imgResource = imgResource;
@@ -21,7 +21,7 @@ public class ItemListRuta implements Serializable {
         return descripcion;
     }
 
-    public int getImgResource() {
+    public String getImgResource() {
         return imgResource;
     }
 }
