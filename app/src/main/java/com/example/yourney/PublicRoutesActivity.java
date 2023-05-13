@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.widget.SearchView;
 
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -45,9 +45,9 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
 
         buscadorRutas.setOnQueryTextListener(this);
 
-        String nombreImagenes[] = {};
-        String nombreRutas[] = {};
-        String descrRutas[] = {};
+        ArrayList<String> nombreImagenes = new ArrayList<String>();
+        ArrayList<String> nombreRutas = new ArrayList<String>();
+        ArrayList<String> descrRutas = new ArrayList<String>();
 
         // Consulto la BD por las rutas publicas
         Data datos = new Data.Builder()
@@ -71,16 +71,18 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
                             JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
 
                             Integer i = 0;
+                            System.out.println("***** " + jsonResultado + " *****");
                             while (i < jsonResultado.size()) {
                                 JSONObject row = (JSONObject) jsonResultado.get(i);
+                                System.out.println("***** " + row + " *****");
                                 // Vuelco la informacion en las variables creadas anteriormente
-                                nombreImagenes[i] = (String) row.get("ImgBlob");
-                                nombreRutas[i] = (String) row.get("Nombre");
-                                descrRutas[i] = (String) row.get("Descripcion");
+                                nombreImagenes.add((String) row.get("FotoDesc"));
+                                nombreRutas.add((String) row.get("Nombre"));
+                                descrRutas.add((String) row.get("Descripcion"));
                                 i++;
                             }
 
-                        } catch (ParseException | JSONException e) {
+                        } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
                     }

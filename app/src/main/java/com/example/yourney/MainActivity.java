@@ -19,7 +19,7 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        /***
         //las imagenes deben ser cuadradas
         String [] nombreImagenes = {"fotoruta","fotoruta2","fotoruta3"};
 
@@ -97,11 +98,15 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         String [] descrRutas = {"Una emocionante caminata de día completo a través de los senderos del monte, con impresionantes vistas panorámicas y desafiantes ascensos.",
                 "Una emocionante ruta de mountain bike de medio día a través de bosques y senderos sinuosos, con saltos y obstáculos desafiantes.",
                 "Una relajante caminata de medio día a través de un hermoso bosque y un río cristalino, hasta llegar a una impresionante cascada rodeada de un ambiente natural y tranquilo."};
+        **/
+
+        ArrayList<String> nombreImagenes = new ArrayList<String>();
+        ArrayList<String> nombreRutas = new ArrayList<String>();
+        ArrayList<String> descrRutas = new ArrayList<String>();
 
         // Consulto la BD por mis rutas
         Sesion sesion = new Sesion(this);
 
-        /**
         Data datos = new Data.Builder()
                 .putString("accion", "selectRuta")
                 .putString("consulta", "MisRutas")
@@ -128,13 +133,13 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
                             while (i < jsonResultado.size()) {
                                 JSONObject row = (JSONObject) jsonResultado.get(i);
                                 // Vuelco la informacion en las variables creadas anteriormente
-                                nombreImagenes[i] = (String) row.get("ImgBlob");
-                                nombreRutas[i] = (String) row.get("Nombre");
-                                descrRutas[i] = (String) row.get("Descripcion");
+                                nombreImagenes.add((String) row.get("FotoDesc"));
+                                nombreRutas.add((String) row.get("Nombre"));
+                                descrRutas.add((String) row.get("Descripcion"));
                                 i++;
                             }
 
-                        } catch (ParseException | JSONException e) {
+                        } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
                     }
@@ -142,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
             }
         });
         WorkManager.getInstance(MainActivity.this).enqueue(select);
-        **/
+
 
         ArrayList<Integer> imagenes = new ArrayList<Integer>();
         for (String nombreImagen : nombreImagenes) {
