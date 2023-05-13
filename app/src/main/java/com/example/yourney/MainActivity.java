@@ -15,6 +15,8 @@ import androidx.work.WorkManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -48,48 +50,57 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         elmenudesplegable.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         elnavigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-           switch (item.getItemId()){
-               case R.id.buscarRutas:
-                   startActivity(new Intent(MainActivity.this, PublicRoutesActivity.class));
-                   finish();
-                   break;
-               case R.id.rutasFavoritas:
-                   startActivity(new Intent(MainActivity.this, RutasFavoritas.class));
-                   finish();
-                   break;
-               case R.id.crearRuta:
-                   startActivity(new Intent(MainActivity.this, GrabarRuta.class));
-                   finish();
-                   break;
-               case R.id.solicitudesAmistad:
-                   break;
-               case R.id.misAmigos:
-                   startActivity(new Intent(MainActivity.this, MisAmigos.class));
-                   finish();
-                   break;
-               case R.id.editarPerfil:
-                   break;
-               case R.id.Preferencias:
-                   startActivity(new Intent(MainActivity.this, Ajustes.class));
-                   finish();
-                   break;
-               case R.id.CerrarSesion:
-                   //FINALIZAMOS LA SESION
-                   Sesion sesion = new Sesion(MainActivity.this);
-                   sesion.deleteUsername();
-                   //VOLVEMOS A LA PANTALLA DE INICIO
-                   startActivity(new Intent(MainActivity.this, LoginRegisterActivity.class));
-                   finish();
-                   break;
-           }
-           elmenudesplegable.closeDrawers();
-           return false;
-       }
-   });
-
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+               switch (item.getItemId()){
+                   case R.id.buscarRutas:
+                       startActivity(new Intent(MainActivity.this, PublicRoutesActivity.class));
+                       finish();
+                       break;
+                   case R.id.rutasFavoritas:
+                       startActivity(new Intent(MainActivity.this, RutasFavoritas.class));
+                       finish();
+                       break;
+                   case R.id.crearRuta:
+                       startActivity(new Intent(MainActivity.this, GrabarRuta.class));
+                       finish();
+                       break;
+                   case R.id.solicitudesAmistad:
+                       break;
+                   case R.id.misAmigos:
+                       startActivity(new Intent(MainActivity.this, MisAmigos.class));
+                       finish();
+                       break;
+                   case R.id.editarPerfil:
+                       break;
+                   case R.id.Preferencias:
+                       startActivity(new Intent(MainActivity.this, Ajustes.class));
+                       finish();
+                       break;
+                   case R.id.CerrarSesion:
+                       //FINALIZAMOS LA SESION
+                       Sesion sesion = new Sesion(MainActivity.this);
+                       sesion.deleteUsername();
+                       //VOLVEMOS A LA PANTALLA DE INICIO
+                       startActivity(new Intent(MainActivity.this, LoginRegisterActivity.class));
+                       finish();
+                       break;
+               }
+               elmenudesplegable.closeDrawers();
+               return false;
+            }
+        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //AÑADIR LA FUNCIONALIDAD AL BOTÓN FLOTANTE DE GRABAR
+        Button btn_2Add = (Button) findViewById(R.id.button2);
+        btn_2Add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, GrabarRuta.class));
+                finish();
+            }
+        });
 
         /***
         //las imagenes deben ser cuadradas
