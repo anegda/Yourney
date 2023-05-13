@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                                 // Paso a la siguiente actividad
                                                 Toast.makeText(LoginActivity.this, getString(R.string.login_correcto) + " " + user + "!", Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(LoginActivity.this, PublicRoutesActivity.class);
+                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                 startActivity(intent);
 
                                                 finish();

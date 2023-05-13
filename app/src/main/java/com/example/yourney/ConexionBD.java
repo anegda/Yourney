@@ -106,7 +106,7 @@ public class ConexionBD extends Worker {
 
                     params.put("nombre", datos.getString("nombre"));
                     params.put("descripcion", datos.getString("descripcion"));
-                    params.put("fotoDesc", LocationService.fotoDesc);
+                    params.put("fotoDesc", GrabarRuta.fotoDesc);
                     params.put("duracion", datos.getDouble("duracion", 0));
                     params.put("distancia", datos.getFloat("distancia", 0));
                     params.put("pasos", datos.getString("pasos"));
