@@ -9,56 +9,55 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.SearchView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecycler.RecyclerItemClick,SearchView.OnQueryTextListener {
-    SearchView buscadorRutas;
+public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerAmigos.RecyclerItemClick,SearchView.OnQueryTextListener {
+    SearchView buscadorUsuarios;
     RecyclerView lalista;
-    ElAdaptadorRecycler adapter;
-    private List<ItemListRuta> items;
+    private List<ItemListAmigo> items = new ArrayList<ItemListAmigo>();
+    ElAdaptadorRecyclerAmigos adapter = new ElAdaptadorRecyclerAmigos(items, MisAmigos.this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rutas_favoritas);
+        setContentView(R.layout.activity_mis_amigos);
 
-        buscadorRutas = findViewById(R.id.search_view);
+        buscadorUsuarios = findViewById(R.id.search_friends);
         lalista = findViewById(R.id.elreciclerview);
 
         LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(manager);
 
-        items = getItems();
-        adapter = new ElAdaptadorRecycler(items, RutasFavoritas.this);
-        lalista.setAdapter(adapter);
+        // OBTENGO EL USUARIO ACTUAL
+        Sesion sesion = new Sesion(this);
+        String username = sesion.getUsername();
 
-        buscadorRutas.setOnQueryTextListener(this);
+        ArrayList<String> amigos = new ArrayList<String>();
 
-        String nombreImagenes[] = {};
-        String nombreRutas[] = {};
-        String descrRutas[] = {};
-
-        // Consulto la BD por las rutas publicas
+        // CONSULTAMOS A LA BD POR AMIGOS
         Data datos = new Data.Builder()
-                .putString("accion", "selectRuta")
-                .putString("consulta", "RutasPublicas")
+                .putString("accion", "select")
+                .putString("consulta", "Amigos")
+                .putString("username", username)
                 .build();
 
         OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
                 .setInputData(datos)
                 .build();
 
-        WorkManager.getInstance(RutasFavoritas.this).getWorkInfoByIdLiveData(select.getId()).observe(RutasFavoritas.this, new Observer<WorkInfo>() {
+        WorkManager.getInstance(MisAmigos.this).getWorkInfoByIdLiveData(select.getId()).observe(MisAmigos.this, new Observer<WorkInfo>() {
             @Override
             public void onChanged(WorkInfo workInfo) {
                 if (workInfo != null && workInfo.getState().isFinished()) {
@@ -70,33 +69,41 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
                             JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
 
                             Integer i = 0;
+                            System.out.println("***** " + jsonResultado + " *****");
                             while (i < jsonResultado.size()) {
                                 JSONObject row = (JSONObject) jsonResultado.get(i);
-                                // Vuelco la informacion en las variables creadas anteriormente
-                                nombreImagenes[i] = (String) row.get("ImgBlob");
-                                nombreRutas[i] = (String) row.get("Nombre");
-                                descrRutas[i] = (String) row.get("Descripcion");
+                                System.out.println("***** " + row + " *****");
+                                amigos.add((String) row.get("Username2"));
                                 i++;
                             }
 
-                        } catch (ParseException | JSONException e) {
+                            items = getItems(amigos);
+                            adapter = new ElAdaptadorRecyclerAmigos(items,MisAmigos.this);
+                            lalista.setAdapter(adapter);
+
+                        } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
                     }
                 }
             }
         });
-        WorkManager.getInstance(RutasFavoritas.this).enqueue(select);
+        WorkManager.getInstance(MisAmigos.this).enqueue(select);
 
+        Log.d("DAS", String.valueOf(items));
+        adapter = new ElAdaptadorRecyclerAmigos(items, MisAmigos.this);
+        lalista.setAdapter(adapter);
+        buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);
     }
 
     /** Metodo para probar si funciona el reciclerView, luego se cambiara por una llamada a la BD **/
-    private List<ItemListRuta> getItems() {
-        List<ItemListRuta> itemListRutas = new ArrayList<>();
-        itemListRutas.add(new ItemListRuta("Monte Aventura", "Una emocionante caminata de día completo a través de los senderos del monte, con impresionantes vistas panorámicas y desafiantes ascensos.", R.drawable.fotoruta));
-        itemListRutas.add(new ItemListRuta("Bicicleta Salvaje", "Una emocionante ruta de mountain bike de medio día a través de bosques y senderos sinuosos, con saltos y obstáculos desafiantes.", R.drawable.fotoruta2));
-        itemListRutas.add(new ItemListRuta("Cascada Misteriosa", "Una relajante caminata de medio día a través de un hermoso bosque y un río cristalino, hasta llegar a una impresionante cascada rodeada de un ambiente natural y tranquilo.", R.drawable.fotoruta3));
-        return itemListRutas;
+    private List<ItemListAmigo> getItems(ArrayList<String> amigos) {
+        List<ItemListAmigo> itemListAmigos = new ArrayList<>();
+        for (String amigo : amigos) {
+            ItemListAmigo amigoAct = new ItemListAmigo(amigo, "prueba", R.drawable.fotoruta);
+            itemListAmigos.add(amigoAct);
+        }
+        return itemListAmigos;
     }
 
     @Override
@@ -112,8 +119,8 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
     }
 
     @Override
-    public void itemClick(ItemListRuta item) {
-        Intent intent = new Intent(this, DetallesRuta.class);
+    public void itemClick(ItemListAmigo item) {
+        Intent intent = new Intent(this, DetallesAmigo.class);
         intent.putExtra("itemDetail", item);
         startActivity(intent);
     }

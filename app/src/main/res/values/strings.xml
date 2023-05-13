@@ -50,4 +50,5 @@
     <string name="login_correcto">¡Hola de nuevo</string>
     <string name="registro_incorrecto">El usuario introducido ya existe</string>
     <string name="registro_correcto">¡Bienvenido</string>
+    <string name="buscarUsuarios">Buscar usuarios</string>
 </resources>

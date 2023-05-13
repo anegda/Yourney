@@ -21,6 +21,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".DetallesAmigo"
+            android:exported="false" />
+        <activity
+            android:name=".MisAmigos"
+            android:exported="false" />
+        <activity
             android:name=".RutasFavoritas"
             android:exported="false" />
         <activity
