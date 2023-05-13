@@ -4,6 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import android.Manifest;
 import android.content.ComponentName;
@@ -11,10 +17,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -24,6 +33,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
+import java.util.Base64;
+
 public class GrabarRuta extends AppCompatActivity implements SensorEventListener {
     private LocationService.LocationServiceBinder locationService;
 
@@ -31,6 +44,7 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
     private SensorManager sensorManager;
     private int pasosHist = 0;
     private boolean iniciar = false;
+    static String fotoDesc;
 
     private Handler h = new Handler();
     @Override
@@ -61,11 +75,75 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
                 TextView pasosNum = (TextView) findViewById(R.id.pasosNum);
                 String pasos = pasosNum.getText().toString();
                 String creador = "anegda";
-                int idRuta = locationService.guardarRuta(pasos, creador);
+                LocalDate currentdate = LocalDate.now();
+                String fecha = Integer.toString(currentdate.getYear()) + "-" + Integer.toString(currentdate.getMonthValue()) + "-" + Integer.toString(currentdate.getDayOfMonth());
 
+
+                //INTRODUCIMOS LA RUTA EN LA BD REMOTA
+                Data datos = new Data.Builder()
+                        .putString("accion", "insert")
+                        .putString("consulta", "Rutas")
+                        .putString("nombre", "Unnamed")
+                        .putString("descripcion", "-")
+                        .putDouble("duracion", locationService.getDuracion())
+                        .putFloat("distancia", locationService.getDistancia())
+                        .putString("pasos", pasos)
+                        .putString("dificultad", "facil")
+                        .putString("fecha", fecha)
+                        .putInt("visibilidad", 1)
+                        .putString("creador", creador)
+                        .build();
+
+                //POR AHORA ESTABLECEMOS COMO FOTO DE RUTA LA FOTO POR DEFECTO
+                Bitmap img = ((BitmapDrawable) getResources().getDrawable(R.drawable.fondobosque)).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                img.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] b = baos.toByteArray();
+                fotoDesc = Base64.getEncoder().encodeToString(b);
+
+                OneTimeWorkRequest insertRuta = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                        .setInputData(datos)
+                        .build();
+
+                WorkManager.getInstance(GrabarRuta.this).getWorkInfoByIdLiveData(insertRuta.getId()).observe(GrabarRuta.this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        // Gestiono la respuesta de la peticion
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            //INTRODUCIMOS LAS UBICACIONES DE LA RUTA EN LA BD REMOTA
+                            for (Location location : locationService.getLocations()){
+                                Data datosUbi = new Data.Builder()
+                                        .putString("accion", "insert")
+                                        .putString("consulta", "Ubicaciones")
+                                        .putInt("idRuta", 1)
+                                        .putDouble("altitud", location.getAltitude())
+                                        .putDouble("latitud", location.getLatitude())
+                                        .putDouble("longitud", location.getLongitude())
+                                        .build();
+
+                                OneTimeWorkRequest insertUbi = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                        .setInputData(datosUbi)
+                                        .build();
+
+                                WorkManager.getInstance(GrabarRuta.this).getWorkInfoByIdLiveData(insertUbi.getId()).observe((LifecycleOwner) new myLifeCycleOwner().getLifecycle(), new Observer<WorkInfo>() {
+                                    @Override
+                                    public void onChanged(WorkInfo workInfo) {
+                                        Log.d("DAS", "ubicación insertada");
+                                    }
+                                });
+
+                                WorkManager.getInstance(GrabarRuta.this).enqueue(insertUbi);
+                            }
+                        }
+                    }
+                });
+                WorkManager.getInstance(GrabarRuta.this).enqueue(insertRuta);
+
+                locationService.guardarRuta();
                 empezar_btn.setEnabled(true);
                 parar_btn.setEnabled(false);
 
+                int idRuta = 1;
                 startActivity(new Intent(GrabarRuta.this, DatosRuta.class).putExtra("idRuta", idRuta));
                 finish();
             }

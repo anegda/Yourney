@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
                case R.id.solicitudesAmistad:
                    break;
                case R.id.misAmigos:
+                   startActivity(new Intent(MainActivity.this, MisAmigos.class));
+                   finish();
                    break;
                case R.id.editarPerfil:
                    break;
