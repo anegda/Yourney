@@ -11,6 +11,10 @@ import androidx.work.WorkManager;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +26,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerAmigos.RecyclerItemClick,SearchView.OnQueryTextListener {
@@ -65,7 +70,7 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
                     if (!output.getString("resultado").equals("Sin resultado")) {
                         JSONParser parser = new JSONParser();
                         try {
-                            // Obtengo la informacion de las rutas devueltas
+                            // Obtengo la informacion de los amigos devueltos
                             JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
 
                             Integer i = 0;
@@ -78,8 +83,9 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
                             }
 
                             items = getItems(amigos);
-                            adapter = new ElAdaptadorRecyclerAmigos(items,MisAmigos.this);
+                            adapter = new ElAdaptadorRecyclerAmigos(items, MisAmigos.this);
                             lalista.setAdapter(adapter);
+                            buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);
 
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
@@ -100,8 +106,51 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
     private List<ItemListAmigo> getItems(ArrayList<String> amigos) {
         List<ItemListAmigo> itemListAmigos = new ArrayList<>();
         for (String amigo : amigos) {
-            ItemListAmigo amigoAct = new ItemListAmigo(amigo, "prueba", R.drawable.fotoruta);
-            itemListAmigos.add(amigoAct);
+            final String[] username = {amigo};
+            final String[] nombre = {""};
+            final Bitmap[] bitmap = new Bitmap[1];
+            // CONSULTAMOS A LA BD POR AMIGOS
+            Data datos = new Data.Builder()
+                    .putString("accion", "select")
+                    .putString("consulta", "Usuarios")
+                    .putString("username", amigo)
+                    .build();
+
+            OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                    .setInputData(datos)
+                    .build();
+
+            WorkManager.getInstance(MisAmigos.this).getWorkInfoByIdLiveData(select.getId()).observe(MisAmigos.this, new Observer<WorkInfo>() {
+                @Override
+                public void onChanged(WorkInfo workInfo) {
+                    if (workInfo != null && workInfo.getState().isFinished()) {
+                        Data output = workInfo.getOutputData();
+                        if (!output.getString("resultado").equals("Sin resultado")) {
+                            JSONParser parser = new JSONParser();
+                            try {
+                                // Obtengo la informacion de el usuario devuelto
+                                JSONObject jsonResultado =(JSONObject) parser.parse(output.getString("resultado"));
+                                Log.d("DAS", String.valueOf(jsonResultado));
+                                username[0] = (String) jsonResultado.get("Username");
+                                nombre[0] = (String) jsonResultado.get("Nombre");
+                                String fotoPerfil = (String) jsonResultado.get("FotoPerfil");
+
+                                byte[] encodeByte = Base64.getDecoder().decode(fotoPerfil);
+                                bitmap[0] = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                                ItemListAmigo amigoAct = new ItemListAmigo(username[0], nombre[0], bitmap[0]);
+                                itemListAmigos.add(amigoAct);
+
+                                adapter = new ElAdaptadorRecyclerAmigos(itemListAmigos, MisAmigos.this);
+                                lalista.setAdapter(adapter);
+                                buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);
+                            } catch (ParseException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
+                }
+            });
+            WorkManager.getInstance(MisAmigos.this).enqueue(select);
         }
         return itemListAmigos;
     }
