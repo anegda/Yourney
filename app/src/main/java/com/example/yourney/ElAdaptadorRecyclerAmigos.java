@@ -39,7 +39,7 @@ public class ElAdaptadorRecyclerAmigos extends RecyclerView.Adapter<ElAdaptadorR
     /** Colocamos los datos y gestionamos la seleccion de un elemento **/
     public void onBindViewHolder(@NonNull RecyclerHolder holder, int position) {
         final ItemListAmigo item = items.get(position);
-        holder.imgPerfil.setImageResource(item.getFotoDePerfil());
+        holder.imgPerfil.setImageBitmap(item.getFotoDePerfil());
         holder.tvNombre.setText(item.getNombre());
         holder.tvUsername.setText(item.getUsername());
 
