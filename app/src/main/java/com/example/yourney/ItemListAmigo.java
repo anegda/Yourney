@@ -1,13 +1,16 @@
 package com.example.yourney;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+
 import java.io.Serializable;
 
 public class ItemListAmigo implements Serializable {
     private String username;
     private String nombre;
-    private int fotoDePerfil;
+    private Bitmap fotoDePerfil;
 
-    public ItemListAmigo(String username, String nombre, int fotoDePerfil) {
+    public ItemListAmigo(String username, String nombre, Bitmap fotoDePerfil) {
         this.username = username;
         this.nombre = nombre;
         this.fotoDePerfil = fotoDePerfil;
@@ -21,7 +24,7 @@ public class ItemListAmigo implements Serializable {
         return nombre;
     }
 
-    public int getFotoDePerfil() {
+    public Bitmap getFotoDePerfil() {
         return fotoDePerfil;
     }
 }
