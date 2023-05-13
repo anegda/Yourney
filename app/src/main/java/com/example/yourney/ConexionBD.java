@@ -106,7 +106,7 @@ public class ConexionBD extends Worker {
 
                     params.put("nombre", datos.getString("nombre"));
                     params.put("descripcion", datos.getString("descripcion"));
-                    params.put("fotoDesc", GrabarRuta.fotoDesc);
+                    params.put("fotoDesc", "prueba2");
                     params.put("duracion", datos.getDouble("duracion", 0));
                     params.put("distancia", datos.getFloat("distancia", 0));
                     params.put("pasos", datos.getString("pasos"));
@@ -118,26 +118,7 @@ public class ConexionBD extends Worker {
                     out.print(params.toString());
                     out.close();
 
-                    int status = urlConnection.getResponseCode();
-                    System.out.println(status);
-                    if (status == 200) {
-                        // La peticion ha tenido exito
-                        BufferedInputStream input = new BufferedInputStream(urlConnection.getInputStream());
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(input, "UTF-8"));
-                        String row = "";
-                        String resultado = "";
-
-                        // Recorro las lineas devueltas por la peticion SQL
-                        while ((row = reader.readLine()) != null) {
-                            resultado += row;
-                        }
-                        input.close();
-
-                        output = new Data.Builder().putString("resultado", resultado).build();
-                        return output;
-                    }
-                    output = new Data.Builder().putString("resultado", "Sin resultado").build();
-                    return output;
+                   break;
 
                 case "Ubicaciones":
 
@@ -218,7 +199,7 @@ public class ConexionBD extends Worker {
 
             int status = urlConnection.getResponseCode();
             System.out.println(status);
-            if (status == 200) {
+            if (status == 200 || status == 500) {
                 output = new Data.Builder().putBoolean("resultado", true).build();
                 return output;
             } else {
@@ -326,6 +307,10 @@ public class ConexionBD extends Worker {
 
                 case "RutasPublicas":
                     params = "?consulta=" + consulta;
+                    break;
+
+                case "UltimaRuta":
+                    params = "?consulta=" + consulta + "&username=" + datos.getString("username");
                     break;
 
                 default:
