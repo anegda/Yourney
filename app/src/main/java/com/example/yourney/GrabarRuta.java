@@ -2,6 +2,7 @@ package com.example.yourney;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.arch.core.executor.DefaultTaskExecutor;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
@@ -32,6 +33,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
@@ -74,7 +80,8 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
             public void onClick(View view) {
                 TextView pasosNum = (TextView) findViewById(R.id.pasosNum);
                 String pasos = pasosNum.getText().toString();
-                String creador = "anegda";
+                Sesion sesion = new Sesion(GrabarRuta.this);
+                String creador = sesion.getUsername();
                 LocalDate currentdate = LocalDate.now();
                 String fecha = Integer.toString(currentdate.getYear()) + "-" + Integer.toString(currentdate.getMonthValue()) + "-" + Integer.toString(currentdate.getDayOfMonth());
 
@@ -110,29 +117,69 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
                     public void onChanged(WorkInfo workInfo) {
                         // Gestiono la respuesta de la peticion
                         if (workInfo != null && workInfo.getState().isFinished()) {
-                            //INTRODUCIMOS LAS UBICACIONES DE LA RUTA EN LA BD REMOTA
-                            for (Location location : locationService.getLocations()){
-                                Data datosUbi = new Data.Builder()
-                                        .putString("accion", "insert")
-                                        .putString("consulta", "Ubicaciones")
-                                        .putInt("idRuta", 1)
-                                        .putDouble("altitud", location.getAltitude())
-                                        .putDouble("latitud", location.getLatitude())
-                                        .putDouble("longitud", location.getLongitude())
+                            Data output = workInfo.getOutputData();
+                            if (output.getBoolean("resultado", false)) {
+
+                                // Obtengo el id de la ruta que acabamos de insertar
+                                Data datos = new Data.Builder()
+                                        .putString("accion", "selectRuta")
+                                        .putString("consulta", "UltimaRuta")
+                                        .putString("username", sesion.getUsername())
                                         .build();
 
-                                OneTimeWorkRequest insertUbi = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                                        .setInputData(datosUbi)
+                                OneTimeWorkRequest selectUltimaRuta = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                        .setInputData(datos)
                                         .build();
 
-                                WorkManager.getInstance(GrabarRuta.this).getWorkInfoByIdLiveData(insertUbi.getId()).observe((LifecycleOwner) new myLifeCycleOwner().getLifecycle(), new Observer<WorkInfo>() {
+                                WorkManager.getInstance(GrabarRuta.this).getWorkInfoByIdLiveData(selectUltimaRuta.getId()).observe(GrabarRuta.this, new Observer<WorkInfo>() {
                                     @Override
                                     public void onChanged(WorkInfo workInfo) {
-                                        Log.d("DAS", "ubicación insertada");
+                                        if (workInfo != null && workInfo.getState().isFinished()) {
+                                            Data output = workInfo.getOutputData();
+                                            if (!output.getString("resultado").equals("Sin resultado")) {
+                                                int idRuta = 0;
+                                                JSONParser parser = new JSONParser();
+                                                try {
+                                                    // Obtengo la informacion de las rutas devueltas
+                                                    System.out.println("###### " + output.getString("resultado") + " ######");
+                                                    JSONArray jsonResultado = (JSONArray) parser.parse(output.getString("resultado"));
+
+                                                    JSONObject row = (JSONObject) jsonResultado.get(0);
+                                                    idRuta = (int) Integer.parseInt((String) row.get("MAX(IdRuta)"));
+
+                                                } catch (ParseException e) {
+                                                    throw new RuntimeException(e);
+                                                }
+
+                                                //INTRODUCIMOS LAS UBICACIONES DE LA RUTA EN LA BD REMOTA
+                                                for (Location location : locationService.getLocations()) {
+                                                    Data datosUbi = new Data.Builder()
+                                                            .putString("accion", "insert")
+                                                            .putString("consulta", "Ubicaciones")
+                                                            .putInt("idRuta", idRuta)
+                                                            .putDouble("altitud", location.getAltitude())
+                                                            .putDouble("latitud", location.getLatitude())
+                                                            .putDouble("longitud", location.getLongitude())
+                                                            .build();
+
+                                                    OneTimeWorkRequest insertUbi = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                                            .setInputData(datosUbi)
+                                                            .build();
+
+                                                    WorkManager.getInstance(GrabarRuta.this).getWorkInfoByIdLiveData(insertUbi.getId()).observe((LifecycleOwner) new myLifeCycleOwner().getLifecycle(), new Observer<WorkInfo>() {
+                                                        @Override
+                                                        public void onChanged(WorkInfo workInfo) {
+                                                            Log.d("DAS", "ubicación insertada");
+                                                        }
+                                                    });
+
+                                                    WorkManager.getInstance(GrabarRuta.this).enqueue(insertUbi);
+                                                }
+                                            }
+                                        }
                                     }
                                 });
-
-                                WorkManager.getInstance(GrabarRuta.this).enqueue(insertUbi);
+                                WorkManager.getInstance(GrabarRuta.this).enqueue(selectUltimaRuta);
                             }
                         }
                     }
