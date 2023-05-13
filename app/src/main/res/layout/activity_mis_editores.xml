@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MisEditores">
+
+    <View
+        android:id="@+id/green_rectangle"
+        android:layout_width="0dp"
+        android:layout_height="118dp"
+        android:background="#3B7E26"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <SearchView
+        android:id="@+id/buscar_editores"
+        android:layout_width="300dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_rounded_background_opaco"
+        android:elevation="6dp"
+        android:gravity="center"
+        android:queryHint="@string/buscarUsuarios"
+        android:iconifiedByDefault="false"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingLeft="12dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="178dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="20dp"
+        android:elevation="6dp"
+        app:layout_constraintEnd_toEndOf="@+id/green_rectangle"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="@+id/green_rectangle"
+        app:layout_constraintTop_toTopOf="@+id/green_rectangle"
+        app:srcCompat="@drawable/yourblnaco" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/elreciclerview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10pt"
+        android:layout_marginTop="20dp"
+        android:clipToPadding="true"
+        android:scrollbars="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/green_rectangle" />
+
+    <View
+        android:id="@+id/green_rectangle2"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:background="#3B7E26"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnGuardarEditores"
+        android:layout_width="250dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="GUARDAR"
+        app:layout_constraintStart_toStartOf="@+id/green_rectangle2"
+        app:layout_constraintTop_toTopOf="@+id/green_rectangle2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

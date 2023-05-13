@@ -44,10 +44,6 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
 
         buscadorRutas.setOnQueryTextListener(this);
 
-        String nombreImagenes[] = {};
-        String nombreRutas[] = {};
-        String descrRutas[] = {};
-
         // Consulto la BD por las rutas publicas
         Data datos = new Data.Builder()
                 .putString("accion", "selectRuta")
