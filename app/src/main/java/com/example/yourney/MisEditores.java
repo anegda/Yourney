@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.SearchView;
 
 import org.json.simple.JSONArray;
@@ -103,7 +104,13 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MisEditores.this, EditarRuta.class);
-                intent.putStringArrayListExtra("editores", editores);
+                intent.putExtra("editores", editores);
+
+                intent.putExtra("tituloRuta", getIntent().getStringExtra("tituloRuta"));
+                intent.putExtra("dificultadRuta", getIntent().getIntExtra("dificultadRuta", 1));
+                intent.putExtra("infoRuta", getIntent().getStringExtra("infoRuta"));
+                intent.putExtra("visibilidadRuta", getIntent().getIntExtra("visibilidadRuta", 1));
+
                 startActivity(intent);
             }
         });
@@ -134,11 +141,24 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
 
     @Override
     public void itemClick(ItemListEditor item) {
-        editores.add(item.getUsername());
+        CheckBox checkBox = findViewById(R.id.checkBoxEditor);
         if(item.getIsChecked()){
             item.isChecked = false;
+
+            Boolean encontrado = false;
+            int i = 0;
+            while(!encontrado) {
+                if(editores.get(i)==item.getUsername()){
+                    editores.remove(i);
+                    encontrado=true;
+                }
+            }
+
+            System.out.println(editores);
         } else {
             item.isChecked = true;
+            editores.add(item.getUsername());
+            System.out.println(editores);
         }
     }
 }

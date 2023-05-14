@@ -57,6 +57,7 @@ public class ElAdaptadorRecyclerEditor extends RecyclerView.Adapter<ElAdaptadorR
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                holder.checkBoxEditor.setChecked(!holder.checkBoxEditor.isChecked());
                 itemClick.itemClick(item);
             }
         });
