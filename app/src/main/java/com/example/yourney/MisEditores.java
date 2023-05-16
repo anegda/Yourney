@@ -141,19 +141,13 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
 
     @Override
     public void itemClick(ItemListEditor item) {
-        CheckBox checkBox = findViewById(R.id.checkBoxEditor);
-        if(item.getIsChecked()){
-            item.isChecked = false;
-
-            Boolean encontrado = false;
-            int i = 0;
-            while(!encontrado) {
+        if(item.isChecked){
+            for (int i=0;i<editores.size();i++) {
                 if(editores.get(i)==item.getUsername()){
                     editores.remove(i);
-                    encontrado=true;
                 }
             }
-
+            item.isChecked = false;
             System.out.println(editores);
         } else {
             item.isChecked = true;
