@@ -7,6 +7,7 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import org.json.JSONException;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -50,6 +51,11 @@ public class ConexionBD extends Worker {
                 Data outputSelectRuta = selectRuta();
                 return Result.success(outputSelectRuta);
 
+            case "selectUsuario":
+                System.out.println("***** SELECT USUARIO *****");
+                Data outputSelectUsuario = selectUsuario();
+                return Result.success(outputSelectUsuario);
+
             case "select":
                 System.out.println("***** SELECT *****");
                 Data outputSelect = select();
@@ -59,6 +65,11 @@ public class ConexionBD extends Worker {
                 System.out.println("***** DELETE *****");
                 Data outputDelete = delete();
                 return Result.success(outputDelete);
+
+            case "notifPeticion":
+                System.out.println("***** NOTIFICACION AMISTAD *****");
+                Data outputPeticion = notifPeticion();
+                return Result.success(outputPeticion);
 
             default:
                 return Result.failure();
@@ -85,7 +96,6 @@ public class ConexionBD extends Worker {
             // Miro a que tabla se realiza la consulta
             String consulta = datos.getString("consulta");
             params.put("consulta", consulta);
-            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
 
             switch (consulta) {
                 case "Usuarios":
@@ -97,8 +107,12 @@ public class ConexionBD extends Worker {
                     params.put("email", datos.getString("email"));
                     params.put("fotoPerfil", RegisterActivity2.fotoen64);
 
-                    out.print(params.toString());
-                    out.close();
+                    System.out.println(params.get("username"));
+                    System.out.println(params.get("nombre"));
+                    System.out.println(params.get("apellidos"));
+                    System.out.println(params.get("password"));
+                    System.out.println(params.get("email"));
+                    System.out.println(RegisterActivity2.fotoen64.length());
 
                     break;
 
@@ -115,9 +129,6 @@ public class ConexionBD extends Worker {
                     params.put("visibilidad", datos.getInt("visibilidad", 1));
                     params.put("creador", datos.getString("creador"));
 
-                    out.print(params.toString());
-                    out.close();
-
                    break;
 
                 case "Ubicaciones":
@@ -127,9 +138,6 @@ public class ConexionBD extends Worker {
                     params.put("longitud", datos.getDouble("longitud", 999));
                     params.put("latitud", datos.getDouble("latitud", 999));
 
-                    out.print(params.toString());
-                    out.close();
-
                     break;
 
                 case "Editores":
@@ -137,18 +145,12 @@ public class ConexionBD extends Worker {
                     params.put("idRuta", datos.getInt("idRuta", 0));
                     params.put("username", datos.getString("username"));
 
-                    out.print(params.toString());
-                    out.close();
-
                     break;
 
                 case "Amigos":
 
                     params.put("username1", datos.getString("username1"));
                     params.put("username2", datos.getString("username2"));
-
-                    out.print(params.toString());
-                    out.close();
 
                     break;
 
@@ -159,9 +161,6 @@ public class ConexionBD extends Worker {
                     params.put("mensaje", datos.getString("mensaje"));
                     params.put("estado", datos.getString("estado"));
 
-                    out.print(params.toString());
-                    out.close();
-
                     break;
 
                 case "Imagenes":
@@ -170,18 +169,12 @@ public class ConexionBD extends Worker {
                     params.put("username", datos.getString("username"));
                     //String imgBlob = datos.getString("imgBlob");
 
-                    out.print(params.toString());
-                    out.close();
-
                     break;
 
                 case "RutasGuardadas":
 
                     params.put("idRuta", datos.getInt("idRuta", 0));
                     params.put("username", datos.getString("username"));
-
-                    out.print(params.toString());
-                    out.close();
 
                     break;
 
@@ -190,12 +183,14 @@ public class ConexionBD extends Worker {
                     params.put("username", datos.getString("username"));
                     params.put("token", datos.getString("token"));
 
-                    out.print(params.toString());
-                    out.close();
 
                 default:
                     break;
             }
+
+            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
+            out.print(params.toString());
+            out.close();
 
             int status = urlConnection.getResponseCode();
             System.out.println(status);
@@ -292,6 +287,7 @@ public class ConexionBD extends Worker {
             // Miro a que tabla se realiza la consulta
             String consulta = datos.getString("consulta");
 
+            // Diferentes parametros para cada consulta
             switch(consulta) {
                 case "InfoRuta":
                     params = "?consulta=" + consulta + "&idRuta=" + Integer.toString(datos.getInt("idRuta", 0));
@@ -335,21 +331,136 @@ public class ConexionBD extends Worker {
                 }
                 input.close();
 
-                output = new Data.Builder().putString("resultado", resultado).build();
-                return output;
+                if (resultado.equals("Sin resultado")) {
+                    // Formo el JSON de resultado
+
+                    // Diferentes datos a devolver para cada consulta
+                    switch(consulta) {
+                        case "InfoRuta":
+
+                            JSONParser parser = new JSONParser();
+                            JSONObject json = (JSONObject) parser.parse(resultado);
+
+                            output = new Data.Builder()
+                                    .putInt("idRuta", (Integer) json.get("IdRuta"))
+                                    .putString("nombre", (String) json.get("Nombre"))
+                                    .putString("descripcion", (String) json.get("Descripcion"))
+                                    .putDouble("duracion", (Double) json.get("Duracion"))
+                                    .putDouble("distancia", (Double) json.get("Distancia"))
+                                    .putInt("Distancia", (Integer) json.get("Distancia"))
+                                    .putString("dificultad", (String) json.get("Dificultad"))
+                                    .putString("fecha", (String) json.get("Fecha"))
+                                    .putInt("visibilidad", (Integer) json.get("Visibilidad"))
+                                    .putString("creador", (String) json.get("Creador"))
+                                    .putString("resultado", "exito")
+                                    .build();
+
+                            // Asignar la imagen (String) json.get("FotoDesc") donde sea
+
+                            break;
+
+                        case "MisRutas":
+
+                            // Loopear sobre todas las rutas devueltas
+                            /**
+                            JSONParser parser2 = new JSONParser();
+                            JSONObject json2 = (JSONObject) parser2.parse(resultado);
+
+                            output = new Data.Builder()
+                                    .putInt("idRuta", (Integer) json2.get("IdRuta"))
+                                    .putString("nombre", (String) json2.get("Nombre"))
+                                    .putString("descripcion", (String) json2.get("Descripcion"))
+                                    .putDouble("duracion", (Double) json2.get("Duracion"))
+                                    .putDouble("distancia", (Double) json2.get("Distancia"))
+                                    .putInt("Distancia", (Integer) json2.get("Distancia"))
+                                    .putString("dificultad", (String) json2.get("Dificultad"))
+                                    .putString("fecha", (String) json2.get("Fecha"))
+                                    .putInt("visibilidad", (Integer) json2.get("Visibilidad"))
+                                    .putString("creador", (String) json2.get("Creador"))
+                                    .putString("resultado", "exito")
+                                    .build();
+                            **/
+                            break;
+
+                        case "RutasGuardadas":
+
+                            // Loopear sobre todas las rutas devueltas
+                            /**
+                            JSONParser parser3 = new JSONParser();
+                            JSONObject json3 = (JSONObject) parser3.parse(resultado);
+
+                            output = new Data.Builder()
+                                    .putInt("idRuta", (Integer) json3.get("IdRuta"))
+                                    .putString("nombre", (String) json3.get("Nombre"))
+                                    .putString("descripcion", (String) json3.get("Descripcion"))
+                                    .putDouble("duracion", (Double) json3.get("Duracion"))
+                                    .putDouble("distancia", (Double) json3.get("Distancia"))
+                                    .putInt("Distancia", (Integer) json3.get("Distancia"))
+                                    .putString("dificultad", (String) json3.get("Dificultad"))
+                                    .putString("fecha", (String) json3.get("Fecha"))
+                                    .putInt("visibilidad", (Integer) json3.get("Visibilidad"))
+                                    .putString("creador", (String) json3.get("Creador"))
+                                    .putString("resultado", "exito")
+                                    .build();
+                            **/
+                            break;
+
+                        case "RutasPublicas":
+
+                             // Loopear sobre todas las rutas devueltas
+                             /**
+                            JSONParser parser4 = new JSONParser();
+                            JSONObject json4 = (JSONObject) parser4.parse(resultado);
+
+                            output = new Data.Builder()
+                                    .putInt("idRuta", (Integer) json4.get("IdRuta"))
+                                    .putString("nombre", (String) json4.get("Nombre"))
+                                    .putString("descripcion", (String) json4.get("Descripcion"))
+                                    .putDouble("duracion", (Double) json4.get("Duracion"))
+                                    .putDouble("distancia", (Double) json4.get("Distancia"))
+                                    .putInt("Distancia", (Integer) json4.get("Distancia"))
+                                    .putString("dificultad", (String) json4.get("Dificultad"))
+                                    .putString("fecha", (String) json4.get("Fecha"))
+                                    .putInt("visibilidad", (Integer) json4.get("Visibilidad"))
+                                    .putString("creador", (String) json4.get("Creador"))
+                                    .putString("resultado", "exito")
+                                    .build();
+                            **/
+                            break;
+
+                        case "UltimaRuta":
+
+                            JSONParser parser5 = new JSONParser();
+                            JSONObject json5 = (JSONObject) parser5.parse(resultado);
+
+                            output = new Data.Builder()
+                                    .putInt("idRuta", (Integer) json5.get("MAX(IdRuta)"))
+                                    .putString("resultado", "exito")
+                                    .build();
+                            break;
+
+                        default:
+                            break;
+                    }
+
+                    return output;
+
+                } else {
+                    output = new Data.Builder().putString("resultado", resultado).build();
+                    return output;
+                }
+
             }
             return output;
 
-        } catch(IOException e) {
+        } catch(IOException | ParseException e) {
             throw new RuntimeException(e);
         }
 
-
-
     }
 
-    public Data select() {
-        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selects.php";
+    public Data selectUsuario() {
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectUsuarios.php";
         HttpURLConnection urlConnection = null;
 
         Data datos = this.getInputData();
@@ -357,9 +468,10 @@ public class ConexionBD extends Worker {
         try {
             Data output = null;
 
-            // En este caso todas las consultas usan los mismos parametros (menos Login que requiere contraseña)
             String params = "?consulta=" + datos.getString("consulta") + "&username=" + datos.getString("username");
-            if(datos.getString("consulta").equals("Login")) {
+
+            // Añado la contraseña en caso de que se este logueando
+            if (datos.getString("consulta").equals("Login")) {
                 params += "&password=" + datos.getString("password");
             }
 
@@ -379,7 +491,85 @@ public class ConexionBD extends Worker {
                 while ((row = reader.readLine()) != null) {
                     resultado += row;
                 }
+                System.out.println(resultado);
                 input.close();
+
+                if (!resultado.equals("Sin resultado")) {
+
+                    // La consulta ha devuelto la informacion de un usuario
+
+                    if (datos.getString("consulta").equals("Login")) {
+
+                        output = new Data.Builder().putString("resultado", resultado).build();
+                        return output;
+
+                    } else if (datos.getString("consulta").equals("Usuarios")) {
+
+                        // Formo el JSON de resultado SIN la imagen
+                        JSONParser parser = new JSONParser();
+                        JSONObject json = (JSONObject) parser.parse(resultado);
+
+                        output = new Data.Builder()
+                                .putString("username", (String) json.get("Username"))
+                                .putString("nombre", (String) json.get("Nombre"))
+                                .putString("apellidos", (String) json.get("Apellidos"))
+                                .putString("password", (String) json.get("Password"))
+                                .putString("email", (String) json.get("Email"))
+                                .putString("resultado", "exito")
+                                .build();
+
+                        // Pongo la imagen donde toca (ajustes del perfil)??
+
+                        return output;
+                    }
+
+                } else {
+
+                    // La consulta no ha devuelto ningun usuario
+
+                    output = new Data.Builder().putString("resultado", resultado).build();
+                    return output;
+                }
+            }
+
+            return output;
+
+        } catch (IOException | ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Data select() {
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selects.php";
+        HttpURLConnection urlConnection = null;
+
+        Data datos = this.getInputData();
+
+        try {
+            Data output = null;
+
+            // En este caso todas las consultas usan los mismos parametros (menos Login que requiere contraseña)
+            String params = "?consulta=" + datos.getString("consulta") + "&username=" + datos.getString("username");
+
+            URL urlFinal = new URL(url + params);
+            urlConnection = (HttpURLConnection) urlFinal.openConnection();
+
+            int status = urlConnection.getResponseCode();
+            System.out.println(status);
+            if (status == 200) {
+                // La peticion ha tenido exito
+                BufferedInputStream input = new BufferedInputStream(urlConnection.getInputStream());
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input, "UTF-8"));
+                String row = "";
+                String resultado = "";
+
+                // Recorro las lineas devueltas por la peticion SQL
+                while ((row = reader.readLine()) != null) {
+                    resultado += row;
+                }
+                System.out.println(resultado);
+                input.close();
+
                 output = new Data.Builder().putString("resultado", resultado).build();
                 return output;
             }
@@ -441,6 +631,37 @@ public class ConexionBD extends Worker {
                 return output;
             } else {
                 output = new Data.Builder().putBoolean("resultado", false).build();
+                return output;
+            }
+
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Data notifPeticion() {
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/notifPeticion.php";
+        HttpURLConnection urlConnection = null;
+
+        Data datos = this.getInputData();
+
+        try {
+            Data output = null;
+
+            String params = "?emisor=" + datos.getString("emisor") + "&receptor=" + datos.getString("receptor") + "&idioma=" + datos.getString("idioma");
+
+            URL urlFinal = new URL(url + params);
+            urlConnection = (HttpURLConnection) urlFinal.openConnection();
+
+            int status = urlConnection.getResponseCode();
+            System.out.println(status);
+            if (status == 200) {
+                // La peticion ha tenido exito
+                output = new Data.Builder().putString("resultado", "exito").build();
+                return output;
+            } else {
+                // La peticion no ha tenido exito
+                output = new Data.Builder().putString("resultado", "sin exito").build();
                 return output;
             }
 

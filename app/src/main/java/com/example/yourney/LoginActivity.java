@@ -49,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
 
             // Comprobar credenciales contra la bbdd
             Data datos = new Data.Builder()
-                    .putString("accion", "select")
+                    .putString("accion", "selectUsuario")
                     .putString("consulta", "Login")
                     .putString("username", username)
                     .putString("password", password)
