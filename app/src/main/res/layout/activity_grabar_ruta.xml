@@ -145,4 +145,12 @@
         app:layout_constraintStart_toStartOf="@+id/btnParar"
         app:layout_constraintTop_toTopOf="@+id/btnParar" />
 
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="550dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -46,7 +48,17 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.Base64;
 
-public class GrabarRuta extends AppCompatActivity implements SensorEventListener {
+import androidx.fragment.app.FragmentActivity;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.example.yourney.databinding.ActivityMapsBinding;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+public class GrabarRuta extends FragmentActivity implements SensorEventListener, OnMapReadyCallback {
     private LocationService.LocationServiceBinder locationService;
 
     private Sensor contadorPasos;
@@ -55,8 +67,12 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
     private boolean iniciar = false;
     static String fotoDesc;
     private Runnable runnable;
+    private ServiceConnection conexion;
     private Button btn_grabando;
     private Handler handler = new Handler();
+    private GoogleMap mMap;
+    private ActivityMapsBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -233,7 +249,7 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
         startService(new Intent(this, LocationService.class));
 
         //CREAMOS LA CONEXIÓN AL SERVICIO
-        ServiceConnection conexion = new ServiceConnection() {
+        conexion = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
                 locationService = (LocationService.LocationServiceBinder) iBinder;
@@ -280,6 +296,13 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
                                     duracionNum.setText(duracionFormato);
                                     distanciaNum.setText(distanciaFormato);
                                     velocidadNum.setText(velocidadFormato);
+
+                                    //OBTENEMOS EL MAPA Y CREAMOS LA RUTA
+                                    SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                                            .findFragmentById(R.id.map);
+                                    if(mapFragment!=null) {
+                                        mapFragment.getMapAsync(GrabarRuta.this);
+                                    }
                                 }
                             });
 
@@ -302,6 +325,11 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
         if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null){
             contadorPasos = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         }
+
+        //OBTENEMOS EL MAPA Y CREAMOS LA RUTA
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     @Override
@@ -359,5 +387,36 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(runnable);
+        unbindService(conexion);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // OBTENEMOS LAS UBICACIONES DE LA RUTA Y REALIZAMOS EL RECORRIDO
+        DBHelper GestorBD = new DBHelper(this, "Yourney", null, 1);
+        SQLiteDatabase bd = GestorBD.getWritableDatabase();
+        String[] campos = new String[] {"idUbi", "idRuta", "altitud", "longitud", "latitud"};
+        Cursor c = bd.query("Ubicaciones",campos,null,null, null,null,null);
+
+        PolylineOptions line = new PolylineOptions().clickable(false);
+        LatLng firstLoc = null;
+        if (locationService!=null) {
+            for (Location location : locationService.getLocations()) {
+                LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+                line.add(loc);
+                if (firstLoc == null) {
+                    firstLoc = loc;
+                }
+            }
+
+            float zoom = 15.0f;
+            if (firstLoc != null) {
+                mMap.addMarker(new MarkerOptions().position(firstLoc).title("Comienzo"));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstLoc, zoom));
+            }
+            mMap.addPolyline(line);
+        }
     }
 }

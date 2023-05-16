@@ -21,6 +21,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".EnviarSolicitud"
+            android:exported="false" />
+        <activity
             android:name=".MisEditores"
             android:exported="false" />
         <activity
