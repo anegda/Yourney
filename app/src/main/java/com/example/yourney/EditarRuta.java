@@ -79,10 +79,9 @@ public class EditarRuta extends AppCompatActivity {
         }
 
         tituloRuta.setText(getIntent().getStringExtra("tituloRuta"));
-        dificultad.check(getIntent().getIntExtra("dificultadRuta", 0));
+        dificultad.check(getIntent().getIntExtra("dificultadRuta", 1));
         informacionExtra.setText(getIntent().getStringExtra("infoRuta"));
-        visibilidad.check(getIntent().getIntExtra("visibilidadRuta",  0));
-
+        visibilidad.check(getIntent().getIntExtra("visibilidadRuta",  1));
     }
 
     @Override
