@@ -1,6 +1,7 @@
 package com.example.yourney;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
@@ -40,37 +41,30 @@ public class ConexionBD extends Worker {
                 System.out.println("***** INSERT *****");
                 Data outputInsert = insert();
                 return Result.success(outputInsert);
-
             case "update":
                 System.out.println("***** UPDATE *****");
                 Data outputUpdate = update();
                 return Result.success(outputUpdate);
-
             case "selectRuta":
                 System.out.println("***** SELECT RUTA *****");
                 Data outputSelectRuta = selectRuta();
                 return Result.success(outputSelectRuta);
-
             case "selectUsuario":
                 System.out.println("***** SELECT USUARIO *****");
                 Data outputSelectUsuario = selectUsuario();
                 return Result.success(outputSelectUsuario);
-
             case "select":
                 System.out.println("***** SELECT *****");
                 Data outputSelect = select();
                 return Result.success(outputSelect);
-
             case "delete":
                 System.out.println("***** DELETE *****");
                 Data outputDelete = delete();
                 return Result.success(outputDelete);
-
             case "notifPeticion":
                 System.out.println("***** NOTIFICACION AMISTAD *****");
                 Data outputPeticion = notifPeticion();
                 return Result.success(outputPeticion);
-
             default:
                 return Result.failure();
         }

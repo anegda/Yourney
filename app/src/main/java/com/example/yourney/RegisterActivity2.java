@@ -67,24 +67,6 @@ public class RegisterActivity2 extends AppCompatActivity {
     private int anchoDestino;
     private int altoDestino;
 
-    // Sacar una fotografía usando una aplicación de fotografía y posteriormente
-    // escalarlas al tamaño que se van a mostrar, pero manteniendo su aspecto
-    /**
-    private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(), result -> {
-
-                if (result.getResultCode() == RESULT_OK && result.getData()!= null ) {
-                    Bundle bundle = result.getData().getExtras();
-                    Bitmap bitmapFoto = (Bitmap) bundle.get( "data" );
-                    bitmapRedimensionado = redimensionarImagen(bitmapFoto);
-                    fotoperfil.setImageBitmap(bitmapRedimensionado);
-
-                } else {
-                    Log. d ( "FOTOS" , "no se ha sacado la foto" );
-                }
-            });
-    **/
-
     private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == RESULT_OK && result.getData()!= null) {
             Bundle bundle = result.getData().getExtras();
@@ -317,43 +299,22 @@ public class RegisterActivity2 extends AppCompatActivity {
     }
 
     public void setFotopPerfil(View v){
+        try{
+            Intent i1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-        fotoperfil = findViewById(R.id.fotoperfil);
-        anchoDestino = fotoperfil.getWidth();
-        altoDestino = fotoperfil.getHeight();
+            Intent i2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        // dialogo para setear la foto de perfil con dos opciones --> (1)camara // (2)galeria
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.str6))
-                .setIcon(R.drawable.logocolor)
-                .setItems(new CharSequence[]{getString(R.string.str7), getString(R.string.str8)}, (dialog, which) -> {
-                    switch (which) {
+            Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+            chooser.putExtra(Intent.EXTRA_INTENT, i1);
 
-                        case 0:
-                            Intent elIntentFoto= new Intent(MediaStore. ACTION_IMAGE_CAPTURE );
-                            takePictureLauncher.launch(elIntentFoto);
-                            break;
+            Intent[] intentArray = { i2 };
+            chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+            startActivityForResult(chooser, PICK_IMAGE_REQUEST); //ESTA DEPRECATED PERO FUNCIONA
+            //ALTERNATIVA A ESTE MÉTODO: https://stackoverflow.com/questions/62671106/onactivityresult-method-is-deprecated-what-is-the-alternative
+        }catch (Exception e){
+            Log.d("DAS","Error la imagen no se carga correctamente");
+        }
 
-                        case 1:
-                            /**
-                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-                            // agregar el siguiente extra para establecer la orientación de la galería a la orientación actual de la pantalla
-                            int orientation = getResources().getConfiguration().orientation;
-                            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                intent.putExtra("orientation", ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                            } else {
-                                intent.putExtra("orientation", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                            }
-                            startActivityForResult(intent, PICK_IMAGE_REQUEST);
-                            **/
-                            pickMedia.launch(new PickVisualMediaRequest.Builder()
-                                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                                    .build());
-                            break;
-                    }
-                })
-                .show();
     }
 
 
@@ -363,62 +324,35 @@ public class RegisterActivity2 extends AppCompatActivity {
 
         // si la imagen viene de la galeria, primero reducir la calidad y despues colocarla en el imageview cuando el proceso termine
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri uri = data.getData();
-            InputStream inputStream = null;
             try {
-                inputStream = getContentResolver().openInputStream(uri);
+                Uri imageUri = data.getData();
+                Bitmap bitmapOriginal = null;
+                if(imageUri==null){
+                    bitmapOriginal = (Bitmap) data.getExtras().get("data");
+                }else {
+                    InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                    bitmapOriginal = BitmapFactory.decodeStream(imageStream);
+                }
+                // Reducir la calidad de la imagen al 50%
+                int calidad = 50; // porcentaje de calidad de la imagen (0-100)
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmapOriginal.compress(Bitmap.CompressFormat.JPEG, calidad, byteArrayOutputStream);
+
+                // Convertir el ByteArrayOutputStream en un array de bytes
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                fotoen64 = Base64.getEncoder().encodeToString(tratarImagen(byteArray));
+
+                // Decodificar el array de bytes en un objeto Bitmap
+                bitmapRedimensionado = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+                // Mostrar el Bitmap redimensionado en una ImageView
+                fotoperfil.setImageBitmap(bitmapRedimensionado);
+
             } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
+                Toast.makeText(RegisterActivity2.this, "ERROR", Toast.LENGTH_SHORT).show();
             }
-            bitmapOriginal  = BitmapFactory.decodeStream(inputStream);
-
-            // Reducir la calidad de la imagen al 50%
-            int calidad = 50; // porcentaje de calidad de la imagen (0-100)
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmapOriginal.compress(Bitmap.CompressFormat.JPEG, calidad, byteArrayOutputStream);
-
-            // Convertir el ByteArrayOutputStream en un array de bytes
-            byte[] byteArray = byteArrayOutputStream.toByteArray();
-
-            // Decodificar el array de bytes en un objeto Bitmap
-            bitmapRedimensionado = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-
-            // redimensionar la imagen al imageview
-            bitmapRedimensionado = redimensionarImagen(bitmapRedimensionado);
-
-            // Mostrar el Bitmap redimensionado en una ImageView
-            fotoperfil.setImageBitmap(bitmapRedimensionado);
-
         }
-        // una vez colocada la imagen restablecer la orientación de la pantalla a su valor predeterminado
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-    }
-
-
-    public Bitmap redimensionarImagen (Bitmap bitmapFoto){
-
-        int anchoImagen = bitmapFoto.getWidth();
-        int altoImagen = bitmapFoto.getHeight();
-
-        float ratioImagen = ( float ) anchoImagen / ( float ) altoImagen;
-        float ratioDestino = ( float ) anchoDestino / ( float ) altoDestino;
-        int anchoFinal = anchoDestino;
-        int altoFinal = altoDestino;
-        if (ratioDestino > ratioImagen) {
-            anchoFinal = ( int ) (( float )altoDestino * ratioImagen);
-        } else {
-            altoFinal = ( int ) (( float )anchoDestino / ratioImagen);
-        }
-        bitmapRedimensionado = Bitmap. createScaledBitmap (bitmapFoto,anchoFinal,altoFinal, true );
-        return bitmapRedimensionado;
-    }
-
-
-    // restablecer la orientación de la pantalla a su valor predeterminado después de cualquier cambio de orientación de pantalla
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
     protected void onSaveInstanceState(Bundle savedInstanceState) {
@@ -432,6 +366,23 @@ public class RegisterActivity2 extends AppCompatActivity {
             String fotoen64 = Base64.getEncoder().encodeToString(byteArray);
             savedInstanceState.putString("fotoen64", fotoen64);
         }
+    }
+
+    protected byte[] tratarImagen(byte[] img){
+        /**
+         * Basado en el código extraído de Stack Overflow
+         * Pregunta: https://stackoverflow.com/questions/57107489/sqliteblobtoobigexception-row-too-big-to-fit-into-cursorwindow-while-writing-to
+         * Autor: https://stackoverflow.com/users/3694451/leo-vitor
+         * Modificado por Ane García para traducir varios términos y adaptarlo a la aplicación
+         */
+        while(img.length > 50000){
+            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+            Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.5), (int)(bitmap.getHeight()*0.5), true);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            img = stream.toByteArray();
+        }
+        return img;
     }
 
 }
