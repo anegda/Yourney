@@ -1,5 +1,14 @@
 package com.example.yourney;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.SearchView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,19 +17,6 @@ import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
-
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.SearchView;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -31,11 +27,11 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerAmigos.RecyclerItemClick,SearchView.OnQueryTextListener {
+public class SolicitudesRecibidas extends AppCompatActivity implements ElAdaptadorRecyclerAmigos.RecyclerItemClick,SearchView.OnQueryTextListener {
     SearchView buscadorUsuarios;
     RecyclerView lalista;
     private List<ItemListAmigo> items = new ArrayList<ItemListAmigo>();
-    ElAdaptadorRecyclerAmigos adapter = new ElAdaptadorRecyclerAmigos(items, MisAmigos.this);
+    ElAdaptadorRecyclerAmigos adapter = new ElAdaptadorRecyclerAmigos(items, SolicitudesRecibidas.this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +47,13 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         Sesion sesion = new Sesion(this);
         String username = sesion.getUsername();
 
-        ArrayList<String> amigos = new ArrayList<String>();
+        ArrayList<String> userPeticion = new ArrayList<String>();
+        ArrayList<String> messagePeticion = new ArrayList<String>();
 
-        // CONSULTAMOS A LA BD POR AMIGOS
+        // CONSULTAMOS A LA BD POR PETICIONES DE AMISTAD
         Data datos = new Data.Builder()
                 .putString("accion", "select")
-                .putString("consulta", "Amigos")
+                .putString("consulta", "Peticiones")
                 .putString("username", username)
                 .build();
 
@@ -64,7 +61,7 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
                 .setInputData(datos)
                 .build();
 
-        WorkManager.getInstance(MisAmigos.this).getWorkInfoByIdLiveData(select.getId()).observe(MisAmigos.this, new Observer<WorkInfo>() {
+        WorkManager.getInstance(SolicitudesRecibidas.this).getWorkInfoByIdLiveData(select.getId()).observe(SolicitudesRecibidas.this, new Observer<WorkInfo>() {
             @Override
             public void onChanged(WorkInfo workInfo) {
                 if (workInfo != null && workInfo.getState().isFinished()) {
@@ -80,21 +77,21 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
                             while (i < jsonResultado.size()) {
                                 JSONObject row = (JSONObject) jsonResultado.get(i);
                                 System.out.println("***** " + row + " *****");
-                                String username1 = (String) row.get("Username1");
                                 String username2 = (String) row.get("Username2");
-                                if(username1.equals(username)){
-                                    amigos.add(username2);
-                                } else{
-                                    amigos.add(username1);
+                                String message = (String) row.get("Mensaje");
+                                int estado = (int) row.get("Estado");
+                                //SI LA PETICIÓN ESTA SIN RESOLVER LA IMPRIMIMOS POR PANTALLA
+                                if(estado == 0){
+                                    userPeticion.add(username2);
+                                    messagePeticion.add(message);
                                 }
-
                                 i++;
                             }
 
-                            items = getItems(amigos);
-                            adapter = new ElAdaptadorRecyclerAmigos(items, MisAmigos.this);
+                            items = getItems(userPeticion, messagePeticion);
+                            adapter = new ElAdaptadorRecyclerAmigos(items, SolicitudesRecibidas.this);
                             lalista.setAdapter(adapter);
-                            buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);
+                            buscadorUsuarios.setOnQueryTextListener(SolicitudesRecibidas.this);
 
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
@@ -103,41 +100,42 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
                 }
             }
         });
-        WorkManager.getInstance(MisAmigos.this).enqueue(select);
+        WorkManager.getInstance(SolicitudesRecibidas.this).enqueue(select);
 
         Log.d("DAS", String.valueOf(items));
-        adapter = new ElAdaptadorRecyclerAmigos(items, MisAmigos.this);
+        adapter = new ElAdaptadorRecyclerAmigos(items, SolicitudesRecibidas.this);
         lalista.setAdapter(adapter);
-        buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);
+        buscadorUsuarios.setOnQueryTextListener(SolicitudesRecibidas.this);
 
-        Button añadirAmigo = (Button) findViewById(R.id.añadirAmigo);
-        añadirAmigo.setOnClickListener(new View.OnClickListener() {
+        Button btn_añadir = (Button) findViewById(R.id.añadirAmigo);
+        btn_añadir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MisAmigos.this, EnviarSolicitud.class));
+                startActivity(new Intent(SolicitudesRecibidas.this, EnviarSolicitud.class));
                 finish();
             }
         });
     }
 
-    private List<ItemListAmigo> getItems(ArrayList<String> amigos) {
-        List<ItemListAmigo> itemListAmigos = new ArrayList<>();
-        for (String amigo : amigos) {
-            final String[] username = {amigo};
-            final String[] nombre = {""};
+    private List<ItemListAmigo> getItems(ArrayList<String> usuarios, ArrayList<String> mensajes) {
+        List<ItemListAmigo> itemListPeticiones = new ArrayList<>();
+        int i = 0;
+        while(i < usuarios.size()){
+            final String[] username = {usuarios.get(i)};
+            final String[] mensaje = {mensajes.get(i)};
             final Bitmap[] bitmap = new Bitmap[1];
             // CONSULTAMOS A LA BD POR AMIGOS
             Data datos = new Data.Builder()
                     .putString("accion", "select")
                     .putString("consulta", "Usuarios")
-                    .putString("username", amigo)
+                    .putString("username", username[0])
                     .build();
 
             OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
                     .setInputData(datos)
                     .build();
 
-            WorkManager.getInstance(MisAmigos.this).getWorkInfoByIdLiveData(select.getId()).observe(MisAmigos.this, new Observer<WorkInfo>() {
+            WorkManager.getInstance(SolicitudesRecibidas.this).getWorkInfoByIdLiveData(select.getId()).observe(SolicitudesRecibidas.this, new Observer<WorkInfo>() {
                 @Override
                 public void onChanged(WorkInfo workInfo) {
                     if (workInfo != null && workInfo.getState().isFinished()) {
@@ -148,18 +146,16 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
                                 // Obtengo la informacion de el usuario devuelto
                                 JSONObject jsonResultado =(JSONObject) parser.parse(output.getString("resultado"));
                                 Log.d("DAS", String.valueOf(jsonResultado));
-                                username[0] = (String) jsonResultado.get("Username");
-                                nombre[0] = (String) jsonResultado.get("Nombre");
                                 String fotoPerfil = (String) jsonResultado.get("FotoPerfil");
 
                                 byte[] encodeByte = Base64.getDecoder().decode(fotoPerfil);
                                 bitmap[0] = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-                                ItemListAmigo amigoAct = new ItemListAmigo(username[0], nombre[0], bitmap[0]);
-                                itemListAmigos.add(amigoAct);
+                                ItemListAmigo amigoAct = new ItemListAmigo(username[0], mensaje[0], bitmap[0]);
+                                itemListPeticiones.add(amigoAct);
 
-                                adapter = new ElAdaptadorRecyclerAmigos(itemListAmigos, MisAmigos.this);
+                                adapter = new ElAdaptadorRecyclerAmigos(itemListPeticiones, SolicitudesRecibidas.this);
                                 lalista.setAdapter(adapter);
-                                buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);
+                                buscadorUsuarios.setOnQueryTextListener(SolicitudesRecibidas.this);
                             } catch (ParseException e) {
                                 throw new RuntimeException(e);
                             }
@@ -167,9 +163,9 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
                     }
                 }
             });
-            WorkManager.getInstance(MisAmigos.this).enqueue(select);
+            WorkManager.getInstance(SolicitudesRecibidas.this).enqueue(select);
         }
-        return itemListAmigos;
+        return itemListPeticiones;
     }
 
     @Override

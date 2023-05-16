@@ -52,4 +52,7 @@
     <string name="registro_incorrecto">The username already exists</string>
     <string name="registro_correcto">Welcome</string>
     <string name="buscarUsuarios">Find users by username</string>
+    <string name="mensaje">Message</string>
+    <string name="enviar">Send</string>
+    <string name="peticion_incorrecta">The username does not exist</string>
 </resources>
