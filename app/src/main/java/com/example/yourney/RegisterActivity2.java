@@ -323,7 +323,7 @@ public class RegisterActivity2 extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // si la imagen viene de la galeria, primero reducir la calidad y despues colocarla en el imageview cuando el proceso termine
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
             try {
                 Uri imageUri = data.getData();
                 Bitmap bitmapOriginal = null;
@@ -377,7 +377,7 @@ public class RegisterActivity2 extends AppCompatActivity {
          */
         while(img.length > 50000){
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-            Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.5), (int)(bitmap.getHeight()*0.5), true);
+            Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.6), (int)(bitmap.getHeight()*0.6), true);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
             img = stream.toByteArray();

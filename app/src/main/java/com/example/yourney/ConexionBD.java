@@ -35,6 +35,7 @@ public class ConexionBD extends Worker {
     public Result doWork() {
         Data datos = this.getInputData();
         String accion = datos.getString("accion");
+        Log.d("DAS", String.valueOf(datos));
 
         switch (accion) {
             case "insert":
