@@ -12,7 +12,10 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,14 +29,19 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycler.RecyclerItemClick {
 
     public ActionBarDrawerToggle  actionBarDrawerToggle;
+
+   private ArrayList<String> nombreImagenes = new ArrayList<String>();
     List<ItemListRuta> items = new ArrayList<>();
     String titulo, descripcion, imagen = "";
+    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,24 +110,24 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
             }
         });
 
-        /***
-        //las imagenes deben ser cuadradas
-        String [] nombreImagenes = {"fotoruta","fotoruta2","fotoruta3"};
+        /*************************** ruta a mostrar de ejemplo **********************************
 
-        // unos 15 caracteres max
-        String [] nombreRutas = {"Monte Aventura","Bicicleta Salvaje","Cascada Misteriosa"};
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fotoruta);
 
-        // descripciones de unas 25 palabras (180 caracteres aprox)
-        String [] descrRutas = {"Una emocionante caminata de día completo a través de los senderos del monte, con impresionantes vistas panorámicas y desafiantes ascensos.",
-                "Una emocionante ruta de mountain bike de medio día a través de bosques y senderos sinuosos, con saltos y obstáculos desafiantes.",
-                "Una relajante caminata de medio día a través de un hermoso bosque y un río cristalino, hasta llegar a una impresionante cascada rodeada de un ambiente natural y tranquilo."};
-        **/
+         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+         byte[] byteArray = byteArrayOutputStream.toByteArray();
+         String fotoen64 = new String(Base64.getEncoder().encode(byteArray));
 
-        ArrayList<String> nombreImagenes = new ArrayList<String>();
-        ArrayList<String> nombreRutas = new ArrayList<String>();
-        ArrayList<String> descrRutas = new ArrayList<String>();
+        String foto = fotoen64;
+        String nombre = "Ruta Ejemplo";
+        String descr = "Este es un ejemplo de una ruta creada por defecto. Así se van a ver el resto de rutas que crees a lo largo de tu aventura";
+        ItemListRuta rutaEjemplo = new ItemListRuta(foto, nombre, descr);
+        items.add(rutaEjemplo);
 
-        // Consulto la BD por mis rutas
+         /****************************************************************************************/
+
+         // Consulto la BD por mis rutas
         Sesion sesion = new Sesion(this);
 
         Data datos = new Data.Builder()

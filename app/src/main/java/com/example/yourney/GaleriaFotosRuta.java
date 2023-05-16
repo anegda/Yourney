@@ -53,7 +53,7 @@ public class GaleriaFotosRuta extends AppCompatActivity {
         prepareRecyclerView();
 
         //BOTÓN DE DESCARGAS
-        Button descargar = (Button) findViewById(R.id.btn_descargar_todas);
+        ImageView descargar = findViewById(R.id.btnDescargar);
         descargar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,7 +91,7 @@ public class GaleriaFotosRuta extends AppCompatActivity {
         });
 
         //BOTÓN DE ANADIR IMAGEN
-        Button btn_anadir = (Button) findViewById(R.id.btn_anadir_img);
+        ImageView btn_anadir = findViewById(R.id.btnAdd);
         btn_anadir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

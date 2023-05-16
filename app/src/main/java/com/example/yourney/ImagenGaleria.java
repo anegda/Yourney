@@ -42,7 +42,7 @@ public class ImagenGaleria extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         imgView.setImageBitmap(bitmap);
 
-        Button btn_descargar = findViewById(R.id.btn_descargar_img);
+        ImageView btn_descargar = findViewById(R.id.btn_descargar_img);
         btn_descargar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,7 +74,7 @@ public class ImagenGaleria extends AppCompatActivity {
             }
         });
 
-        Button btn_eliminar = (Button) findViewById(R.id.btn_eliminar_img);
+        ImageView btn_eliminar = findViewById(R.id.btn_eliminar_img);
         btn_eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

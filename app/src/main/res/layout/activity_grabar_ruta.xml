@@ -110,23 +110,39 @@
 
     <Button
         android:id="@+id/btnEmpezar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="129dp"
+        android:layout_height="41dp"
+        android:background="@drawable/round_btn_gris"
         android:layout_marginStart="50dp"
         android:layout_marginTop="20dp"
         android:layout_weight="1"
+        android:textColor="#ffff"
         android:text="START"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/caloriasText" />
 
     <Button
         android:id="@+id/btnParar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="129dp"
+        android:layout_height="41dp"
+        android:background="@drawable/round_btn_gris"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="50dp"
         android:layout_weight="1"
+        android:textColor="#ffff"
         android:text="STOP"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/caloriasText" />
+
+    <Button
+        android:id="@+id/grabando"
+        android:layout_width="19dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/round_btn_rojo"
+        app:layout_constraintBottom_toBottomOf="@+id/btnParar"
+        app:layout_constraintStart_toStartOf="@+id/btnParar"
+        app:layout_constraintTop_toTopOf="@+id/btnParar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

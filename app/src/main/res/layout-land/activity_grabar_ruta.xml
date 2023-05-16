@@ -110,23 +110,41 @@
 
     <Button
         android:id="@+id/btnEmpezar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="129dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="216dp"
         android:layout_weight="1"
+        android:background="@drawable/round_btn_gris"
         android:text="START"
+        android:textColor="#ffff"
+        app:layout_constraintEnd_toStartOf="@+id/btnParar"
+        app:layout_constraintHorizontal_bias="0.449"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/caloriasText" />
 
     <Button
         android:id="@+id/btnParar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="50dp"
+        android:layout_width="129dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="216dp"
+        android:layout_marginEnd="188dp"
         android:layout_weight="1"
+        android:background="@drawable/round_btn_gris"
         android:text="STOP"
+        android:textColor="#ffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/caloriasText" />
+
+    <Button
+        android:id="@+id/grabando"
+        android:layout_width="19dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
+        android:background="@drawable/round_btn_rojo"
+        app:layout_constraintBottom_toBottomOf="@+id/btnParar"
+        app:layout_constraintStart_toStartOf="@+id/btnParar"
+        app:layout_constraintTop_toTopOf="@+id/btnParar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

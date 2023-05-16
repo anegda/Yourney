@@ -2,47 +2,56 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-    <item android:title="Buscar Rutas">
+
+    <item
+        android:title="Rutas"
+        android:icon="@android:drawable/ic_btn_speak_now">
         <menu>
             <item
                 android:id="@+id/buscarRutas"
-                android:icon="@android:drawable/ic_btn_speak_now"
+                android:icon="@drawable/buscarruta"
                 android:title="Buscar Rutas" />
             <item
                 android:id="@+id/rutasFavoritas"
-                android:icon="@android:drawable/ic_btn_speak_now"
+                android:icon="@drawable/rutafav"
                 android:title="Rutas Favoritas" />
             <item
                 android:id="@+id/crearRuta"
-                android:icon="@android:drawable/ic_btn_speak_now"
+                android:icon="@drawable/annadiruta"
                 android:title="Crear Ruta" />
         </menu>
     </item>
-    <item android:title="Amigos">
+
+    <item
+        android:title="Amigos"
+        android:icon="@android:drawable/ic_btn_speak_now">
         <menu>
             <item
-                android:id="@+id/solicitudesAmistad"
-                android:icon="@android:drawable/ic_btn_speak_now"
-                android:title="Solicitudes de Amistad" />
-            <item
                 android:id="@+id/misAmigos"
-                android:icon="@android:drawable/ic_btn_speak_now"
+                android:icon="@drawable/misamigos"
                 android:title="Mis Amigos" />
+            <item
+                android:id="@+id/solicitudesAmistad"
+                android:icon="@drawable/annadiramigo"
+                android:title="Solicitudes de Amistad" />
         </menu>
     </item>
-    <item android:title="Configuración">
+
+    <item
+        android:title="Configuración"
+        android:icon="@android:drawable/ic_btn_speak_now">
         <menu>
             <item
                 android:id="@+id/editarPerfil"
-                android:icon="@android:drawable/ic_btn_speak_now"
+                android:icon="@drawable/editar"
                 android:title="Editar Perfil" />
             <item
                 android:id="@+id/Preferencias"
-                android:icon="@android:drawable/ic_btn_speak_now"
+                android:icon="@drawable/preferencias"
                 android:title="Preferencias" />
             <item
                 android:id="@+id/CerrarSesion"
-                android:icon="@android:drawable/ic_btn_speak_now"
+                android:icon="@drawable/cerrarsesion"
                 android:title="Cerrar sesión" />
         </menu>
     </item>

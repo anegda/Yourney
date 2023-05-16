@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -31,6 +32,8 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -51,8 +54,9 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
     private int pasosHist = 0;
     private boolean iniciar = false;
     static String fotoDesc;
-
-    private Handler h = new Handler();
+    private Runnable runnable;
+    private Button btn_grabando;
+    private Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +66,13 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
         Button parar_btn = (Button) findViewById(R.id.btnParar);
         Button empezar_btn = (Button) findViewById(R.id.btnEmpezar);
         empezar_btn.setEnabled(true);
+        empezar_btn.setBackgroundResource(R.drawable.round_btn_verde);
         parar_btn.setEnabled(false);
+
+        // DESHABILITAR EL TEXTVIEW QUE DICE GRABANDO RUTA Y AÑADIR PARPADEO
+        btn_grabando = findViewById(R.id.grabando);
+        btn_grabando.setVisibility(View.GONE);
+
 
         //AÑADIMOS LOS LISTENERS A CADA BOTÓN
         empezar_btn.setOnClickListener(new View.OnClickListener() {
@@ -70,8 +80,26 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
             public void onClick(View view) {
                 locationService.grabarRuta();
                 empezar_btn.setEnabled(false);
+                empezar_btn.setBackgroundResource(R.drawable.round_btn_gris);
                 parar_btn.setEnabled(true);
+                btn_grabando.setVisibility(View.VISIBLE);
+                parar_btn.setBackgroundResource(R.drawable.round_btn_verde);
                 iniciar = true;
+
+                btn_grabando = findViewById(R.id.grabando);
+                runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (btn_grabando.getVisibility() == View.VISIBLE) {
+                            btn_grabando.setVisibility(View.INVISIBLE);
+                        } else {
+                            btn_grabando.setVisibility(View.VISIBLE);
+                        }
+                        handler.postDelayed(this, 1000); // Cambia la duración a tu preferencia
+                    }
+                };
+
+                handler.postDelayed(runnable, 1000); // Cambia la duración a tu preferencia
             }
         });
 
@@ -242,7 +270,7 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
                             final String velocidadFormato = String.format("%.2f KM/H", velocidad);
 
                             //ACTUALIZAMOS LOS TEXTVIEWS TRAS MEDIO SEGUNDO
-                            h.post(new Runnable() {
+                            handler.post(new Runnable() {
                                 @Override
                                 public void run() {
                                     TextView duracionNum = findViewById(R.id.duracionNum);
@@ -325,5 +353,11 @@ public class GrabarRuta extends AppCompatActivity implements SensorEventListener
         if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null){
             sensorManager.registerListener(this, contadorPasos, SensorManager.SENSOR_DELAY_NORMAL);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(runnable);
     }
 }
