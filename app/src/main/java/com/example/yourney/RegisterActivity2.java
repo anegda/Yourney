@@ -1,6 +1,7 @@
 package com.example.yourney;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +42,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 
@@ -54,7 +56,7 @@ public class RegisterActivity2 extends AppCompatActivity {
     private EditText editNombre;
     private EditText editApellido;
     private ImageView fotoperfil;
-    public static String fotoen64;
+    static String fotoen64;
     private Button btnLogin;
     private Bitmap bitmapRedimensionado;
     private Bitmap bitmapOriginal;
@@ -67,6 +69,7 @@ public class RegisterActivity2 extends AppCompatActivity {
 
     // Sacar una fotografía usando una aplicación de fotografía y posteriormente
     // escalarlas al tamaño que se van a mostrar, pero manteniendo su aspecto
+    /**
     private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), result -> {
 
@@ -80,7 +83,60 @@ public class RegisterActivity2 extends AppCompatActivity {
                     Log. d ( "FOTOS" , "no se ha sacado la foto" );
                 }
             });
+    **/
 
+    private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == RESULT_OK && result.getData()!= null) {
+            Bundle bundle = result.getData().getExtras();
+            ImageView img_perfil = findViewById(R.id.fotoperfil);
+            Bitmap miniatura = (Bitmap) bundle.get("data");
+            img_perfil.setImageBitmap(miniatura);
+
+            /** Código para convertir un BitMap en un String
+             *  Pregunta de StackOverflow: https://stackoverflow.com/questions/13562429/how-many-ways-to-convert-bitmap-to-string-and-vice-versa
+             *  Autor de la respuesta: https://stackoverflow.com/users/1191766/sachin10
+             */
+            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            miniatura.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
+            byte[] img_bytes = byteStream.toByteArray();
+            fotoen64 = java.util.Base64.getEncoder().encodeToString(img_bytes);
+            System.out.println(fotoen64);
+
+        } else {
+            Log.d("TakenPicture", "No photo taken");
+        }
+    });
+
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+        if (uri != null) {
+            Log.d("PhotoPicker", "Selected URI: " + uri);
+            Bitmap bmap = null;
+            try {
+                /** Código utilizado para obtener el BitMap de una imagen sacada de la galería mediante una URI
+                 *  Pregunta de StackOverflow: https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                 *  Autor de la respuesta: https://stackoverflow.com/users/986/mark-ingram
+                 */
+                bmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+
+                /** Código para convertir un BitMap en un String
+                 *  Pregunta de StackOverflow: https://stackoverflow.com/questions/13562429/how-many-ways-to-convert-bitmap-to-string-and-vice-versa
+                 *  Autor de la respuesta: https://stackoverflow.com/users/1191766/sachin10
+                 */
+                ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                bmap.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
+                byte[] img_bytes =byteStream.toByteArray();
+                fotoen64 = java.util.Base64.getEncoder().encodeToString(img_bytes);
+                System.out.println(fotoen64);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            ImageView img_perfil = findViewById(R.id.fotoperfil);
+            img_perfil.setImageURI(uri);
+        } else {
+            Log.d("PhotoPicker", "No media selected");
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +175,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                 fotoperfil.setImageBitmap(bitmapRedimensionado);
             }
         }else{
-            fotoperfil.setBackgroundResource(R.drawable.perfil);
+            fotoperfil.setImageResource(R.drawable.perfil);
         }
 
         // objeto OrientationEventListener para detectar cambios de orientación de pantalla
@@ -139,7 +195,8 @@ public class RegisterActivity2 extends AppCompatActivity {
 
         if (isEmailValid) {
             // obtener bitmap del imageview actual --> comprimirla --> convertirlo en base64 para subirlo a la bbdd
-            if (fotoperfil.getDrawable()!=null) {
+            //if (fotoperfil.getDrawable()!=null) {
+            if (fotoen64 == null) {
                 Bitmap bitmap = ((BitmapDrawable) fotoperfil.getDrawable()).getBitmap();
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
@@ -147,14 +204,18 @@ public class RegisterActivity2 extends AppCompatActivity {
                 fotoen64 = new String(Base64.getEncoder().encode(byteArray));
             }
 
+            System.out.println("******** BOTON PULSADO ********");
+            System.out.println(fotoen64);
+
             // Obtengo los datos a introducir en la BD
             String nombre = editNombre.getText().toString();
             String apellidos = editApellido.getText().toString();
 
             // Comprobar credenciales contra la BD
             Data datos = new Data.Builder()
-                     .putString("accion", "select")
+                     .putString("accion", "selectUsuario")
                      .putString("consulta", "Usuarios")
+                     .putString("actividad", "Registro")
                      .putString("username", user)
                      .build();
 
@@ -231,6 +292,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                                             Sesion sesion = new Sesion(RegisterActivity2.this);
                                             sesion.setUsername(user);
 
+                                            System.out.println("***** " + fotoen64);
                                             // Paso a la siguiente actividad
                                             Toast.makeText(RegisterActivity2.this, getString(R.string.registro_correcto) + " " + user + "!", Toast.LENGTH_SHORT).show();
                                             Intent intent = new Intent(RegisterActivity2.this, MainActivity.class);
@@ -273,6 +335,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                             break;
 
                         case 1:
+                            /**
                             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
                             // agregar el siguiente extra para establecer la orientación de la galería a la orientación actual de la pantalla
@@ -283,6 +346,10 @@ public class RegisterActivity2 extends AppCompatActivity {
                                 intent.putExtra("orientation", ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                             }
                             startActivityForResult(intent, PICK_IMAGE_REQUEST);
+                            **/
+                            pickMedia.launch(new PickVisualMediaRequest.Builder()
+                                    .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                                    .build());
                             break;
                     }
                 })
