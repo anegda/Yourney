@@ -88,6 +88,7 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
         empezar_btn.setBackgroundResource(R.drawable.round_btn_verde);
         parar_btn.setEnabled(false);
 
+
         // DESHABILITAR EL TEXTVIEW QUE DICE GRABANDO RUTA Y AÑADIR PARPADEO
         btn_grabando = findViewById(R.id.grabando);
         btn_grabando.setVisibility(View.GONE);

@@ -159,8 +159,8 @@
         android:layout_height="41dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
-        android:elevation="16dp"
         android:layout_weight="1"
+        android:alpha="1"
         android:background="@drawable/round_btn_gris"
         android:text="START"
         android:textColor="#ffff"
@@ -171,14 +171,15 @@
         android:id="@+id/btnParar"
         android:layout_width="129dp"
         android:layout_height="41dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="16dp"
         android:layout_weight="1"
+        android:alpha="1"
         android:background="@drawable/round_btn_gris"
         android:text="STOP"
         android:textColor="#ffff"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/grabando"
@@ -186,6 +187,7 @@
         android:layout_height="19dp"
         android:layout_marginStart="16dp"
         android:layout_weight="1"
+        android:alpha="1"
         android:background="@drawable/round_btn_rojo"
         app:layout_constraintBottom_toBottomOf="@+id/btnParar"
         app:layout_constraintStart_toStartOf="@+id/btnParar"
