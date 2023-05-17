@@ -79,29 +79,21 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="15dp"
+        android:elevation="12dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="250dp"
+        app:cardCornerRadius="50dp"
+        android:layout_centerHorizontal="true"
         app:layout_constraintEnd_toEndOf="@+id/tvFrase2"
         app:layout_constraintStart_toStartOf="@+id/tvFrase2"
         app:layout_constraintTop_toBottomOf="@+id/tvFrase2">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card2"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            app:cardCornerRadius="250dp">
-
             <ImageView
                 android:id="@+id/fotoperfil"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:onClick="setFotopPerfil"
                 android:scaleType="centerCrop"
                 tools:srcCompat="@drawable/perfil" />
-
-        </androidx.cardview.widget.CardView>
-
     </androidx.cardview.widget.CardView>
 
     <Button

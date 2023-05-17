@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
    private ArrayList<String> nombreImagenes = new ArrayList<String>();
     List<ItemListRuta> items = new ArrayList<>();
     String titulo, descripcion, imagen = "";
-    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
                        finish();
                        break;
                    case R.id.solicitudesAmistad:
+                       startActivity(new Intent(MainActivity.this, SolicitudesRecibidas.class));
+                       finish();
                        break;
                    case R.id.misAmigos:
                        startActivity(new Intent(MainActivity.this, MisAmigos.class));
@@ -92,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
                        //VOLVEMOS A LA PANTALLA DE INICIO
                        startActivity(new Intent(MainActivity.this, LoginRegisterActivity.class));
                        finish();
+                       break;
+                   default:
                        break;
                }
                elmenudesplegable.closeDrawers();

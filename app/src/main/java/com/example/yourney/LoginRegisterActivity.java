@@ -15,13 +15,13 @@ public class LoginRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loginregister);
 
         /**
-        Sesion sesion = new Sesion(this);
-        String username = sesion.getUsername();
-        if (!username.equals("")) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        }
-        **/
+         Sesion sesion = new Sesion(this);
+         String username = sesion.getUsername();
+         if (!username.equals("")) {
+         Intent intent = new Intent(this, MainActivity.class);
+         startActivity(intent);
+         }
+         **/
     }
 
     public void login(View v) {

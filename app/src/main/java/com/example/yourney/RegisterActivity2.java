@@ -321,8 +321,6 @@ public class RegisterActivity2 extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // si la imagen viene de la galeria, primero reducir la calidad y despues colocarla en el imageview cuando el proceso termine
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
             try {
                 Uri imageUri = data.getData();
@@ -333,21 +331,16 @@ public class RegisterActivity2 extends AppCompatActivity {
                     InputStream imageStream = getContentResolver().openInputStream(imageUri);
                     bitmapOriginal = BitmapFactory.decodeStream(imageStream);
                 }
-                // Reducir la calidad de la imagen al 50%
-                int calidad = 50; // porcentaje de calidad de la imagen (0-100)
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmapOriginal.compress(Bitmap.CompressFormat.JPEG, calidad, byteArrayOutputStream);
+                //Pasar de bitmap a string y guardar en la variable
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmapOriginal.compress(Bitmap.CompressFormat.PNG, 80, baos);
+                byte[] b = baos.toByteArray();
+                b = tratarImagen(b);
+                fotoen64 = Base64.getEncoder().encodeToString(b);
 
-                // Convertir el ByteArrayOutputStream en un array de bytes
-                byte[] byteArray = byteArrayOutputStream.toByteArray();
-                fotoen64 = Base64.getEncoder().encodeToString(tratarImagen(byteArray));
-
-                // Decodificar el array de bytes en un objeto Bitmap
-                bitmapRedimensionado = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-
-                // Mostrar el Bitmap redimensionado en una ImageView
-                fotoperfil.setImageBitmap(bitmapRedimensionado);
-
+                //Poner el array comprimido como foto
+                Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+                fotoperfil.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(RegisterActivity2.this, "ERROR", Toast.LENGTH_SHORT).show();
@@ -377,7 +370,7 @@ public class RegisterActivity2 extends AppCompatActivity {
          */
         while(img.length > 50000){
             Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-            Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.6), (int)(bitmap.getHeight()*0.6), true);
+            Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.3), (int)(bitmap.getHeight()*0.3), true);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
             img = stream.toByteArray();
