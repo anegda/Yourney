@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
 
          /****************************************************************************************/
 
+        /*
          // Consulto la BD por mis rutas
         Sesion sesion = new Sesion(this);
 
@@ -171,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
             }
         });
         WorkManager.getInstance(MainActivity.this).enqueue(select);
+        */
 
 
         ArrayList<Integer> imagenes = new ArrayList<Integer>();
