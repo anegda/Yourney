@@ -368,13 +368,40 @@ public class RegisterActivity2 extends AppCompatActivity {
          * Autor: https://stackoverflow.com/users/3694451/leo-vitor
          * Modificado por Ane García para traducir varios términos y adaptarlo a la aplicación
          */
-        while(img.length > 50000){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-            Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.3), (int)(bitmap.getHeight()*0.3), true);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            img = stream.toByteArray();
+        if (img.length <75000){
+            while(img.length > 50000){
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                img = stream.toByteArray();
+            }
+        } else if (img.length < 100000){
+            while(img.length > 50000){
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.5), (int)(bitmap.getHeight()*0.5), true);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                img = stream.toByteArray();
+            }
+        }else if (img.length < 500000){
+            while(img.length > 50000){
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.4), (int)(bitmap.getHeight()*0.4), true);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                img = stream.toByteArray();
+            }
+        }else {
+            while(img.length > 50000){
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.3), (int)(bitmap.getHeight()*0.3), true);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                img = stream.toByteArray();
+            }
         }
+
         return img;
     }
 
