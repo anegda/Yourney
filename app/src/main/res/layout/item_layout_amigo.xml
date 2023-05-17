@@ -7,7 +7,7 @@
     android:background="#00FFFFFF">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="362dp"
+        android:layout_width="300dp"
         android:layout_height="105dp"
         app:cardBackgroundColor="#00FF6800"
         app:cardCornerRadius="0dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="340dp"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:cardCornerRadius="12dp"
@@ -27,15 +27,15 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="15dp">
 
                 <ImageView
                     android:id="@+id/fotoPerfilAmigo"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_marginStart="4dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
