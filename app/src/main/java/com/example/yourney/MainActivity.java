@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         ItemListRuta rutaEjemplo = new ItemListRuta(foto, nombre, descr);
         items.add(rutaEjemplo);
 
-         /****************************************************************************************/
+         /****************************************************************************************
 
          // Consulto la BD por mis rutas
         Sesion sesion = new Sesion(this);
@@ -140,6 +140,8 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
                 .setInputData(datos)
                 .build();
+
+        System.out.println("Main Activity");
 
         WorkManager.getInstance(MainActivity.this).getWorkInfoByIdLiveData(select.getId()).observe(MainActivity.this, new Observer<WorkInfo>() {
             @Override
@@ -171,6 +173,17 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
             }
         });
         WorkManager.getInstance(MainActivity.this).enqueue(select);
+
+        /****************************************************************************************/
+
+        // Llamada al AsyncTask
+        Sesion sesion = new Sesion(this);
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
+        String params = "?consulta=MisRutas&username=" + sesion.getUsername();
+        System.out.println(url + params);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
+        TaskGetMisRutas taskGetMisRutas = new TaskGetMisRutas(url + params, recyclerView, MainActivity.this);
+        taskGetMisRutas.execute();
 
 
         ArrayList<Integer> imagenes = new ArrayList<Integer>();

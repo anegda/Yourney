@@ -342,7 +342,6 @@ public class ConexionBD extends Worker {
                                     .putString("descripcion", (String) json.get("Descripcion"))
                                     .putDouble("duracion", (Double) json.get("Duracion"))
                                     .putDouble("distancia", (Double) json.get("Distancia"))
-                                    .putInt("Distancia", (Integer) json.get("Distancia"))
                                     .putString("dificultad", (String) json.get("Dificultad"))
                                     .putString("fecha", (String) json.get("Fecha"))
                                     .putInt("visibilidad", (Integer) json.get("Visibilidad"))
