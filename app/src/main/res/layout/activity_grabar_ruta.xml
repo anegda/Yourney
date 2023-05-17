@@ -6,31 +6,68 @@
     android:layout_height="match_parent"
     tools:context=".GrabarRuta">
 
-    <TextView
-        android:id="@+id/duracionText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/duracion"
+
+    <View
+        android:id="@+id/green_rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#3B7E26"
+        android:elevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvEsperando"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="6dp"
+        android:text="Esperando a grabar"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/green_rectangle"
+        app:layout_constraintEnd_toEndOf="@+id/green_rectangle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/green_rectangle"
+        app:layout_constraintVertical_bias="0.504" />
+
+    <TextView
+        android:id="@+id/tvGrabando"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="6dp"
+        android:text="Grabando"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/green_rectangle"
+        app:layout_constraintEnd_toEndOf="@+id/green_rectangle"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/green_rectangle"
+        app:layout_constraintVertical_bias="0.0" />
 
 
     <TextView
         android:id="@+id/distanciaText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:background="#fff5eb"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/distancia"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/duracionText" />
+        app:layout_constraintTop_toBottomOf="@+id/green_rectangle" />
 
     <TextView
         android:id="@+id/velocidadText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:background="#fff5eb"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/velocidad"
@@ -41,6 +78,8 @@
         android:id="@+id/pasosText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:background="#fff5eb"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/pasos"
@@ -51,6 +90,8 @@
         android:id="@+id/caloriasText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:background="#fff5eb"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/calorias"
@@ -61,78 +102,84 @@
         android:id="@+id/duracionNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:text="00:00:00"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        android:elevation="10dp"
+        style="@style/blanco1"
+        app:layout_constraintEnd_toEndOf="@+id/tvGrabando"
+        app:layout_constraintStart_toStartOf="@+id/tvGrabando"
+        app:layout_constraintTop_toBottomOf="@+id/tvGrabando" />
 
     <TextView
         android:id="@+id/distanciaNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:elevation="10dp"
+        android:background="#fff5eb"
         android:layout_marginEnd="8dp"
         android:text="0.00KM"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/duracionText" />
+        app:layout_constraintTop_toTopOf="@+id/distanciaText" />
 
     <TextView
         android:id="@+id/velocidadNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:elevation="10dp"
+        android:background="#fff5eb"
         android:layout_marginEnd="8dp"
         android:text="0.00KM/H"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/distanciaText" />
+        app:layout_constraintTop_toTopOf="@+id/velocidadText" />
 
     <TextView
         android:id="@+id/pasosNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:elevation="10dp"
+        android:background="#fff5eb"
         android:layout_marginEnd="8dp"
         android:text="00000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/velocidadText" />
+        app:layout_constraintTop_toTopOf="@+id/pasosText" />
 
     <TextView
         android:id="@+id/caloriasNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:elevation="10dp"
+        android:background="#fff5eb"
         android:layout_marginEnd="8dp"
         android:text="0000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pasosText" />
+        app:layout_constraintTop_toTopOf="@+id/caloriasText" />
 
     <Button
         android:id="@+id/btnEmpezar"
         android:layout_width="129dp"
         android:layout_height="41dp"
-        android:background="@drawable/round_btn_gris"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginBottom="16dp"
         android:layout_weight="1"
-        android:textColor="#ffff"
+        android:alpha="1"
+        android:background="@drawable/round_btn_verde"
         android:text="START"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/caloriasText" />
+        android:textColor="#ffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnParar"
         android:layout_width="129dp"
         android:layout_height="41dp"
-        android:background="@drawable/round_btn_gris"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="16dp"
         android:layout_weight="1"
-        android:textColor="#ffff"
+        android:alpha="1"
+        android:background="@drawable/round_btn_verde"
         android:text="STOP"
+        android:textColor="#ffff"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/caloriasText" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/grabando"
@@ -140,6 +187,7 @@
         android:layout_height="19dp"
         android:layout_marginStart="16dp"
         android:layout_weight="1"
+        android:alpha="1"
         android:background="@drawable/round_btn_rojo"
         app:layout_constraintBottom_toBottomOf="@+id/btnParar"
         app:layout_constraintStart_toStartOf="@+id/btnParar"
@@ -148,9 +196,13 @@
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="550dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout="@layout/support_simple_spinner_dropdown_item" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

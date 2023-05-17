@@ -72,6 +72,9 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
     private Handler handler = new Handler();
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
+    private TextView tv_grabando;
+    private TextView tv_duracion_num;
+    private TextView tv_esperando;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +88,17 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
         empezar_btn.setBackgroundResource(R.drawable.round_btn_verde);
         parar_btn.setEnabled(false);
 
+
         // DESHABILITAR EL TEXTVIEW QUE DICE GRABANDO RUTA Y AÑADIR PARPADEO
         btn_grabando = findViewById(R.id.grabando);
         btn_grabando.setVisibility(View.GONE);
+        tv_grabando = findViewById(R.id.tvGrabando);
+        tv_grabando.setVisibility(View.GONE);
+        tv_duracion_num = findViewById(R.id.duracionNum);
+        tv_duracion_num.setVisibility(View.GONE);
+        tv_esperando  = findViewById(R.id.tvEsperando);
+
+
 
 
         //AÑADIMOS LOS LISTENERS A CADA BOTÓN
@@ -101,6 +112,9 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                 btn_grabando.setVisibility(View.VISIBLE);
                 parar_btn.setBackgroundResource(R.drawable.round_btn_verde);
                 iniciar = true;
+                tv_grabando.setVisibility(View.VISIBLE);
+                tv_duracion_num.setVisibility(View.VISIBLE);
+                tv_esperando.setVisibility(View.GONE);
 
                 btn_grabando = findViewById(R.id.grabando);
                 runnable = new Runnable() {
