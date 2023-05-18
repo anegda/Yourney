@@ -1,256 +1,441 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:orientation="vertical"
-        android:background="@android:color/white">
-        <LinearLayout
-            android:id="@+id/cabecera"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/green_rectangle"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:orientation="horizontal"
-            android:layout_gravity="bottom"
-            android:background="@android:color/white">
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_centerHorizontal="true"
-                android:elevation="12dp"
-                app:cardCornerRadius="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-                <ImageView
-                    android:id="@+id/fotoDescR"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/fondobosque" />
-            </androidx.cardview.widget.CardView>
-            <LinearLayout
-                android:id="@+id/datosRuta"
-                android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="#3B7E26"
+            android:elevation="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:elevation="6dp"
+            android:text="Información de la ruta"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/green_rectangle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/green_rectangle"
+            app:layout_constraintVertical_bias="0.533" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:elevation="12dp"
+            android:layout_marginTop="24dp"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/green_rectangle">
+
+            <ImageView
+                android:id="@+id/fotoDescR"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp">
-                <TextView
-                    android:id="@+id/tituloRText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Titulo" />
-                <TextView
-                    android:id="@+id/creadorRText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Creador" />
-                <TextView
-                    android:id="@+id/fechaRText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="2022-02-2" />
-                <TextView
-                    android:id="@+id/dificultadRText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Dificultad" />
-                <TextView
-                    android:id="@+id/visibilidadRText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/privado" />
-            </LinearLayout>
-        </LinearLayout>
-        <LinearLayout
+                android:scaleType="centerCrop"
+                android:src="@drawable/fondobosque"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:id="@+id/tituloRText"
+            style="@style/f_go_xl_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:gravity="center"
+            android:text="Titulo de la ruta"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+        <ImageView
+            android:id="@+id/fotoMontannero"
+            android:layout_width="29dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/montannero"
+            app:layout_constraintStart_toStartOf="@+id/tituloRText"
+            app:layout_constraintTop_toBottomOf="@+id/tituloRText" />
+
+        <TextView
+            android:id="@+id/creadorRText"
+            style="@style/f_gc_s"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Creador"
+            app:layout_constraintBottom_toBottomOf="@+id/fotoMontannero"
+            app:layout_constraintStart_toEndOf="@+id/fotoMontannero"
+            app:layout_constraintTop_toTopOf="@+id/fotoMontannero" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout5"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/fotoMontannero"
+            tools:layout_editor_absoluteX="0dp">
+
+
+            <TextView
+                android:id="@+id/fechaText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="16dp"
+                android:text="Fecha"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/dificultadText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="60dp"
+                android:text="Dificultad"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/fechaText" />
+
+            <TextView
+                android:id="@+id/visibilidadText"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="Visibilidad"
+                app:layout_constraintEnd_toStartOf="@+id/dificultadText"
+                app:layout_constraintStart_toEndOf="@+id/fechaText"
+                app:layout_constraintTop_toTopOf="@+id/fechaText" />
+
+            <TextView
+                android:id="@+id/fechaRText"
+                style="@style/f_go_m_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2022-02-2"
+                android:textSize="18dp"
+                app:layout_constraintEnd_toEndOf="@+id/fechaText"
+                app:layout_constraintStart_toStartOf="@+id/fechaText"
+                app:layout_constraintTop_toBottomOf="@+id/fechaText" />
+
+            <TextView
+                android:id="@+id/dificultadRText"
+                style="@style/f_go_m_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dificultad"
+                app:layout_constraintEnd_toEndOf="@+id/dificultadText"
+                app:layout_constraintStart_toStartOf="@+id/dificultadText"
+                app:layout_constraintTop_toBottomOf="@+id/dificultadText" />
+
+            <TextView
+                android:id="@+id/visibilidadRText"
+                style="@style/f_go_m_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/privado"
+                app:layout_constraintEnd_toEndOf="@+id/visibilidadText"
+                app:layout_constraintStart_toStartOf="@+id/visibilidadText"
+                app:layout_constraintTop_toBottomOf="@+id/visibilidadText" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@+id/fotoMontannero"
+                tools:ignore="NotSibling" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fotoMontannero"
+                tools:ignore="NotSibling" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:gravity="center"
             android:orientation="horizontal"
-            android:gravity="center">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+            tools:layout_editor_absoluteX="0dp">
+
             <Button
                 android:id="@+id/btn_ruta"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="1dp"
-                android:text="@string/ruta" />
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/round_btn_verde"
+                android:text="@string/ruta"
+                android:textColor="#ffff" />
+
             <Button
                 android:id="@+id/btn_imagenes"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="1dp"
-                android:text="@string/fotos" />
-            <Button
-                android:id="@+id/btn_otros"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="1dp"
-                android:text="@string/otros" />
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/round_btn_verde"
+                android:text="@string/fotos"
+                android:textColor="#ffff" />
+
             <Button
                 android:id="@+id/btn_editar"
-                android:layout_width="80dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="1dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="1dp"
-                android:text="@string/editar" />
-        </LinearLayout>
-    </LinearLayout>
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="420dp"
-        android:layout_gravity="center"/>
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/round_btn_verde"
+                android:text="@string/editar"
+                android:textColor="#ffff" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/datosNumRuta"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+            <Button
+                android:id="@+id/btn_otros"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/round_btn_verde"
+                android:text="@string/otros"
+                android:textColor="#ffff" />
+
+        </LinearLayout>
+
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout4"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout4"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
+            tools:layout="@layout/support_simple_spinner_dropdown_item" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout6"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:orientation="vertical">
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/map"
+            tools:layout_editor_absoluteX="0dp">
+
+
             <TextView
                 android:id="@+id/duracionRText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/duracion"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/view2"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <View
+                android:id="@+id/view2"
+                android:layout_width="200dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/duracionRText"
+                tools:ignore="NotSibling" />
 
             <TextView
                 android:id="@+id/distanciaRText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/distancia"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/duracionRText" />
+                app:layout_constraintStart_toStartOf="@+id/view2"
+                app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+            <View
+                android:id="@+id/view3"
+                android:layout_width="200dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="@+id/view2"
+                app:layout_constraintHorizontal_bias="0.754"
+                app:layout_constraintStart_toStartOf="@+id/view2"
+                app:layout_constraintTop_toBottomOf="@+id/distanciaRText" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="200dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="@+id/view2"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/view2"
+                app:layout_constraintTop_toBottomOf="@+id/velocidadRText" />
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="200dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="@+id/view2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/view2"
+                app:layout_constraintTop_toBottomOf="@+id/pasosRText" />
+
+            <View
+                android:id="@+id/view6"
+                android:layout_width="200dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="15dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintEnd_toEndOf="@+id/view2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/view2"
+                app:layout_constraintTop_toBottomOf="@+id/caloriasRText" />
 
             <TextView
                 android:id="@+id/velocidadRText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/velocidad"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/distanciaRText" />
+                app:layout_constraintStart_toStartOf="@+id/view3"
+                app:layout_constraintTop_toBottomOf="@+id/view3" />
 
             <TextView
                 android:id="@+id/pasosRText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/pasos"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/velocidadRText" />
+                app:layout_constraintStart_toStartOf="@+id/view4"
+                app:layout_constraintTop_toBottomOf="@+id/view4" />
 
             <TextView
                 android:id="@+id/caloriasRText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/calorias"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pasosRText" />
-        </LinearLayout>
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:orientation="vertical">
+                app:layout_constraintStart_toStartOf="@+id/view5"
+                app:layout_constraintTop_toBottomOf="@+id/view5" />
+
             <TextView
                 android:id="@+id/duracionRNum"
+                style="@style/f_go_m_b"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="00:00:00"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/view2"
+                app:layout_constraintTop_toTopOf="@+id/duracionRText" />
 
             <TextView
                 android:id="@+id/distanciaRNum"
+                style="@style/f_go_m_b"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="0.00KM"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/duracionRText" />
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/view2"
+                app:layout_constraintTop_toTopOf="@+id/distanciaRText" />
 
             <TextView
                 android:id="@+id/velocidadRNum"
+                style="@style/f_go_m_b"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="0.00KM/H"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/distanciaRText" />
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/view3"
+                app:layout_constraintTop_toTopOf="@+id/velocidadRText" />
 
             <TextView
                 android:id="@+id/pasosRNum"
+                style="@style/f_go_m_b"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:text="00000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/velocidadRText" />
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/view4"
+                app:layout_constraintTop_toTopOf="@+id/pasosRText" />
 
             <TextView
                 android:id="@+id/caloriasRNum"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                style="@style/f_go_m_b"
+                android:layout_width="34dp"
+                android:layout_height="17dp"
                 android:layout_marginEnd="8dp"
                 android:text="0000"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/pasosRText" />
-        </LinearLayout>
-    </LinearLayout>
-    <TextView
-        android:id="@+id/descripcionRText"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:visibility="gone"/>
-</LinearLayout>
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/view5"
+                app:layout_constraintTop_toTopOf="@+id/caloriasRText" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@+id/fotoMontannero"
+                tools:ignore="NotSibling" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fotoMontannero"
+                tools:ignore="NotSibling" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

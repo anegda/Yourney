@@ -162,7 +162,7 @@ public class ConexionBD extends Worker {
 
                     params.put("idRuta", datos.getInt("idRuta", 0));
                     params.put("username", datos.getString("username"));
-                    params.put("imgBlob", GaleriaFotosRuta.fotoNueva);
+                    //params.put("imgBlob", GaleriaFotosRuta.fotoNueva);
 
                     break;
 
