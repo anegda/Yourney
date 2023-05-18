@@ -57,4 +57,10 @@
     <string name="mensaje">Message</string>
     <string name="peticion_incorrecta">Incorrect request</string>
     <string name="grabando">Recording route</string>
+
+    <string name="editar_nombre_usuario">Username</string>
+    <string name="editar_nombre">Name</string>
+    <string name="editar_apellido">Last name</string>
+    <string name="editar_email">Email</string>
+    <string name="editar_contrasenia">Password</string>
 </resources>

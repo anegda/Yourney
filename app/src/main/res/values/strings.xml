@@ -56,4 +56,11 @@
     <string name="mensaje">Mensaje</string>
     <string name="peticion_incorrecta">Petición incorrecta</string>
     <string name="grabando">Grabando ruta</string>
+
+    <string name="editar_nombre_usuario">Nombre de Usuario</string>
+    <string name="editar_nombre">Nombre</string>
+    <string name="editar_apellido">Apellido</string>
+    <string name="editar_email">Correo electrónico</string>
+    <string name="editar_contrasenia">Contraseña</string>
+
 </resources>
