@@ -41,10 +41,18 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
         LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(manager);
 
-
-
         buscadorRutas.setOnQueryTextListener(this);
 
+        // Llamada al AsyncTask
+        Sesion sesion = new Sesion(this);
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
+        String params = "?consulta=RutasPublicas&username=" + sesion.getUsername();
+        System.out.println(url + params);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
+        TaskGetRutasPublicas taskGetRutasPublicas = new TaskGetRutasPublicas(url + params, recyclerView, PublicRoutesActivity.this);
+        taskGetRutasPublicas.execute();
+
+        /**
         // Consulto la BD por las rutas publicas
         Data datos = new Data.Builder()
                 .putString("accion", "selectRuta")
@@ -55,6 +63,7 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
                 .setInputData(datos)
                 .build();
 
+        System.out.println("Public Routes");
 
         WorkManager.getInstance(PublicRoutesActivity.this).getWorkInfoByIdLiveData(select.getId()).observe(PublicRoutesActivity.this, new Observer<WorkInfo>() {
             @Override
@@ -74,9 +83,9 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
                                 System.out.println("***** " + row + " *****");
                                 // Vuelco la informacion en las variables creadas anteriormente
 
-                                titulo = (String) row.get("FotoDesc");
-                                descripcion = (String) row.get("Nombre");
-                                imagen = (String) row.get("Descripcion");
+                                titulo = (String) row.get("Nombre");
+                                descripcion = (String) row.get("Descripcion");
+                                imagen = (String) row.get("FotoDesc");
                                 getItems(titulo, descripcion, imagen);
                                 i++;
                             }
@@ -92,6 +101,7 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
             }
         });
         WorkManager.getInstance(PublicRoutesActivity.this).enqueue(select);
+        **/
 
     }
 

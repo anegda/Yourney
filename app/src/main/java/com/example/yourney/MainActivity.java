@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -187,7 +188,8 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         String params = "?consulta=MisRutas&username=" + sesion.getUsername();
         System.out.println(url + params);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TaskGetMisRutas taskGetMisRutas = new TaskGetMisRutas(url + params, recyclerView, MainActivity.this);
+        TextView placeHolder = (TextView) findViewById(R.id.tvDescrRutPers);
+        TaskGetMisRutas taskGetMisRutas = new TaskGetMisRutas(url + params, recyclerView, MainActivity.this, placeHolder);
         taskGetMisRutas.execute();
 
 
