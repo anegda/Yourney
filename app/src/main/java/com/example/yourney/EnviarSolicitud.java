@@ -8,10 +8,16 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 public class EnviarSolicitud extends AppCompatActivity {
 
@@ -30,7 +36,7 @@ public class EnviarSolicitud extends AppCompatActivity {
 
                 // Comprobar credenciales contra la BD
                 Data datos = new Data.Builder()
-                        .putString("accion", "select")
+                        .putString("accion", "selectUsuario")
                         .putString("consulta", "Usuarios")
                         .putString("username", userPeti)
                         .build();
@@ -56,11 +62,11 @@ public class EnviarSolicitud extends AppCompatActivity {
 
                                 Data datosInsert = new Data.Builder()
                                         .putString("accion", "insert")
-                                        .putString("consulta", "Peticion")
-                                        .putString("Username1", username)
-                                        .putString("Username2", userPeti)
-                                        .putString("Mensaje",mensaje)
-                                        .putInt("Estado",0)
+                                        .putString("consulta", "Peticiones")
+                                        .putString("username1", username)
+                                        .putString("username2", userPeti)
+                                        .putString("mensaje",mensaje)
+                                        .putInt("estado",0)
                                         .build();
 
                                 OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
@@ -73,6 +79,62 @@ public class EnviarSolicitud extends AppCompatActivity {
                                         Toast.makeText(EnviarSolicitud.this, "OK", Toast.LENGTH_SHORT).show();
                                     }
                                 });
+                                WorkManager.getInstance(EnviarSolicitud.this).enqueue(insert);
+
+                                //mientras también cogemos el token del receptor
+                                Data datosSelectToken = new Data.Builder()
+                                        .putString("accion", "select")
+                                        .putString("consulta", "Tokens")
+                                        .putString("username", userPeti)
+                                        .build();
+
+                                OneTimeWorkRequest selectToken = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                        .setInputData(datosSelectToken)
+                                        .build();
+                                WorkManager.getInstance(EnviarSolicitud.this).getWorkInfoByIdLiveData(selectToken.getId()).observe(EnviarSolicitud.this, new Observer<WorkInfo>() {
+                                    @Override
+                                    public void onChanged(WorkInfo workInfo) {
+                                        if (workInfo != null && workInfo.getState().isFinished()) {
+                                            Data output = workInfo.getOutputData();
+                                            if (!output.getString("resultado").equals("Sin resultado")) {
+                                                //si el usuario está logeado en algún dispositivo
+                                                JSONParser parser = new JSONParser();
+                                                try {
+                                                    JSONArray jsonResultado = (JSONArray) parser.parse(output.getString("resultado"));
+
+                                                    Integer i = 0;
+                                                    System.out.println("***** " + jsonResultado + " *****");
+                                                    while (i < jsonResultado.size()) {
+                                                        JSONObject row = (JSONObject) jsonResultado.get(i);
+                                                        System.out.println("***** " + row + " *****");
+                                                        String Token = (String) row.get("Token");
+
+                                                        Data datosNoti = new Data.Builder()
+                                                                .putString("accion", "notifPeticion")
+                                                                .putString("emisor", username)
+                                                                .putString("receptor", Token)
+                                                                .putString("mensaje", mensaje)
+                                                                .build();
+                                                        OneTimeWorkRequest notif = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                                                .setInputData(datosNoti)
+                                                                .build();
+                                                        WorkManager.getInstance(EnviarSolicitud.this).getWorkInfoByIdLiveData(notif.getId()).observe(EnviarSolicitud.this, new Observer<WorkInfo>() {
+                                                            @Override
+                                                            public void onChanged(WorkInfo workInfo) {
+                                                            }
+                                                        });
+                                                        WorkManager.getInstance(EnviarSolicitud.this).enqueue(notif);
+                                                        i=i+1;
+                                                    }
+                                                }catch (ParseException e) {
+                                                    throw new RuntimeException(e);
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                                WorkManager.getInstance(EnviarSolicitud.this).enqueue(selectToken);
+
                             } else {
                                 Toast.makeText(EnviarSolicitud.this, R.string.peticion_incorrecta, Toast.LENGTH_SHORT).show();
                             }

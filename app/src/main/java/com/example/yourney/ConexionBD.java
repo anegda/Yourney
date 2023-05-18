@@ -154,7 +154,7 @@ public class ConexionBD extends Worker {
                     params.put("username1", datos.getString("username1"));
                     params.put("username2", datos.getString("username2"));
                     params.put("mensaje", datos.getString("mensaje"));
-                    params.put("estado", datos.getString("estado"));
+                    params.put("estado", datos.getInt("estado",0));
 
                     break;
 
@@ -642,7 +642,7 @@ public class ConexionBD extends Worker {
         try {
             Data output = null;
 
-            String params = "?emisor=" + datos.getString("emisor") + "&receptor=" + datos.getString("receptor") + "&idioma=" + datos.getString("idioma");
+            String params = "?emisor=" + datos.getString("emisor") + "&receptor=" + datos.getString("receptor") + "&mensaje=" + datos.getString("mensaje");
 
             URL urlFinal = new URL(url + params);
             urlConnection = (HttpURLConnection) urlFinal.openConnection();
