@@ -1,6 +1,7 @@
 package com.example.yourney;
 
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,9 @@ public class ElAdaptadorRecyclerAmigos extends RecyclerView.Adapter<ElAdaptadorR
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("DAS", item.getNombre());
+                Log.d("DAS", item.getUsername());
+                Log.d("DAS", String.valueOf(item.getFotoDePerfil()));
                 itemClick.itemClick(item);
             }
         });

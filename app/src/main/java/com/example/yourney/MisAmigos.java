@@ -51,62 +51,6 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         Sesion sesion = new Sesion(this);
         String username = sesion.getUsername();
 
-        /**
-        ArrayList<String> amigos = new ArrayList<String>();
-
-        // CONSULTAMOS A LA BD POR AMIGOS
-        Data datos = new Data.Builder()
-                .putString("accion", "select")
-                .putString("consulta", "Amigos")
-                .putString("username", username)
-                .build();
-
-        OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                .setInputData(datos)
-                .build();
-
-        WorkManager.getInstance(MisAmigos.this).getWorkInfoByIdLiveData(select.getId()).observe(MisAmigos.this, new Observer<WorkInfo>() {
-            @Override
-            public void onChanged(WorkInfo workInfo) {
-                if (workInfo != null && workInfo.getState().isFinished()) {
-                    Data output = workInfo.getOutputData();
-                    if (!output.getString("resultado").equals("Sin resultado")) {
-                        JSONParser parser = new JSONParser();
-                        try {
-                            // Obtengo la informacion de los amigos devueltos
-                            JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
-
-                            Integer i = 0;
-                            System.out.println("***** " + jsonResultado + " *****");
-                            while (i < jsonResultado.size()) {
-                                JSONObject row = (JSONObject) jsonResultado.get(i);
-                                System.out.println("***** " + row + " *****");
-                                String username1 = (String) row.get("Username1");
-                                String username2 = (String) row.get("Username2");
-                                if(username1.equals(username)){
-                                    amigos.add(username2);
-                                } else{
-                                    amigos.add(username1);
-                                }
-
-                                i++;
-                            }
-
-                            items = getItems(amigos);
-                            adapter = new ElAdaptadorRecyclerAmigos(items, MisAmigos.this);
-                            lalista.setAdapter(adapter);
-                            buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);
-
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            }
-        });
-        WorkManager.getInstance(MisAmigos.this).enqueue(select);
-        **/
-
         // Llamada al asynctask
         String urlAmigos = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selects.php";
         String urlUsuarios = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectUsuarios.php";
@@ -115,12 +59,6 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
         TaskGetAmigos taskGetAmigos = new TaskGetAmigos(urlAmigos + paramsAmigos, urlUsuarios + paramsUsuarios, recyclerView, MisAmigos.this, username);
         taskGetAmigos.execute();
-
-        /**
-        Log.d("DAS", String.valueOf(items));
-        adapter = new ElAdaptadorRecyclerAmigos(items, MisAmigos.this);
-        lalista.setAdapter(adapter);
-        **/
 
         buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);
 
@@ -132,58 +70,6 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
                 finish();
             }
         });
-    }
-
-    private List<ItemListAmigo> getItems(ArrayList<String> amigos) {
-        List<ItemListAmigo> itemListAmigos = new ArrayList<>();
-        for (String amigo : amigos) {
-            final String[] username = {amigo};
-            final String[] nombre = {""};
-            final Bitmap[] bitmap = new Bitmap[1];
-            // CONSULTAMOS A LA BD POR AMIGOS
-            Data datos = new Data.Builder()
-                    .putString("accion", "select")
-                    .putString("consulta", "Usuarios")
-                    .putString("username", amigo)
-                    .build();
-
-            OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                    .setInputData(datos)
-                    .build();
-
-            WorkManager.getInstance(MisAmigos.this).getWorkInfoByIdLiveData(select.getId()).observe(MisAmigos.this, new Observer<WorkInfo>() {
-                @Override
-                public void onChanged(WorkInfo workInfo) {
-                    if (workInfo != null && workInfo.getState().isFinished()) {
-                        Data output = workInfo.getOutputData();
-                        if (!output.getString("resultado").equals("Sin resultado")) {
-                            JSONParser parser = new JSONParser();
-                            try {
-                                // Obtengo la informacion de el usuario devuelto
-                                JSONObject jsonResultado =(JSONObject) parser.parse(output.getString("resultado"));
-                                Log.d("DAS", String.valueOf(jsonResultado));
-                                username[0] = (String) jsonResultado.get("Username");
-                                nombre[0] = (String) jsonResultado.get("Nombre");
-                                String fotoPerfil = (String) jsonResultado.get("FotoPerfil");
-
-                                byte[] encodeByte = Base64.getDecoder().decode(fotoPerfil);
-                                bitmap[0] = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-                                ItemListAmigo amigoAct = new ItemListAmigo(username[0], nombre[0], bitmap[0]);
-                                itemListAmigos.add(amigoAct);
-
-                                adapter = new ElAdaptadorRecyclerAmigos(itemListAmigos, MisAmigos.this);
-                                lalista.setAdapter(adapter);
-                                buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);
-                            } catch (ParseException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    }
-                }
-            });
-            WorkManager.getInstance(MisAmigos.this).enqueue(select);
-        }
-        return itemListAmigos;
     }
 
     @Override
