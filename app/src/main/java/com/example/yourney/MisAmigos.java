@@ -57,7 +57,7 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         String paramsAmigos = "?consulta=Amigos&username=" + username;
         String paramsUsuarios = "?consulta=Usuarios&username=";
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TaskGetAmigos taskGetAmigos = new TaskGetAmigos(urlAmigos + paramsAmigos, urlUsuarios + paramsUsuarios, recyclerView, MisAmigos.this, username);
+        TaskGetAmigos taskGetAmigos = new TaskGetAmigos(urlAmigos + paramsAmigos,urlUsuarios + paramsUsuarios, buscadorUsuarios, recyclerView, MisAmigos.this, username);
         taskGetAmigos.execute();
 
         buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);

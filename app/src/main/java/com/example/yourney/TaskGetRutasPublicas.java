@@ -1,6 +1,8 @@
 package com.example.yourney;
 
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.SearchView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,16 +28,17 @@ public class TaskGetRutasPublicas extends AsyncTask<Void, Void, ArrayList<JSONOb
     private ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick;
     List<ItemListRuta> items = new ArrayList<>();
     ElAdaptadorRecycler adapter;
+    SearchView searchView;
 
-    public TaskGetRutasPublicas(String url, RecyclerView recyclerView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick) {
+    public TaskGetRutasPublicas(String url, RecyclerView recyclerView, SearchView searchView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick) {
         this.urlString = url;
         this.recyclerView = recyclerView;
+        this.searchView = searchView;
         this.recyclerItemClick = recyclerItemClick;
     }
 
     @Override
     protected ArrayList<JSONObject> doInBackground(Void... voids) {
-
         try {
             URL url = new URL(urlString);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -95,7 +98,19 @@ public class TaskGetRutasPublicas extends AsyncTask<Void, Void, ArrayList<JSONOb
             System.out.println(items);
             adapter = new ElAdaptadorRecycler(items, recyclerItemClick);
             recyclerView.setAdapter(adapter);
-        }
 
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    adapter.filter(s);
+                    return false;
+                }
+            });
+        }
     }
 }

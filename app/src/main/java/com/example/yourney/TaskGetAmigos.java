@@ -3,6 +3,7 @@ package com.example.yourney;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.widget.SearchView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,15 +28,17 @@ public class TaskGetAmigos extends AsyncTask<Void, Void, ArrayList<JSONObject>> 
     private final String urlStringAmigos;
     private final String urlStringUsuarios;     // A falta de añadir el username al final
     private RecyclerView recyclerView;
+    private SearchView searchView;
     private ElAdaptadorRecyclerAmigos.RecyclerItemClick recyclerItemClick;
     private String username;
     List<ItemListAmigo> items = new ArrayList<ItemListAmigo>();
     ElAdaptadorRecyclerAmigos adapter;
 
-    public TaskGetAmigos(String urlAmigos, String urlUsuarios, RecyclerView recyclerView, ElAdaptadorRecyclerAmigos.RecyclerItemClick recyclerItemClick, String username) {
+    public TaskGetAmigos(String urlAmigos, String urlUsuarios, SearchView searchView, RecyclerView recyclerView, ElAdaptadorRecyclerAmigos.RecyclerItemClick recyclerItemClick, String username) {
         this.urlStringAmigos = urlAmigos;
         this.urlStringUsuarios = urlUsuarios;
         this.recyclerView = recyclerView;
+        this.searchView = searchView;
         this.recyclerItemClick = recyclerItemClick;
         this.username = username;
     }
@@ -155,6 +158,18 @@ public class TaskGetAmigos extends AsyncTask<Void, Void, ArrayList<JSONObject>> 
 
             adapter = new ElAdaptadorRecyclerAmigos(items, recyclerItemClick);
             recyclerView.setAdapter(adapter);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    adapter.filter(s);
+                    return false;
+                }
+            });
         }
     }
 }

@@ -26,6 +26,7 @@ import java.util.List;
 public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptadorRecycler.RecyclerItemClick,SearchView.OnQueryTextListener {
     SearchView buscadorRutas;
     RecyclerView lalista;
+    SearchView searchView;
     ElAdaptadorRecycler adapter;
     List<ItemListRuta> items = new ArrayList<>();
 
@@ -37,6 +38,7 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
 
         buscadorRutas = findViewById(R.id.search_view);
         lalista = findViewById(R.id.elreciclerview);
+        searchView = findViewById(R.id.search_view);
 
         LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(manager);
@@ -49,7 +51,7 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
         String params = "?consulta=RutasPublicas&username=" + sesion.getUsername();
         System.out.println(url + params);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TaskGetRutasPublicas taskGetRutasPublicas = new TaskGetRutasPublicas(url + params, recyclerView, PublicRoutesActivity.this);
+        TaskGetRutasPublicas taskGetRutasPublicas = new TaskGetRutasPublicas(url + params, lalista, searchView,PublicRoutesActivity.this);
         taskGetRutasPublicas.execute();
 
         /**
@@ -106,9 +108,6 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
     }
 
     /** Metodo para probar si funciona el reciclerView, luego se cambiara por una llamada a la BD **/
-    private void getItems(String titulo, String descripcion, String imagen) {
-        items.add(new ItemListRuta(titulo, descripcion, imagen));
-    }
 
     @Override
     public boolean onQueryTextSubmit(String s) {
