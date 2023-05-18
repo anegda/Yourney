@@ -39,11 +39,24 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
         LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(manager);
 
+        /**
         adapter = new ElAdaptadorRecycler(items, RutasFavoritas.this);
         lalista.setAdapter(adapter);
+        **/
 
         buscadorRutas.setOnQueryTextListener(this);
 
+        // Llamada al AsyncTask
+        Sesion sesion = new Sesion(this);
+        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
+        String params = "?consulta=RutasGuardadas&username=" + sesion.getUsername();
+        System.out.println(url + params);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
+        TaskGetRutasGuardadas taskGetRutasGuardadas = new TaskGetRutasGuardadas(url + params, recyclerView, RutasFavoritas.this);
+        taskGetRutasGuardadas.execute();
+
+
+        /**
         // Consulto la BD por las rutas publicas
         Data datos = new Data.Builder()
                 .putString("accion", "selectRuta")
@@ -53,6 +66,8 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
         OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
                 .setInputData(datos)
                 .build();
+
+        System.out.println("Rutas Favoritas");
 
         WorkManager.getInstance(RutasFavoritas.this).getWorkInfoByIdLiveData(select.getId()).observe(RutasFavoritas.this, new Observer<WorkInfo>() {
             @Override
@@ -84,6 +99,7 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
             }
         });
         WorkManager.getInstance(RutasFavoritas.this).enqueue(select);
+        **/
 
     }
 

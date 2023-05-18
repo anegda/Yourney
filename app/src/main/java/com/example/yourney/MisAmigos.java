@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
-public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerAmigos.RecyclerItemClick,SearchView.OnQueryTextListener {
+public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerAmigos.RecyclerItemClick, SearchView.OnQueryTextListener {
     SearchView buscadorUsuarios;
     RecyclerView lalista;
     private List<ItemListAmigo> items = new ArrayList<ItemListAmigo>();
@@ -51,6 +51,7 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         Sesion sesion = new Sesion(this);
         String username = sesion.getUsername();
 
+        /**
         ArrayList<String> amigos = new ArrayList<String>();
 
         // CONSULTAMOS A LA BD POR AMIGOS
@@ -104,10 +105,23 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
             }
         });
         WorkManager.getInstance(MisAmigos.this).enqueue(select);
+        **/
 
+        // Llamada al asynctask
+        String urlAmigos = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selects.php";
+        String urlUsuarios = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectUsuarios.php";
+        String paramsAmigos = "?consulta=Amigos&username=" + username;
+        String paramsUsuarios = "?consulta=Usuarios&username=";
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
+        TaskGetAmigos taskGetAmigos = new TaskGetAmigos(urlAmigos + paramsAmigos, urlUsuarios + paramsUsuarios, recyclerView, MisAmigos.this, username);
+        taskGetAmigos.execute();
+
+        /**
         Log.d("DAS", String.valueOf(items));
         adapter = new ElAdaptadorRecyclerAmigos(items, MisAmigos.this);
         lalista.setAdapter(adapter);
+        **/
+
         buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);
 
         Button añadirAmigo = (Button) findViewById(R.id.añadirAmigo);

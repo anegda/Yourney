@@ -1,8 +1,6 @@
 package com.example.yourney;
 
 import android.os.AsyncTask;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,27 +19,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TaskGetMisRutas extends AsyncTask<Void, Void, ArrayList<JSONObject>> {
+public class TaskGetRutasPublicas extends AsyncTask<Void, Void, ArrayList<JSONObject>> {
 
     private final String urlString;
     private RecyclerView recyclerView;
     private ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick;
-    private TextView placeHolder;
     List<ItemListRuta> items = new ArrayList<>();
     ElAdaptadorRecycler adapter;
 
-    public TaskGetMisRutas(String url, RecyclerView recyclerView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick, TextView placeHolder) {
+    public TaskGetRutasPublicas(String url, RecyclerView recyclerView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick) {
         this.urlString = url;
         this.recyclerView = recyclerView;
         this.recyclerItemClick = recyclerItemClick;
-        this.placeHolder = placeHolder;
     }
 
     @Override
     protected ArrayList<JSONObject> doInBackground(Void... voids) {
 
         try {
-            System.out.println(urlString);
             URL url = new URL(urlString);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -52,17 +47,9 @@ public class TaskGetMisRutas extends AsyncTask<Void, Void, ArrayList<JSONObject>
             StringBuilder stringBuilder = new StringBuilder();
             String row;
 
-            ArrayList<JSONObject> misRutas = new ArrayList<JSONObject>();
-
             // Obtengo un string con el resultado de la consulta
             while ( (row = reader.readLine()) != null ) {
-                System.out.println(row);
                 stringBuilder.append(row);
-
-                if (row.equals("Sin resultado")) {
-                    // Se devuelve la lista vacia --> la consulta no ha tenido resultados
-                    return misRutas;
-                }
             }
 
             // Lo transformo en un JSON para devolver los datos
@@ -70,10 +57,11 @@ public class TaskGetMisRutas extends AsyncTask<Void, Void, ArrayList<JSONObject>
             JSONArray jsonResultado = (JSONArray) parser.parse(stringBuilder.toString());
             int i = 0;
 
+            ArrayList<JSONObject> misRutas = new ArrayList<JSONObject>();
             while (i < jsonResultado.size()) {
                 JSONObject unaRuta = (JSONObject) jsonResultado.get(i);
 
-                // Tambien puedo devolver un ArrayList de JSON???
+                // Devuelvo un ArrayList de JSON
                 misRutas.add(unaRuta);
                 i++;
             }
@@ -88,12 +76,11 @@ public class TaskGetMisRutas extends AsyncTask<Void, Void, ArrayList<JSONObject>
     @Override
     protected void onPostExecute(ArrayList<JSONObject> misRutas) {
         if (misRutas.isEmpty()) {
-            // No ha habido resultado para la consulta --> el usuario no ha creado ninguna ruta
+            // No ha habido resultado para la consulta --> no existen rutas publicas
 
 
         } else {
             // Asigno la info de los json devueltos a donde toque
-            placeHolder.setVisibility(View.GONE);
 
             for (int i = 0; i < misRutas.size(); i++) {
                 JSONObject row = (JSONObject) misRutas.get(i);
@@ -108,7 +95,7 @@ public class TaskGetMisRutas extends AsyncTask<Void, Void, ArrayList<JSONObject>
             System.out.println(items);
             adapter = new ElAdaptadorRecycler(items, recyclerItemClick);
             recyclerView.setAdapter(adapter);
-
         }
+
     }
 }
