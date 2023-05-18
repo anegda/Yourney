@@ -17,9 +17,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -57,6 +59,20 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, elmenudesplegable, R.string.nav_open, R.string.nav_close);
         elmenudesplegable.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+
+
+        //AÑADIMOS EL NOMBRE Y LA FOTO DE PEFIL DEL USUARIO QUE HA INICIADO SESION
+        Sesion sesion = new Sesion(this);
+
+        //CONSEGUIMOS EL HEADER DEL NAVIGATION VIEW
+        View viewHeader = elnavigation.getHeaderView(0);
+
+        TextView username = (TextView) viewHeader.findViewById(R.id.usuario);
+        username.setText(sesion.getUsername());
+
+        ImageView fotoPerfil = (ImageView) viewHeader.findViewById(R.id.fotoperfil);
+
+
         elnavigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -82,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
                        finish();
                        break;
                    case R.id.editarPerfil:
+                       startActivity(new Intent(MainActivity.this, EditarPerfil.class));
+                       finish();
                        break;
                    case R.id.Preferencias:
                        startActivity(new Intent(MainActivity.this, Ajustes.class));
@@ -183,7 +201,6 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         /****************************************************************************************/
 
         // Llamada al AsyncTask
-        Sesion sesion = new Sesion(this);
         String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
         String params = "?consulta=MisRutas&username=" + sesion.getUsername();
         System.out.println(url + params);
