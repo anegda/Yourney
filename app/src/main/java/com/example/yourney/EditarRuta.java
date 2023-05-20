@@ -30,7 +30,7 @@ public class EditarRuta extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editar_ruta);
+        setContentView(R.layout.activity_datos_ruta);
 
         fotoDescRuta = findViewById(R.id.fotoDescRuta);
         tituloRuta = findViewById(R.id.tituloRutaEdit);
@@ -41,7 +41,7 @@ public class EditarRuta extends AppCompatActivity {
         restaurarCampos();
 
         Button btn_guardar = (Button) findViewById(R.id.btn_guardarDatosRuta);
-        Button btn_editores = (Button) findViewById(R.id.btn_anadirEditores);
+        ImageView btn_editores = (ImageView) findViewById(R.id.btn_anadirEditores);
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

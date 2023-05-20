@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondobosqueblur"
+    tools:context=".EditarPerfil">
+
+    <TextView
+        android:id="@+id/tvNombreEditarPerfil"
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        style="@style/blanco1"
+        android:text="@string/editar_nombre"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardEditarPerfil"/>
+
+    <EditText
+        android:id="@+id/nombre"
+        style="@style/blanco1"
+        android:layout_width="227dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:alpha=".65"
+        android:gravity="center"
+        android:hint="@string/editar_nombre"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNombreEditarPerfil"/>
+
+    <TextView
+        android:id="@+id/tvApellidoEditarPerfil"
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        style="@style/blanco1"
+        android:text="@string/editar_apellido"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nombre"/>
+
+    <EditText
+        android:id="@+id/apellido"
+        style="@style/blanco1"
+        android:layout_width="227dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:alpha=".65"
+        android:gravity="center"
+        android:hint="@string/editar_apellido"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvApellidoEditarPerfil"/>
+
+    <TextView
+        android:id="@+id/tvEmailEditarPerfil"
+        android:layout_width="200dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        style="@style/blanco1"
+        android:text="@string/editar_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/apellido"/>
+
+    <EditText
+        android:id="@+id/email"
+        style="@style/blanco1"
+        android:layout_width="227dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:alpha=".65"
+        android:gravity="center"
+        android:hint="@string/editar_email"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmailEditarPerfil"/>
+
+    <TextView
+        android:id="@+id/tvPasswordEditarPerfil"
+        android:layout_width="100dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        style="@style/blanco1"
+        android:text="@string/editar_contrasenia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email"/>
+
+    <EditText
+        android:id="@+id/contrasenia"
+        style="@style/blanco1"
+        android:layout_width="227dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:alpha=".65"
+        android:gravity="center"
+        android:hint="@string/editar_contrasenia"
+        android:textColorHint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvPasswordEditarPerfil"/>
+
+    <Button
+        android:id="@+id/btnGuardarEditarUsuario"
+        style="@style/blanco1"
+        android:layout_width="227dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="35dp"
+        android:alpha=".65"
+        android:gravity="center"
+        android:text="@string/guardar"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:onClick="update"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardEditarPerfil"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="50dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="250dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardEditarPerfil2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            app:cardCornerRadius="250dp">
+
+            <ImageView
+                android:id="@+id/fotoPerfilEditarPerfil"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@drawable/perfil" />
+
+        </androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
