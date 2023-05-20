@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
                        finish();
                        break;
                    case R.id.editarPerfil:
-                       //startActivity(new Intent(MainActivity.this, EditarPerfil.class));
+                       startActivity(new Intent(MainActivity.this, EditarPerfil.class));
                        finish();
                        break;
                    case R.id.Preferencias:
