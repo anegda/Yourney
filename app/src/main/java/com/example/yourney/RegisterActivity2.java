@@ -179,11 +179,14 @@ public class RegisterActivity2 extends AppCompatActivity {
             // obtener bitmap del imageview actual --> comprimirla --> convertirlo en base64 para subirlo a la bbdd
             //if (fotoperfil.getDrawable()!=null) {
             if (fotoen64 == null) {
-                Bitmap bitmap = ((BitmapDrawable) fotoperfil.getDrawable()).getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream.toByteArray();
-                fotoen64 = new String(Base64.getEncoder().encode(byteArray));
+                ImageView fotoPerfil = (ImageView) findViewById(R.id.fotoperfil);
+                Bitmap img = ((BitmapDrawable) fotoPerfil.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                img.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] b = baos.toByteArray();
+                //PARA QUE NO EXISTAN PROBLEMAS CON EL TAMAÑO DE LA IMAGEN
+                b = tratarImagen(b);
+                fotoen64 = Base64.getEncoder().encodeToString(b);
             }
 
             System.out.println("******** BOTON PULSADO ********");
@@ -318,33 +321,29 @@ public class RegisterActivity2 extends AppCompatActivity {
     }
 
 
+    //PARA ESTABLECER IMAGEN
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
             try {
                 Uri imageUri = data.getData();
-                Bitmap bitmapOriginal = null;
                 if(imageUri==null){
-                    bitmapOriginal = (Bitmap) data.getExtras().get("data");
+                    Bitmap foto = (Bitmap) data.getExtras().get("data");
+                    ImageView fotoPerfil = (ImageView) findViewById(R.id.fotoperfil);
+                    fotoPerfil.setImageBitmap(foto);
                 }else {
                     InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                    bitmapOriginal = BitmapFactory.decodeStream(imageStream);
+                    Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                    ImageView fotoPerfil = (ImageView) findViewById(R.id.fotoperfil);
+                    fotoPerfil.setImageBitmap(selectedImage);
                 }
-                //Pasar de bitmap a string y guardar en la variable
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmapOriginal.compress(Bitmap.CompressFormat.PNG, 80, baos);
-                byte[] b = baos.toByteArray();
-                b = tratarImagen(b);
-                fotoen64 = Base64.getEncoder().encodeToString(b);
-
-                //Poner el array comprimido como foto
-                Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-                fotoperfil.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(RegisterActivity2.this, "ERROR", Toast.LENGTH_SHORT).show();
             }
+        }else {
+            Toast.makeText(RegisterActivity2.this,  "ERROR",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -369,12 +368,22 @@ public class RegisterActivity2 extends AppCompatActivity {
          * Modificado por Ane García para traducir varios términos y adaptarlo a la aplicación
          */
         Log.d("DAS", String.valueOf(img.length));
-        while(img.length > 50000){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-            Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.3), (int)(bitmap.getHeight()*0.3), true);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            img = stream.toByteArray();
+        if (img.length > 10000000){
+            while(img.length > 50000){
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.3), (int)(bitmap.getHeight()*0.3), true);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                img = stream.toByteArray();
+            }
+        }else{
+            while(img.length > 50000){
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                img = stream.toByteArray();
+            }
         }
         return img;
     }
