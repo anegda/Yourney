@@ -224,10 +224,6 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         lalista.setLayoutManager(elLayoutLineal);
     }
 
-    private void getItems(String titulo, String descripcion, String imagen) {
-        items.add(new ItemListRuta(titulo, descripcion, imagen));
-    }
-
     @Override
     public void itemClick(ItemListRuta item) {
         Intent intent = new Intent(this, DetallesRuta.class);

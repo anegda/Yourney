@@ -100,10 +100,11 @@ public class TaskGetMisRutas extends AsyncTask<Void, Void, ArrayList<JSONObject>
                 System.out.println("***** " + row + " *****");
                 // Vuelco la informacion en las variables
 
+                String id = (String) row.get("IdRuta");
                 String titulo = (String) row.get("Nombre");
                 String descripcion = (String) row.get("Descripcion");
                 String imagen = (String) row.get("FotoDesc");
-                items.add(new ItemListRuta(titulo, descripcion, imagen));
+                items.add(new ItemListRuta(id, titulo, descripcion, imagen));
             }
             System.out.println(items);
             adapter = new ElAdaptadorRecycler(items, recyclerItemClick);

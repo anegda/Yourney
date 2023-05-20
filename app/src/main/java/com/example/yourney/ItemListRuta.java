@@ -3,16 +3,18 @@ package com.example.yourney;
 import java.io.Serializable;
 
 public class ItemListRuta implements Serializable {
-    private String titulo;
-    private String descripcion;
-    private String imgResource;
+    private String id, titulo, descripcion, imgResource;
 
-    public ItemListRuta(String titulo, String descripcion, String imgResource) {
+    public ItemListRuta(String id, String titulo, String descripcion, String imgResource) {
+        this.id = id;
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.imgResource = imgResource;
     }
 
+    public String getId() {
+        return id;
+    }
     public String getTitulo() {
         return titulo;
     }

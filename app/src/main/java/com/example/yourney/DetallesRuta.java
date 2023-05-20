@@ -1,6 +1,11 @@
 package com.example.yourney;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -50,12 +55,59 @@ public class DetallesRuta extends AppCompatActivity {
         detallesTitulo.setText(detallesItem.getTitulo());
         detallesDescripcion.setText(detallesItem.getDescripcion());
 
+        Sesion sesion = new Sesion(this);
+
         btnFavoritos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int resId = esFavorito ? R.drawable.no_favorito : R.drawable.favorito;
                 btnFavoritos.setImageResource(resId);
                 esFavorito = !esFavorito;
+
+                if(esFavorito){
+                    // Añadimos la ruta a la lista de rutas favoritas
+                    Data datos = new Data.Builder()
+                            .putString("accion", "insert")
+                            .putString("consulta", "RutasGuardadas")
+                            .putInt("idRuta", Integer.parseInt(detallesItem.getId()))
+                            .putString("username", sesion.getUsername())
+                            .build();
+
+                    OneTimeWorkRequest insertRutaGuardada = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                            .setInputData(datos)
+                            .build();
+
+                    WorkManager.getInstance(DetallesRuta.this).getWorkInfoByIdLiveData(insertRutaGuardada.getId()).observe(DetallesRuta.this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState().isFinished()) {
+                            }
+                        }
+                    });
+                    WorkManager.getInstance(DetallesRuta.this).enqueue(insertRutaGuardada);
+
+                } else {
+                    // Eliminamos la ruta de la lista de rutas favoritas
+                    Data datos = new Data.Builder()
+                            .putString("accion", "delete")
+                            .putString("consulta", "RutasGuardadas")
+                            .putInt("idRuta", Integer.parseInt(detallesItem.getId()))
+                            .putString("username", sesion.getUsername())
+                            .build();
+
+                    OneTimeWorkRequest deleteRutaGuardada = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                            .setInputData(datos)
+                            .build();
+
+                    WorkManager.getInstance(DetallesRuta.this).getWorkInfoByIdLiveData(deleteRutaGuardada.getId()).observe(DetallesRuta.this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState().isFinished()) {
+                            }
+                        }
+                    });
+                    WorkManager.getInstance(DetallesRuta.this).enqueue(deleteRutaGuardada);
+                }
             }
         });
     }

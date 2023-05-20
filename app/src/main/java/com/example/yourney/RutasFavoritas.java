@@ -103,11 +103,6 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
 
     }
 
-    /** Metodo para probar si funciona el reciclerView, luego se cambiara por una llamada a la BD **/
-    private void getItems(String titulo, String descripcion, String imagen) {
-        items.add(new ItemListRuta(titulo, descripcion, imagen));
-    }
-
     @Override
     public boolean onQueryTextSubmit(String s) {
         return false;
