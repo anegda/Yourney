@@ -78,7 +78,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
                             float distancia = output.getFloat("Distancia",0);
                             int pasos = output.getInt("Pasos",0);
                             String dificultad = output.getString("Dificultad");
-                            String fecha = output.getString("Fecha");
+                            String fecha = output.getString("Fecha").split("\\s+")[0];
                             int visibilidad = output.getInt("Visibilidad", 0);
                             String creador = output.getString("Creador");
 
