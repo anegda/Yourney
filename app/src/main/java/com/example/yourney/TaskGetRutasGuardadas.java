@@ -1,6 +1,7 @@
 package com.example.yourney;
 
 import android.os.AsyncTask;
+import android.widget.SearchView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,10 +27,12 @@ public class TaskGetRutasGuardadas extends AsyncTask<Void, Void, ArrayList<JSONO
     private ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick;
     List<ItemListRuta> items = new ArrayList<>();
     ElAdaptadorRecycler adapter;
+    SearchView searchView;
 
-    public TaskGetRutasGuardadas(String url, RecyclerView recyclerView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick) {
+    public TaskGetRutasGuardadas(String url, RecyclerView recyclerView, SearchView searchView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick) {
         this.urlString = url;
         this.recyclerView = recyclerView;
+        this.searchView = searchView;
         this.recyclerItemClick = recyclerItemClick;
     }
 
@@ -95,6 +98,19 @@ public class TaskGetRutasGuardadas extends AsyncTask<Void, Void, ArrayList<JSONO
             System.out.println(items);
             adapter = new ElAdaptadorRecycler(items, recyclerItemClick);
             recyclerView.setAdapter(adapter);
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    adapter.filter(s);
+                    return false;
+                }
+            });
 
         }
 

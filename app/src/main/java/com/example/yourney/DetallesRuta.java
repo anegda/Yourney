@@ -13,12 +13,18 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
 import org.json.simple.ItemList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -30,6 +36,7 @@ public class DetallesRuta extends AppCompatActivity {
     private TextView detallesDescripcion;
     private ItemListRuta detallesItem;
     private boolean esFavorito = false;
+    String idRuta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +53,8 @@ public class DetallesRuta extends AppCompatActivity {
         // Conseguimmos los datos de la ruta seleccionada
         detallesItem = (ItemListRuta) getIntent().getExtras().getSerializable("itemDetail");
 
+        Log.d("DESTALLES ITEM", detallesItem.getId());
+
         byte [] encodeByte = Base64.decode(detallesItem.getImgResource(), Base64.DEFAULT);
         InputStream inputStream  = new ByteArrayInputStream(encodeByte);
         Bitmap bitmap  = BitmapFactory.decodeStream(inputStream);
@@ -56,6 +65,52 @@ public class DetallesRuta extends AppCompatActivity {
         detallesDescripcion.setText(detallesItem.getDescripcion());
 
         Sesion sesion = new Sesion(this);
+
+        ////////////////////////////////////////////////////////
+        // Añadimos la ruta a la lista de rutas favoritas
+        Data datos = new Data.Builder()
+                .putString("accion", "selectRuta")
+                .putString("consulta", "RutasGuardadas2")
+                .putString("username", sesion.getUsername())
+                .build();
+
+        OneTimeWorkRequest selectRutaGuardada = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                .setInputData(datos)
+                .build();
+
+        WorkManager.getInstance(DetallesRuta.this).getWorkInfoByIdLiveData(selectRutaGuardada.getId()).observe(DetallesRuta.this, new Observer<WorkInfo>() {
+            @Override
+            public void onChanged(WorkInfo workInfo) {
+                Log.d("OUTPUT", workInfo.toString());
+                if (workInfo != null && workInfo.getState().isFinished()) {
+                    Data output = workInfo.getOutputData();
+                    Log.d("OUTPUT", output.toString());
+                    if (!output.getString("resultado").equals("Sin resultado")) {
+                        JSONParser parser = new JSONParser();
+                        try {
+                            // Obtengo la informacion de las rutas devueltas
+                            JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
+                            Integer i = 0;
+                            while (i < jsonResultado.size()) {
+                                JSONObject row = (JSONObject) jsonResultado.get(i);
+                                // Vuelco la informacion en las variables creadas anteriormente
+                                idRuta = row.get("idRuta").toString();
+                                if(idRuta.equals(detallesItem.getId())){
+                                    Log.d("ENTRA EN ES FAVORITO", "");
+                                    btnFavoritos.setImageResource(R.drawable.favorito);
+                                    esFavorito = true;
+                                }
+                                i++;
+                            }
+                        } catch (ParseException e) {
+                            System.out.print("ERROR AL BUSCAR RUTA GUARDADA");
+                        }
+                    }
+                }
+            }
+        });
+        WorkManager.getInstance(DetallesRuta.this).enqueue(selectRutaGuardada);
+        ////////////////////////////////////////////////////////
 
         btnFavoritos.setOnClickListener(new View.OnClickListener() {
             @Override

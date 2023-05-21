@@ -18,14 +18,17 @@ import java.util.Base64;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
     private final Context context;
+    private final ArrayList<Integer> idImgList;
     private final ArrayList<String> imageBlobArrayList;
     private final ArrayList<String> listaOriginal;
 
     public static String fotoElegidaBlob;
+    public static Integer idImgElegida;
 
-    public RecyclerViewAdapter(Context context, ArrayList<String> imagePathArrayList) {
+    public RecyclerViewAdapter(Context context, ArrayList<Integer> idImgList, ArrayList<String> imagePathArrayList) {
         this.context = context;
         this.imageBlobArrayList = imagePathArrayList;
+        this.idImgList = idImgList;
         listaOriginal = new ArrayList<>();
         listaOriginal.addAll(imagePathArrayList);
     }
@@ -51,6 +54,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Intent i = new Intent(context, ImagenGaleria.class);
                     i.putExtra("imgBlob", "nananananana");
                     fotoElegidaBlob = imageBlobArrayList.get(position);
+                    idImgElegida = idImgList.get(position-2);
                     context.startActivity(i);
                 }
             });
