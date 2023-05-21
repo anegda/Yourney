@@ -106,7 +106,7 @@
         android:layout_marginBottom="48dp"
         android:background="@drawable/round_btn_verde2"
         android:onClick="login"
-        android:text="@string/str2"
+        android:text="@string/str1"
         android:textColor="#99FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/editApellido"

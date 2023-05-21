@@ -66,4 +66,5 @@
     <string name="descr_rutas">Aquí están las rutas que has creado o en las que has participado a lo largo del tiempo en tu viaje</string>
     <string name="mis_rutas">Mis Rutas</string>
     <string name="perfil">Perfil</string>
+    <string name="preferencias">Preferencias</string>
 </resources>
