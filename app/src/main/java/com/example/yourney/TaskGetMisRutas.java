@@ -93,7 +93,6 @@ public class TaskGetMisRutas extends AsyncTask<Void, Void, ArrayList<JSONObject>
 
         } else {
             // Asigno la info de los json devueltos a donde toque
-            placeHolder.setVisibility(View.GONE);
 
             for (int i = 0; i < misRutas.size(); i++) {
                 JSONObject row = (JSONObject) misRutas.get(i);

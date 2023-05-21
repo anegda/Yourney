@@ -346,7 +346,7 @@ public class ConexionBD extends Worker {
                                     .putString("Creador", (String) fila.get("Creador"))
                                     .putString("resultado", "exito")
                                     .build();
-                            VerRuta.fotoDesc = (String) fila.get("FotoDesc");
+                            //VerRuta.fotoDesc = (String) fila.get("FotoDesc");
                             return output;
                         case "UbisRuta":
                         case "UltimaRuta":

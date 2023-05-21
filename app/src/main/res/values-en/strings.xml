@@ -13,7 +13,7 @@
     <string name="titulo">Title</string>
     <string name="guardar">SAVE</string>
     <string name="str0">I already have an account</string>
-    <string name="str1">Register</string>
+    <string name="str1">Sign Up</string>
     <string name="str2">Log in</string>
     <string name="str4">Password</string>
     <string name="str3">User</string>
@@ -63,4 +63,7 @@
     <string name="editar_apellido">Last name</string>
     <string name="editar_email">Email</string>
     <string name="editar_contrasenia">Password</string>
+    <string name="descr_rutas">These are the routes you have created or in which you have participated over time in your journey.</string>
+    <string name="mis_rutas">My Routes</string>
+    <string name="perfil">Profile</string>
 </resources>

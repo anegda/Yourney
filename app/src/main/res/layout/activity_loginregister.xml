@@ -43,10 +43,11 @@
     <Button
         android:id="@+id/btnRegistro"
         android:layout_width="265dp"
-        android:layout_height="33dp"
-        android:background="@drawable/round_btn_marron"
+        android:layout_height="40dp"
+        android:background="@drawable/round_btn_verde2"
         android:onClick="registrarse"
         android:text="@string/str1"
+        android:alpha=".9"
         android:textColor="#CCFFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +59,7 @@
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="265dp"
-        android:layout_height="33dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/round_btn_blanco"
         android:onClick="login"

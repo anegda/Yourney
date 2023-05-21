@@ -4,124 +4,104 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondobosqueblur"
+    android:background="#f4f4e9"
     tools:context=".EditarPerfil">
 
-    <TextView
-        android:id="@+id/tvNombreEditarPerfil"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="30dp"
-        android:gravity="center"
-        style="@style/blanco1"
-        android:text="@string/editar_nombre"
-        app:layout_constraintEnd_toEndOf="parent"
+    <View
+        android:id="@+id/green_rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#75a064"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardEditarPerfil"/>
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:elevation="6dp"
+        android:text="@string/perfil"
+        android:textColor="#ffffff"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/green_rectangle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/green_rectangle"
+        app:layout_constraintVertical_bias="0.533" />
+
+    <View
+        android:id="@+id/bosque_rectangle"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:background="@drawable/fondobosqueblur2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/green_rectangle" />
 
     <EditText
         android:id="@+id/nombre"
         style="@style/blanco1"
         android:layout_width="227dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:alpha=".65"
-        android:gravity="center"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_rounded_background_opaco"
         android:hint="@string/editar_nombre"
-        android:textColorHint="@color/white"
+        android:paddingLeft="10dp"
+        android:textColorHint="#636363"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNombreEditarPerfil"/>
-
-    <TextView
-        android:id="@+id/tvApellidoEditarPerfil"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        style="@style/blanco1"
-        android:text="@string/editar_apellido"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nombre"/>
+        app:layout_constraintTop_toBottomOf="@+id/tvNombre" />
 
     <EditText
         android:id="@+id/apellido"
         style="@style/blanco1"
         android:layout_width="227dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:alpha=".65"
-        android:gravity="center"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_rounded_background_opaco"
+        android:paddingLeft="10dp"
         android:hint="@string/editar_apellido"
-        android:textColorHint="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvApellidoEditarPerfil"/>
-
-    <TextView
-        android:id="@+id/tvEmailEditarPerfil"
-        android:layout_width="200dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        style="@style/blanco1"
-        android:text="@string/editar_email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/apellido"/>
+        android:textColorHint="#636363"
+        app:layout_constraintStart_toStartOf="@+id/tvApellido"
+        app:layout_constraintTop_toBottomOf="@+id/tvApellido" />
 
     <EditText
         android:id="@+id/email"
         style="@style/blanco1"
         android:layout_width="227dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:alpha=".65"
-        android:gravity="center"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_rounded_background_opaco"
+        android:paddingLeft="10dp"
         android:hint="@string/editar_email"
-        android:textColorHint="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvEmailEditarPerfil"/>
-
-    <TextView
-        android:id="@+id/tvPasswordEditarPerfil"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        style="@style/blanco1"
-        android:text="@string/editar_contrasenia"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email"/>
+        android:textColorHint="#636363"
+        app:layout_constraintStart_toStartOf="@+id/tvContraseña"
+        app:layout_constraintTop_toBottomOf="@+id/tvContraseña" />
 
     <EditText
         android:id="@+id/contrasenia"
         style="@style/blanco1"
         android:layout_width="227dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="5dp"
-        android:alpha=".65"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittext_rounded_background_opaco"
         android:gravity="center"
         android:hint="@string/editar_contrasenia"
-        android:textColorHint="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPasswordEditarPerfil"/>
+        android:textColorHint="#636363"
+        app:layout_constraintStart_toStartOf="@+id/tvCorreo"
+        app:layout_constraintTop_toBottomOf="@+id/tvCorreo" />
 
     <Button
         android:id="@+id/btnGuardarEditarUsuario"
-        style="@style/blanco1"
         android:layout_width="227dp"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="35dp"
-        android:alpha=".65"
+        android:background="@drawable/round_btn_verde"
         android:gravity="center"
+        android:textColor="@color/white"
         android:text="@string/guardar"
-        android:textColor="@color/black"
-        android:textStyle="bold"
         android:onClick="update"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -137,7 +117,7 @@
         app:cardCornerRadius="250dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/green_rectangle">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardEditarPerfil2"
@@ -155,5 +135,45 @@
 
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tvNombre"
+        style="@style/f_go_s_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/editar_nombre"
+        app:layout_constraintStart_toStartOf="@+id/nombre"
+        app:layout_constraintTop_toBottomOf="@+id/bosque_rectangle" />
+
+    <TextView
+        android:id="@+id/tvApellido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/editar_apellido"
+        style="@style/f_go_s_b"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@+id/nombre"
+        app:layout_constraintTop_toBottomOf="@+id/nombre" />
+
+    <TextView
+        android:id="@+id/tvCorreo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/editar_contrasenia"
+        style="@style/f_go_s_b"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@+id/email"
+        app:layout_constraintTop_toBottomOf="@+id/email" />
+
+    <TextView
+        android:id="@+id/tvContraseña"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/editar_email"
+        style="@style/f_go_s_b"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="@+id/apellido"
+        app:layout_constraintTop_toBottomOf="@+id/apellido" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //AÑADIR LA FUNCIONALIDAD AL BOTÓN FLOTANTE DE GRABAR
-        Button btn_2Add = (Button) findViewById(R.id.button2);
+        ImageView btn_2Add = findViewById(R.id.button2);
         btn_2Add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -222,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         /** definir el aspecto del RecyclerView --> horizontal, vertical, grid... **/
         LinearLayoutManager elLayoutLineal= new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(elLayoutLineal);
+
     }
 
     @Override

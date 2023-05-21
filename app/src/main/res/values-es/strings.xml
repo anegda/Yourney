@@ -13,7 +13,7 @@
     <string name="titulo">Título</string>
     <string name="guardar">GUARDAR</string>
     <string name="str0">Ya tengo cuenta</string>
-    <string name="str1">Registrarse</string>
+    <string name="str1">Crear cuenta</string>
     <string name="str2">Iniciar sesión</string>
     <string name="str3">Usuario</string>
     <string name="str4">Contraseña</string>
@@ -63,4 +63,7 @@
     <string name="editar_apellido">Apellido</string>
     <string name="editar_email">Correo electrónico</string>
     <string name="editar_contrasenia">Contraseña</string>
+    <string name="descr_rutas">Aquí están las rutas que has creado o en las que has participado a lo largo del tiempo en tu viaje</string>
+    <string name="mis_rutas">Mis Rutas</string>
+    <string name="perfil">Perfil</string>
 </resources>
