@@ -245,7 +245,8 @@ public class ConexionBD extends Worker {
                     params.put("idRuta", datos.getInt("idRuta", 0));
                     params.put("nombre", datos.getString("nombre"));
                     params.put("descripcion", datos.getString("descripcion"));
-                    //params.put("fotoDesc", datos.getString("fotoDesc"));
+                    params.put("dificultad", datos.getString("dificultad"));
+                    params.put("fotoDesc", EditarRuta.fotoDescriptiva);
                     params.put("visibilidad", datos.getInt("visibilidad", 1));
 
                     out.print(params.toString());
@@ -291,6 +292,10 @@ public class ConexionBD extends Worker {
                     params = "?consulta=" + consulta + "&idRuta=" + Integer.toString(datos.getInt("idRuta", 0));
                     break;
 
+                case "UbisRuta":
+                    params = "?consulta=" + consulta + "&idRuta=" + Integer.toString(datos.getInt("idRuta", 0));
+                    break;
+
                 case "MisRutas":
                     params = "?consulta=" + consulta + "&username=" + datos.getString("username");
                     break;
@@ -315,7 +320,7 @@ public class ConexionBD extends Worker {
             urlConnection = (HttpURLConnection) urlFinal.openConnection();
 
             int status = urlConnection.getResponseCode();
-            System.out.println(status);
+            Log.d("DAS", String.valueOf(status));
             if (status == 200) {
                 // La peticion ha tenido exito
                 BufferedInputStream input = new BufferedInputStream(urlConnection.getInputStream());
@@ -328,7 +333,7 @@ public class ConexionBD extends Worker {
                     resultado += row;
                 }
                 input.close();
-
+                Log.d("DAS", resultado);
                 if (resultado.equals("Sin resultado")) {
                     // Formo el JSON de resultado
 

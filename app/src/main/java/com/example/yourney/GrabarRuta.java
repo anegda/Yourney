@@ -224,7 +224,7 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                                                             .setInputData(datosUbi)
                                                             .build();
 
-                                                    WorkManager.getInstance(GrabarRuta.this).getWorkInfoByIdLiveData(insertUbi.getId()).observe((LifecycleOwner) new myLifeCycleOwner().getLifecycle(), new Observer<WorkInfo>() {
+                                                    WorkManager.getInstance(GrabarRuta.this).getWorkInfoByIdLiveData(insertUbi.getId()).observe(GrabarRuta.this, new Observer<WorkInfo>() {
                                                         @Override
                                                         public void onChanged(WorkInfo workInfo) {
                                                             Log.d("DAS", "ubicación insertada");
@@ -233,6 +233,9 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
 
                                                     WorkManager.getInstance(GrabarRuta.this).enqueue(insertUbi);
                                                 }
+
+                                                startActivity(new Intent(GrabarRuta.this, EditarRuta.class).putExtra("idRuta", idRuta));
+                                                finish();
                                             }
                                         }
                                     }
@@ -247,10 +250,6 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                 locationService.guardarRuta();
                 empezar_btn.setEnabled(true);
                 parar_btn.setEnabled(false);
-
-                int idRuta = 1;
-                startActivity(new Intent(GrabarRuta.this, DatosRuta.class).putExtra("idRuta", idRuta));
-                finish();
             }
         });
 
@@ -407,12 +406,6 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // OBTENEMOS LAS UBICACIONES DE LA RUTA Y REALIZAMOS EL RECORRIDO
-        DBHelper GestorBD = new DBHelper(this, "Yourney", null, 1);
-        SQLiteDatabase bd = GestorBD.getWritableDatabase();
-        String[] campos = new String[] {"idUbi", "idRuta", "altitud", "longitud", "latitud"};
-        Cursor c = bd.query("Ubicaciones",campos,null,null, null,null,null);
 
         PolylineOptions line = new PolylineOptions().clickable(false);
         LatLng firstLoc = null;
