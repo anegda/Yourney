@@ -1,5 +1,6 @@
 package com.example.yourney;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.work.Data;
@@ -43,6 +44,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     int idRuta;
+    static String fotoDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
         //OBTENEMOS LOS GENERALES DE LA RUTA
         int idRuta = getIntent().getIntExtra("idRuta",0);
         Data datos = new Data.Builder()
-                .putString("accion", "selectRutas")
+                .putString("accion", "selectRuta")
                 .putString("consulta", "InfoRuta")
                 .putInt("idRuta", idRuta)
                 .build();
@@ -69,11 +71,9 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
                 if (workInfo != null && workInfo.getState().isFinished()) {
                     Data output = workInfo.getOutputData();
                     if (!output.getString("resultado").equals("Sin resultado")) {
-                        JSONParser parser = new JSONParser();
                         try {
                             String titulo = output.getString("Nombre");
                             String descripcion = output.getString("Descripcion");
-                            String fotoDesc = output.getString("FotoDesc");
                             float duracion = output.getFloat("Duracion",0);
                             float distancia = output.getFloat("Distancia",0);
                             int pasos = output.getInt("Pasos",0);
@@ -153,7 +153,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
                 TextView descripcionRuta = findViewById(R.id.descripcionRText);
                 descripcionRuta.setVisibility(View.GONE);
 
-                LinearLayout datosNum = findViewById(R.id.datosNumRuta);
+                ConstraintLayout datosNum = findViewById(R.id.datosNumRuta);
                 datosNum.setVisibility(View.VISIBLE);
             }
         });
@@ -180,7 +180,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
                 TextView descripcionRuta = findViewById(R.id.descripcionRText);
                 descripcionRuta.setVisibility(View.VISIBLE);
 
-                LinearLayout datosNum = findViewById(R.id.datosNumRuta);
+                ConstraintLayout datosNum = findViewById(R.id.datosNumRuta);
                 datosNum.setVisibility(View.GONE);
             }
         });
@@ -209,7 +209,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
         // OBTENEMOS LAS UBICACIONES DE LA RUTA Y REALIZAMOS EL RECORRIDO
         int idRuta = getIntent().getIntExtra("idRuta",0);
         Data datos = new Data.Builder()
-                .putString("accion", "selectRutas")
+                .putString("accion", "selectRuta")
                 .putString("consulta", "UbisRuta")
                 .putInt("idRuta", idRuta)
                 .build();

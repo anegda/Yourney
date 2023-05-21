@@ -245,11 +245,21 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
             tools:layout="@layout/support_simple_spinner_dropdown_item" />
 
+        <TextView
+            android:id="@+id/descripcionRText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/map"
+            tools:layout_editor_absoluteX="0dp"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout6"
+            android:id="@+id/datosNumRuta"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/map"
             tools:layout_editor_absoluteX="0dp">
 

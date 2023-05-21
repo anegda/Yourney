@@ -155,7 +155,7 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                         .putString("pasos", pasos)
                         .putString("dificultad", "facil")
                         .putString("fecha", fecha)
-                        .putInt("visibilidad", 1)
+                        .putInt("visibilidad", 0)
                         .putString("creador", creador)
                         .build();
 

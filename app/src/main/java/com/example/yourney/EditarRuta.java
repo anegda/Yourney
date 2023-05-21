@@ -240,12 +240,6 @@ public class EditarRuta extends AppCompatActivity {
         outState.putInt("dificultad", dificultad.indexOfChild(dificultad.findViewById(dificultad.getCheckedRadioButtonId())));
         outState.putString("infoExtra", informacionExtra.getText().toString());
         outState.putInt("visibilidad", visibilidad.indexOfChild(visibilidad.findViewById(visibilidad.getCheckedRadioButtonId())));
-
-        if (fotoDescRuta.getDrawable() != null) {
-            Bitmap imagen = ((BitmapDrawable)fotoDescRuta.getDrawable()).getBitmap();
-            outState.putParcelable("imagen", imagen);
-        }
-
     }
 
     @Override
@@ -256,7 +250,5 @@ public class EditarRuta extends AppCompatActivity {
         dificultad.check(outState.getInt("difitultad"));
         informacionExtra.setText(outState.getString("infoExtra"));
         visibilidad.check(outState.getInt("visibilidad"));
-
-        fotoDescRuta.setImageBitmap(outState.getParcelable("imagen"));
     }
 }
