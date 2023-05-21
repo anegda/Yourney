@@ -39,10 +39,8 @@ import java.util.Base64;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycler.RecyclerItemClick {
-
     public ActionBarDrawerToggle  actionBarDrawerToggle;
-
-   private ArrayList<String> nombreImagenes = new ArrayList<String>();
+    private ArrayList<String> nombreImagenes = new ArrayList<String>();
     List<ItemListRuta> items = new ArrayList<>();
     String titulo, descripcion, imagen = "";
     @Override
@@ -133,74 +131,6 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
             }
         });
 
-        /*************************** ruta a mostrar de ejemplo **********************************
-
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fotoruta);
-
-         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-         byte[] byteArray = byteArrayOutputStream.toByteArray();
-         String fotoen64 = new String(Base64.getEncoder().encode(byteArray));
-
-        String foto = fotoen64;
-        String nombre = "Ruta Ejemplo";
-        String descr = "Este es un ejemplo de una ruta creada por defecto. Así se van a ver el resto de rutas que crees a lo largo de tu aventura";
-        ItemListRuta rutaEjemplo = new ItemListRuta(foto, nombre, descr);
-        items.add(rutaEjemplo);
-
-         /****************************************************************************************
-
-        /*
-         // Consulto la BD por mis rutas
-        Sesion sesion = new Sesion(this);
-
-        Data datos = new Data.Builder()
-                .putString("accion", "selectRuta")
-                .putString("consulta", "MisRutas")
-                .putString("username", sesion.getUsername())
-                .build();
-
-
-        OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                .setInputData(datos)
-                .build();
-
-        System.out.println("Main Activity");
-
-        WorkManager.getInstance(MainActivity.this).getWorkInfoByIdLiveData(select.getId()).observe(MainActivity.this, new Observer<WorkInfo>() {
-            @Override
-            public void onChanged(WorkInfo workInfo) {
-                if (workInfo != null && workInfo.getState().isFinished()) {
-                    Data output = workInfo.getOutputData();
-                    if (!output.getString("resultado").equals("Sin resultado")) {
-                        JSONParser parser = new JSONParser();
-                        try {
-                            // Obtengo la informacion de las rutas devueltas
-                            JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
-
-                            Integer i = 0;
-                            while (i < jsonResultado.size()) {
-                                JSONObject row = (JSONObject) jsonResultado.get(i);
-                                // Vuelco la informacion en las variables creadas anteriormente
-                                titulo = (String) row.get("FotoDesc");
-                                descripcion = (String) row.get("Nombre");
-                                imagen = (String) row.get("Descripcion");
-                                getItems(titulo, descripcion, imagen);
-                                i++;
-                            }
-
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            }
-        });
-        WorkManager.getInstance(MainActivity.this).enqueue(select);
-        */
-
-        /****************************************************************************************/
-
         // Llamada al AsyncTask
         String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
         String params = "?consulta=MisRutas&username=" + sesion.getUsername();
@@ -228,8 +158,10 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
 
     @Override
     public void itemClick(ItemListRuta item) {
-        Intent intent = new Intent(this, DetallesRuta.class);
-        intent.putExtra("itemDetail", item);
+        Intent intent = new Intent(this, VerRuta.class);
+        int idRuta = Integer.parseInt(item.getId());
+        intent.putExtra("idRuta", idRuta);
+        Log.d("DAS", String.valueOf(idRuta));
         startActivity(intent);
     }
 

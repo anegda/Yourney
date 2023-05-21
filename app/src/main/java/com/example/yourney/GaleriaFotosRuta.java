@@ -144,19 +144,6 @@ public class GaleriaFotosRuta extends AppCompatActivity {
         GridLayoutManager manager = new GridLayoutManager(GaleriaFotosRuta.this, 4);
         imagesRV.setLayoutManager(manager);
         imagesRV.setAdapter(imageRVAdapter);
-        getImageBlob();
-    }
-
-    private void getImageBlob() {
-        //CARGAMOS LAS IMÁGENES
-        Bitmap img = BitmapFactory.decodeResource(GaleriaFotosRuta.this.getResources(), R.drawable.fotoruta);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        img.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] b = baos.toByteArray();
-        String foto = Base64.getEncoder().encodeToString(b);
-        imageBlobs.add(foto);
-        imageBlobs.add(foto);
-        imageRVAdapter.notifyDataSetChanged();
     }
 
     @Override

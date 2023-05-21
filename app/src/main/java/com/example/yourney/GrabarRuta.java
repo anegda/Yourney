@@ -209,6 +209,24 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                                                     throw new RuntimeException(e);
                                                 }
 
+                                                //INTRODUCIMOS A NUESTRO USUARIO COMO EDITOR
+                                                Data datosEditor = new Data.Builder()
+                                                        .putString("accion", "insert")
+                                                        .putString("consulta", "Editores")
+                                                        .putInt("idRuta", idRuta)
+                                                        .putString("username", creador)
+                                                        .build();
+                                                OneTimeWorkRequest insertEditor = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                                        .setInputData(datosEditor)
+                                                        .build();
+                                                WorkManager.getInstance(GrabarRuta.this).getWorkInfoByIdLiveData(insertEditor.getId()).observe(GrabarRuta.this, new Observer<WorkInfo>() {
+                                                    @Override
+                                                    public void onChanged(WorkInfo workInfo) {
+                                                        Log.d("DAS", "editor insertado");
+                                                    }
+                                                });
+                                                WorkManager.getInstance(GrabarRuta.this).enqueue(insertEditor);
+
                                                 //INTRODUCIMOS LAS UBICACIONES DE LA RUTA EN LA BD REMOTA
                                                 for (Location location : locationService.getLocations()) {
                                                     Data datosUbi = new Data.Builder()

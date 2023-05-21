@@ -164,6 +164,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(VerRuta.this, GaleriaFotosRuta.class);
+                i.putExtra("idRuta", idRuta);
                 startActivity(i);
                 finish();
             }
@@ -190,15 +191,15 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
         btn_editarRuta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(VerRuta.this, GaleriaFotosRuta.class);
+                Intent i = new Intent(VerRuta.this, EditarRuta.class);
+                i.putExtra("idRuta", idRuta);
                 startActivity(i);
                 finish();
             }
         });
 
         //OBTENEMOS EL MAPA Y CREAMOS LA RUTA
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 

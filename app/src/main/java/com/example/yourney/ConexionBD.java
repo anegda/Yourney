@@ -350,6 +350,7 @@ public class ConexionBD extends Worker {
                             return output;
                         case "UbisRuta":
                         case "UltimaRuta":
+                        case "RutasGuardadas2":
                             output = new Data.Builder().putString("resultado", resultado).build();
                             return output;
                         default:
@@ -361,6 +362,7 @@ public class ConexionBD extends Worker {
                     return output;
                 }
             }
+            output = new Data.Builder().putString("resultado", "Sin resultado").build();
             return output;
         } catch(IOException | ParseException e) {
             throw new RuntimeException(e);
