@@ -53,7 +53,7 @@ public class DetallesRuta extends AppCompatActivity {
         // Conseguimmos los datos de la ruta seleccionada
         detallesItem = (ItemListRuta) getIntent().getExtras().getSerializable("itemDetail");
 
-        Log.d("DESTALLES ITEM", detallesItem.getId());
+        //Log.d("DESTALLES ITEM", detallesItem.getId());
 
         byte [] encodeByte = Base64.decode(detallesItem.getImgResource(), Base64.DEFAULT);
         InputStream inputStream  = new ByteArrayInputStream(encodeByte);

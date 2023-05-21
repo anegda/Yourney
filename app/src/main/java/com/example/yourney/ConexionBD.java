@@ -521,7 +521,7 @@ public class ConexionBD extends Worker {
                     break;
 
                 case "RutasGuardadas":
-                    params = "?consulta=" + consulta + "&idRuta=" + datos.getString("idRuta") + "&username=" + datos.getString("username");
+                    params = "?consulta=" + consulta + "&idRuta=" + datos.getInt("idRuta", 0) + "&username=" + datos.getString("username");
                     break;
 
                 case "Imagenes":
