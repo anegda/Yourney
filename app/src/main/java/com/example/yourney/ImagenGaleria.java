@@ -1,6 +1,11 @@
 package com.example.yourney;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -80,9 +85,30 @@ public class ImagenGaleria extends AppCompatActivity {
             public void onClick(View view) {
                 //TODO: LLAMAR A LA BD CON UN DELETE
 
-                //CERRAMOS LA ACTIVIDAD Y VOLVEMOS A LA GALERÍA
-                startActivity(new Intent(ImagenGaleria.this, GaleriaFotosRuta.class));
-                finish();
+                Data datos = new Data.Builder()
+                        .putString("accion", "delete")
+                        .putString("consulta", "Imagenes")
+                        .putInt("idImg", RecyclerViewAdapter.idImgElegida)
+                        .build();
+
+                // Peticion al Worker
+                OneTimeWorkRequest delete = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                        .setInputData(datos)
+                        .build();
+
+                WorkManager.getInstance(ImagenGaleria.this).getWorkInfoByIdLiveData(delete.getId()).observe(ImagenGaleria.this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            System.out.println("Imagen borrada");
+
+                            //CERRAMOS LA ACTIVIDAD Y VOLVEMOS A LA GALERÍA
+                            startActivity(new Intent(ImagenGaleria.this, GaleriaFotosRuta.class));
+                            finish();
+                        }
+                    }
+                });
+                WorkManager.getInstance(ImagenGaleria.this).enqueue(delete);
             }
         });
     }

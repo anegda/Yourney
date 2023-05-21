@@ -162,7 +162,7 @@ public class ConexionBD extends Worker {
 
                     params.put("idRuta", datos.getInt("idRuta", 0));
                     params.put("username", datos.getString("username"));
-                    //params.put("imgBlob", GaleriaFotosRuta.fotoNueva);
+                    params.put("imgBlob", GaleriaFotosRuta.fotoNueva);
 
                     break;
 
@@ -520,6 +520,12 @@ public class ConexionBD extends Worker {
 
                 case "RutasGuardadas":
                     params = "?consulta=" + consulta + "&idRuta=" + datos.getString("idRuta") + "&username=" + datos.getString("username");
+                    break;
+
+                case "Imagenes":
+                    System.out.println("IMAGENES");
+                    System.out.println(datos.getInt("idImg", 0));
+                    params = "?consulta=" + consulta + "&idImg=" + datos.getInt("idImg", 0);
                     break;
 
                 case "Tokens":
