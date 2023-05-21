@@ -40,9 +40,9 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
         lalista.setLayoutManager(manager);
 
         /**
-        adapter = new ElAdaptadorRecycler(items, RutasFavoritas.this);
-        lalista.setAdapter(adapter);
-        **/
+         adapter = new ElAdaptadorRecycler(items, RutasFavoritas.this);
+         lalista.setAdapter(adapter);
+         **/
 
         buscadorRutas.setOnQueryTextListener(this);
 
@@ -52,54 +52,54 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
         String params = "?consulta=RutasGuardadas&username=" + sesion.getUsername();
         System.out.println(url + params);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TaskGetRutasGuardadas taskGetRutasGuardadas = new TaskGetRutasGuardadas(url + params, recyclerView, RutasFavoritas.this);
+        TaskGetRutasGuardadas taskGetRutasGuardadas = new TaskGetRutasGuardadas(url + params, recyclerView, buscadorRutas, RutasFavoritas.this);
         taskGetRutasGuardadas.execute();
 
 
         /**
-        // Consulto la BD por las rutas publicas
-        Data datos = new Data.Builder()
-                .putString("accion", "selectRuta")
-                .putString("consulta", "RutasPublicas")
-                .build();
+         // Consulto la BD por las rutas publicas
+         Data datos = new Data.Builder()
+         .putString("accion", "selectRuta")
+         .putString("consulta", "RutasPublicas")
+         .build();
 
-        OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                .setInputData(datos)
-                .build();
+         OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
+         .setInputData(datos)
+         .build();
 
-        System.out.println("Rutas Favoritas");
+         System.out.println("Rutas Favoritas");
 
-        WorkManager.getInstance(RutasFavoritas.this).getWorkInfoByIdLiveData(select.getId()).observe(RutasFavoritas.this, new Observer<WorkInfo>() {
-            @Override
-            public void onChanged(WorkInfo workInfo) {
-                if (workInfo != null && workInfo.getState().isFinished()) {
-                    Data output = workInfo.getOutputData();
-                    if (!output.getString("resultado").equals("Sin resultado")) {
-                        JSONParser parser = new JSONParser();
-                        try {
-                            // Obtengo la informacion de las rutas devueltas
-                            JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
+         WorkManager.getInstance(RutasFavoritas.this).getWorkInfoByIdLiveData(select.getId()).observe(RutasFavoritas.this, new Observer<WorkInfo>() {
+        @Override
+        public void onChanged(WorkInfo workInfo) {
+        if (workInfo != null && workInfo.getState().isFinished()) {
+        Data output = workInfo.getOutputData();
+        if (!output.getString("resultado").equals("Sin resultado")) {
+        JSONParser parser = new JSONParser();
+        try {
+        // Obtengo la informacion de las rutas devueltas
+        JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
 
-                            Integer i = 0;
-                            while (i < jsonResultado.size()) {
-                                JSONObject row = (JSONObject) jsonResultado.get(i);
-                                // Vuelco la informacion en las variables creadas anteriormente
-                                titulo = (String) row.get("FotoDesc");
-                                descripcion = (String) row.get("Nombre");
-                                imagen = (String) row.get("Descripcion");
-                                getItems(titulo, descripcion, imagen);
-                                i++;
-                            }
+        Integer i = 0;
+        while (i < jsonResultado.size()) {
+        JSONObject row = (JSONObject) jsonResultado.get(i);
+        // Vuelco la informacion en las variables creadas anteriormente
+        titulo = (String) row.get("FotoDesc");
+        descripcion = (String) row.get("Nombre");
+        imagen = (String) row.get("Descripcion");
+        getItems(titulo, descripcion, imagen);
+        i++;
+        }
 
-                        } catch (ParseException | JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            }
+        } catch (ParseException | JSONException e) {
+        throw new RuntimeException(e);
+        }
+        }
+        }
+        }
         });
-        WorkManager.getInstance(RutasFavoritas.this).enqueue(select);
-        **/
+         WorkManager.getInstance(RutasFavoritas.this).enqueue(select);
+         **/
 
     }
 
