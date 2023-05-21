@@ -8,7 +8,7 @@ import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import org.json.JSONException;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -296,18 +296,6 @@ public class ConexionBD extends Worker {
                     params = "?consulta=" + consulta + "&idRuta=" + Integer.toString(datos.getInt("idRuta", 0));
                     break;
 
-                case "MisRutas":
-                    params = "?consulta=" + consulta + "&username=" + datos.getString("username");
-                    break;
-
-                case "RutasGuardadas":
-                    params = "?consulta=" + consulta + "&username=" + datos.getString("username");
-                    break;
-
-                case "RutasPublicas":
-                    params = "?consulta=" + consulta;
-                    break;
-
                 case "UltimaRuta":
                     params = "?consulta=" + consulta + "&username=" + datos.getString("username");
                     break;
@@ -333,128 +321,43 @@ public class ConexionBD extends Worker {
                     resultado += row;
                 }
                 input.close();
-                Log.d("DAS", resultado);
-                if (resultado.equals("Sin resultado")) {
-                    // Formo el JSON de resultado
 
-                    // Diferentes datos a devolver para cada consulta
+                Log.d("DAS", resultado);
+                if (!resultado.equals("Sin resultado")) {
                     switch(consulta) {
                         case "InfoRuta":
-
                             JSONParser parser = new JSONParser();
-                            JSONObject json = (JSONObject) parser.parse(resultado);
+                            JSONArray jsonResultado = (JSONArray) parser.parse(resultado);
+                            JSONObject fila = (JSONObject) jsonResultado.get(0);
 
                             output = new Data.Builder()
-                                    .putInt("idRuta", (Integer) json.get("IdRuta"))
-                                    .putString("nombre", (String) json.get("Nombre"))
-                                    .putString("descripcion", (String) json.get("Descripcion"))
-                                    .putDouble("duracion", (Double) json.get("Duracion"))
-                                    .putDouble("distancia", (Double) json.get("Distancia"))
-                                    .putString("dificultad", (String) json.get("Dificultad"))
-                                    .putString("fecha", (String) json.get("Fecha"))
-                                    .putInt("visibilidad", (Integer) json.get("Visibilidad"))
-                                    .putString("creador", (String) json.get("Creador"))
+                                    .putString("Nombre", (String) fila.get("Nombre"))
+                                    .putString("Descripcion", (String) fila.get("Descripcion"))
+                                    .putFloat("Duracion", Float.parseFloat((String) fila.get("Duracion")))
+                                    .putFloat("Distancia", Float.parseFloat((String) fila.get("Distancia")))
+                                    .putInt("Pasos", Integer.parseInt((String) fila.get("Pasos")))
+                                    .putString("Dificultad", (String) fila.get("Dificultad"))
+                                    .putString("Fecha", (String) fila.get("Fecha"))
+                                    .putInt("Visibilidad", (Integer) Integer.parseInt((String) fila.get("Visibilidad")))
+                                    .putString("Creador", (String) fila.get("Creador"))
                                     .putString("resultado", "exito")
                                     .build();
-
-                            // Asignar la imagen (String) json.get("FotoDesc") donde sea
-
-                            break;
-
-                        case "MisRutas":
-
-                            // Loopear sobre todas las rutas devueltas
-                            /**
-                            JSONParser parser2 = new JSONParser();
-                            JSONObject json2 = (JSONObject) parser2.parse(resultado);
-
-                            output = new Data.Builder()
-                                    .putInt("idRuta", (Integer) json2.get("IdRuta"))
-                                    .putString("nombre", (String) json2.get("Nombre"))
-                                    .putString("descripcion", (String) json2.get("Descripcion"))
-                                    .putDouble("duracion", (Double) json2.get("Duracion"))
-                                    .putDouble("distancia", (Double) json2.get("Distancia"))
-                                    .putInt("Distancia", (Integer) json2.get("Distancia"))
-                                    .putString("dificultad", (String) json2.get("Dificultad"))
-                                    .putString("fecha", (String) json2.get("Fecha"))
-                                    .putInt("visibilidad", (Integer) json2.get("Visibilidad"))
-                                    .putString("creador", (String) json2.get("Creador"))
-                                    .putString("resultado", "exito")
-                                    .build();
-                            **/
-                            break;
-
-                        case "RutasGuardadas":
-
-                            // Loopear sobre todas las rutas devueltas
-                            /**
-                            JSONParser parser3 = new JSONParser();
-                            JSONObject json3 = (JSONObject) parser3.parse(resultado);
-
-                            output = new Data.Builder()
-                                    .putInt("idRuta", (Integer) json3.get("IdRuta"))
-                                    .putString("nombre", (String) json3.get("Nombre"))
-                                    .putString("descripcion", (String) json3.get("Descripcion"))
-                                    .putDouble("duracion", (Double) json3.get("Duracion"))
-                                    .putDouble("distancia", (Double) json3.get("Distancia"))
-                                    .putInt("Distancia", (Integer) json3.get("Distancia"))
-                                    .putString("dificultad", (String) json3.get("Dificultad"))
-                                    .putString("fecha", (String) json3.get("Fecha"))
-                                    .putInt("visibilidad", (Integer) json3.get("Visibilidad"))
-                                    .putString("creador", (String) json3.get("Creador"))
-                                    .putString("resultado", "exito")
-                                    .build();
-                            **/
-                            break;
-
-                        case "RutasPublicas":
-
-                             // Loopear sobre todas las rutas devueltas
-                             /**
-                            JSONParser parser4 = new JSONParser();
-                            JSONObject json4 = (JSONObject) parser4.parse(resultado);
-
-                            output = new Data.Builder()
-                                    .putInt("idRuta", (Integer) json4.get("IdRuta"))
-                                    .putString("nombre", (String) json4.get("Nombre"))
-                                    .putString("descripcion", (String) json4.get("Descripcion"))
-                                    .putDouble("duracion", (Double) json4.get("Duracion"))
-                                    .putDouble("distancia", (Double) json4.get("Distancia"))
-                                    .putInt("Distancia", (Integer) json4.get("Distancia"))
-                                    .putString("dificultad", (String) json4.get("Dificultad"))
-                                    .putString("fecha", (String) json4.get("Fecha"))
-                                    .putInt("visibilidad", (Integer) json4.get("Visibilidad"))
-                                    .putString("creador", (String) json4.get("Creador"))
-                                    .putString("resultado", "exito")
-                                    .build();
-                            **/
-                            break;
-
+                            VerRuta.fotoDesc = (String) fila.get("FotoDesc");
+                            return output;
+                        case "UbisRuta":
                         case "UltimaRuta":
-
-                            JSONParser parser5 = new JSONParser();
-                            JSONObject json5 = (JSONObject) parser5.parse(resultado);
-
-                            output = new Data.Builder()
-                                    .putInt("idRuta", (Integer) json5.get("MAX(IdRuta)"))
-                                    .putString("resultado", "exito")
-                                    .build();
-                            break;
-
+                            output = new Data.Builder().putString("resultado", resultado).build();
+                            return output;
                         default:
                             break;
                     }
-
                     return output;
-
-                } else {
+                }else{
                     output = new Data.Builder().putString("resultado", resultado).build();
                     return output;
                 }
-
             }
             return output;
-
         } catch(IOException | ParseException e) {
             throw new RuntimeException(e);
         }
