@@ -11,7 +11,7 @@
     <string name="publico">Público</string>
     <string name="privado">Privado</string>
     <string name="titulo">Título</string>
-    <string name="guardar">GUARDAR</string>
+    <string name="guardar">Guardar</string>
     <string name="str0">Ya tengo cuenta</string>
     <string name="str1">Crear cuenta</string>
     <string name="str2">Iniciar sesión</string>
@@ -51,7 +51,7 @@
     <string name="login_correcto">¡Hola de nuevo</string>
     <string name="registro_incorrecto">El usuario introducido ya existe</string>
     <string name="registro_correcto">¡Bienvenido</string>
-    <string name="buscarUsuarios">Buscar amigos</string>
+    <string name="buscarUsuarios">Buscar usuarios</string>
     <string name="galeria">Galería de imágenes</string>
     <string name="enviar">Enviar</string>
     <string name="mensaje">Mensaje</string>

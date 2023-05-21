@@ -11,7 +11,7 @@
     <string name="publico">Public</string>
     <string name="privado">Private</string>
     <string name="titulo">Title</string>
-    <string name="guardar">SAVE</string>
+    <string name="guardar">Save</string>
     <string name="str0">I already have an account</string>
     <string name="str1">Sign Up</string>
     <string name="str2">Log in</string>
@@ -51,7 +51,7 @@
     <string name="login_correcto">Welcome again</string>
     <string name="registro_incorrecto">The username already exists</string>
     <string name="registro_correcto">Welcome</string>
-    <string name="buscarUsuarios">Find friends by username</string>
+    <string name="buscarUsuarios">Find users by username</string>
     <string name="galeria">"Image gallery "</string>
     <string name="enviar">Send</string>
     <string name="mensaje">Message</string>
