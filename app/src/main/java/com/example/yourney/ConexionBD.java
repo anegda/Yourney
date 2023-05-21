@@ -300,6 +300,10 @@ public class ConexionBD extends Worker {
                     params = "?consulta=" + consulta + "&username=" + datos.getString("username");
                     break;
 
+                case "RutasGuardadas2":
+                    params = "?consulta=" + consulta + "&username=" + datos.getString("username");
+                    break;
+
                 default:
                     break;
             }
