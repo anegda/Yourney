@@ -11,7 +11,7 @@
     <string name="publico">Public</string>
     <string name="privado">Private</string>
     <string name="titulo">Title</string>
-    <string name="guardar">SAVE</string>
+    <string name="guardar">Save</string>
     <string name="str0">I already have an account</string>
     <string name="str1">Sign Up</string>
     <string name="str2">Log in</string>
@@ -66,4 +66,5 @@
     <string name="descr_rutas">These are the routes you have created or in which you have participated over time in your journey.</string>
     <string name="mis_rutas">My Routes</string>
     <string name="perfil">Profile</string>
+    <string name="preferencias">Preferences</string>
 </resources>

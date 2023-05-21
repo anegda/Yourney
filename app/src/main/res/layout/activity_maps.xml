@@ -248,7 +248,7 @@
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="700dp"
             android:layout_gravity="center"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout4"
             app:layout_constraintStart_toStartOf="@+id/linearLayout4"

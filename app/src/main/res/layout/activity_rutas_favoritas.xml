@@ -8,13 +8,13 @@
 
     <View
         android:id="@+id/green_rectangle"
-        android:layout_width="0dp"
-        android:layout_height="118dp"
-        android:background="#3B7E26"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:background="#75a064"
         android:elevation="4dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <SearchView
         android:id="@+id/search_view"
@@ -28,7 +28,7 @@
         android:iconifiedByDefault="false"
         android:inputType="text"
         android:maxLines="1"
-        android:paddingLeft="12dp"
+        android:paddingLeft="52dp"
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

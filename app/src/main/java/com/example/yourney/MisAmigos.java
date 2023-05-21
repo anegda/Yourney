@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SearchView;
 
 import org.json.simple.JSONArray;
@@ -62,7 +63,7 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
 
         buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);
 
-        Button añadirAmigo = (Button) findViewById(R.id.añadirAmigo);
+        ImageView añadirAmigo = findViewById(R.id.añadirAmigo);
         añadirAmigo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
