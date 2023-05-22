@@ -134,23 +134,6 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
             }
         });
 
-        /*************************** ruta a mostrar de ejemplo **********************************
-
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fotoruta);
-
-         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-         byte[] byteArray = byteArrayOutputStream.toByteArray();
-         String fotoen64 = new String(Base64.getEncoder().encode(byteArray));
-
-        String foto = fotoen64;
-        String nombre = "Ruta Ejemplo";
-        String descr = "Este es un ejemplo de una ruta creada por defecto. Así se van a ver el resto de rutas que crees a lo largo de tu aventura";
-        ItemListRuta rutaEjemplo = new ItemListRuta(foto, nombre, descr);
-        items.add(rutaEjemplo);
-
-        /****************************************************************************************/
-
         // Llamada al AsyncTask
         String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
         String params = "?consulta=MisRutas&username=" + sesion.getUsername();

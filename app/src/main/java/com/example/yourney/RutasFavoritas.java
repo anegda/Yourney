@@ -11,6 +11,7 @@ import androidx.work.WorkManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.SearchView;
 
 import org.json.JSONException;
@@ -54,53 +55,6 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
         TaskGetRutasGuardadas taskGetRutasGuardadas = new TaskGetRutasGuardadas(url + params, recyclerView, buscadorRutas, RutasFavoritas.this);
         taskGetRutasGuardadas.execute();
-
-
-        /**
-         // Consulto la BD por las rutas publicas
-         Data datos = new Data.Builder()
-         .putString("accion", "selectRuta")
-         .putString("consulta", "RutasPublicas")
-         .build();
-
-         OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
-         .setInputData(datos)
-         .build();
-
-         System.out.println("Rutas Favoritas");
-
-         WorkManager.getInstance(RutasFavoritas.this).getWorkInfoByIdLiveData(select.getId()).observe(RutasFavoritas.this, new Observer<WorkInfo>() {
-        @Override
-        public void onChanged(WorkInfo workInfo) {
-        if (workInfo != null && workInfo.getState().isFinished()) {
-        Data output = workInfo.getOutputData();
-        if (!output.getString("resultado").equals("Sin resultado")) {
-        JSONParser parser = new JSONParser();
-        try {
-        // Obtengo la informacion de las rutas devueltas
-        JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
-
-        Integer i = 0;
-        while (i < jsonResultado.size()) {
-        JSONObject row = (JSONObject) jsonResultado.get(i);
-        // Vuelco la informacion en las variables creadas anteriormente
-        titulo = (String) row.get("FotoDesc");
-        descripcion = (String) row.get("Nombre");
-        imagen = (String) row.get("Descripcion");
-        getItems(titulo, descripcion, imagen);
-        i++;
-        }
-
-        } catch (ParseException | JSONException e) {
-        throw new RuntimeException(e);
-        }
-        }
-        }
-        }
-        });
-         WorkManager.getInstance(RutasFavoritas.this).enqueue(select);
-         **/
-
     }
 
     @Override
@@ -117,8 +71,10 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
 
     @Override
     public void itemClick(ItemListRuta item) {
-        Intent intent = new Intent(this, DetallesRuta.class);
-        intent.putExtra("itemDetail", item);
+        Intent intent = new Intent(this, VerRuta.class);
+        int idRuta = Integer.parseInt(item.getId());
+        intent.putExtra("idRuta", idRuta);
+        Log.d("DAS", String.valueOf(idRuta));
         startActivity(intent);
     }
 }

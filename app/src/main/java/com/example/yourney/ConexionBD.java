@@ -459,10 +459,11 @@ public class ConexionBD extends Worker {
 
         try {
             Data output = null;
-
-            // En este caso todas las consultas usan los mismos parametros (menos Login que requiere contraseña)
-            String params = "?consulta=" + datos.getString("consulta") + "&username=" + datos.getString("username");
-
+            String consulta = datos.getString("consulta");
+            String params = "?consulta=" + consulta + "&username=" + datos.getString("username");
+            if(consulta.equals("Editores")){
+                params = params + "&idRuta=" + Integer.toString(datos.getInt("idRuta",0));
+            }
             URL urlFinal = new URL(url + params);
             urlConnection = (HttpURLConnection) urlFinal.openConnection();
 

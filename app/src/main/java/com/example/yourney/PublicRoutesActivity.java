@@ -11,6 +11,7 @@ import androidx.work.WorkManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.SearchView;
 
 import org.json.JSONException;
@@ -54,60 +55,8 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
         TaskGetRutasPublicas taskGetRutasPublicas = new TaskGetRutasPublicas(url + params, lalista, searchView,PublicRoutesActivity.this);
         taskGetRutasPublicas.execute();
 
-        /**
-        // Consulto la BD por las rutas publicas
-        Data datos = new Data.Builder()
-                .putString("accion", "selectRuta")
-                .putString("consulta", "RutasPublicas")
-                .build();
-
-        OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                .setInputData(datos)
-                .build();
-
-        System.out.println("Public Routes");
-
-        WorkManager.getInstance(PublicRoutesActivity.this).getWorkInfoByIdLiveData(select.getId()).observe(PublicRoutesActivity.this, new Observer<WorkInfo>() {
-            @Override
-            public void onChanged(WorkInfo workInfo) {
-                if (workInfo != null && workInfo.getState().isFinished()) {
-                    Data output = workInfo.getOutputData();
-                    if (!output.getString("resultado").equals("Sin resultado")) {
-                        JSONParser parser = new JSONParser();
-                        try {
-                            // Obtengo la informacion de las rutas devueltas
-                            JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
-
-                            Integer i = 0;
-                            System.out.println("***** " + jsonResultado + " *****");
-                            while (i < jsonResultado.size()) {
-                                JSONObject row = (JSONObject) jsonResultado.get(i);
-                                System.out.println("***** " + row + " *****");
-                                // Vuelco la informacion en las variables creadas anteriormente
-
-                                titulo = (String) row.get("Nombre");
-                                descripcion = (String) row.get("Descripcion");
-                                imagen = (String) row.get("FotoDesc");
-                                getItems(titulo, descripcion, imagen);
-                                i++;
-                            }
-
-                            adapter = new ElAdaptadorRecycler(items, PublicRoutesActivity.this);
-                            lalista.setAdapter(adapter);
-
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            }
-        });
-        WorkManager.getInstance(PublicRoutesActivity.this).enqueue(select);
-        **/
 
     }
-
-    /** Metodo para probar si funciona el reciclerView, luego se cambiara por una llamada a la BD **/
 
     @Override
     public boolean onQueryTextSubmit(String s) {
@@ -123,8 +72,10 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
 
     @Override
     public void itemClick(ItemListRuta item) {
-        Intent intent = new Intent(this, DetallesRuta.class);
-        intent.putExtra("itemDetail", item);
+        Intent intent = new Intent(this, VerRuta.class);
+        int idRuta = Integer.parseInt(item.getId());
+        intent.putExtra("idRuta", idRuta);
+        Log.d("DAS", String.valueOf(idRuta));
         startActivity(intent);
     }
 }

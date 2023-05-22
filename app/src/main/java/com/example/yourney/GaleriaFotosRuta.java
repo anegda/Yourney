@@ -53,6 +53,7 @@ public class GaleriaFotosRuta extends AppCompatActivity {
     static RecyclerViewAdapter imageRVAdapter;
     private Integer idRuta = 1;
     static String fotoNueva;
+    private boolean editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,14 @@ public class GaleriaFotosRuta extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null && idRuta == null) {
             idRuta = extras.getInt("idRuta");
+            editor = extras.getBoolean("editor");
+        }
+
+        if(!editor){
+            ImageView descargar = findViewById(R.id.btnDescargar);
+            descargar.setEnabled(false);
+            ImageView btn_anadir = findViewById(R.id.btnAdd);
+            btn_anadir.setEnabled(false);
         }
 
         idImgList = new ArrayList<>();

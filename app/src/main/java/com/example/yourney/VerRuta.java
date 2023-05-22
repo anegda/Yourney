@@ -45,6 +45,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
     private ActivityMapsBinding binding;
     int idRuta;
     static String fotoDesc;
+    boolean editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //OBTENGO LA RUTA ACTUAL
         idRuta = getIntent().getIntExtra("idRuta",0);
 
         //OBTENEMOS LOS GENERALES DE LA RUTA
@@ -141,6 +143,39 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
         });
         WorkManager.getInstance(VerRuta.this).enqueue(selectRuta);
 
+
+        // OBTENGO EL USUARIO ACTUAL
+        Sesion sesion = new Sesion(this);
+        String username = sesion.getUsername();
+
+        //DESHABILITAMOS FUNCIONES SI NO ERES EDITOR
+        Data datosEditor = new Data.Builder()
+                .putString("accion", "select")
+                .putString("consulta", "Editores")
+                .putInt("idRuta", idRuta)
+                .putString("username", username)
+                .build();
+        OneTimeWorkRequest selectEditor = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                .setInputData(datosEditor)
+                .build();
+        WorkManager.getInstance(VerRuta.this).getWorkInfoByIdLiveData(selectEditor.getId()).observe(VerRuta.this, new Observer<WorkInfo>() {
+            @Override
+            public void onChanged(WorkInfo workInfo) {
+                if (workInfo != null && workInfo.getState().isFinished()) {
+                    Data output = workInfo.getOutputData();
+                    if (output.getString("resultado").equals("Sin resultado")) {
+                        Button btn_editarRuta = findViewById(R.id.btn_editar);
+                        btn_editarRuta.setEnabled(false);
+                        editor=false;
+                    }else{
+                        editor=true;
+                    }
+                }
+            }
+        });
+        WorkManager.getInstance(VerRuta.this).enqueue(selectEditor);
+
+
         //AÑADIMOS LAS FUNCIONALIDADES A LOS BOTONES
         //BOTÓN PARA DAR VISIBILIDAD A LA RUTA
         Button btn_ruta = (Button) findViewById(R.id.btn_ruta);
@@ -165,6 +200,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
             public void onClick(View view) {
                 Intent i = new Intent(VerRuta.this, GaleriaFotosRuta.class);
                 i.putExtra("idRuta", idRuta);
+                i.putExtra("editor", editor);
                 startActivity(i);
                 finish();
             }
