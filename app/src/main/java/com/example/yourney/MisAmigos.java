@@ -111,7 +111,7 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
     @Override
     public void itemClick(ItemListAmigo item) {
         Intent intent = new Intent(this, DetallesAmigo.class);
-        intent.putExtra("itemDetail", item);
+        intent.putExtra("username", item.getUsername());
         startActivity(intent);
     }
 }

@@ -4,60 +4,92 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DetallesAmigo">
+    tools:context=".DetallesRuta">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ImageButton
-                    android:id="@+id/btnAgregar"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/no_favorito"
-                    android:background="@android:color/transparent"
-                    android:scaleType="centerCrop"/>
-            </RelativeLayout>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/fotoAmigo1"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:elevation="12dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="100dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/fotoAmigo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:onClick="setFotopPerfil"
+                    android:scaleType="centerCrop"
+                    tools:srcCompat="@drawable/perfil" />
+            </androidx.cardview.widget.CardView>
+
             <TextView
-                android:id="@+id/tvTituloDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:textSize="40sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/imgItemDetail"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-            <ImageView
-                android:id="@+id/imgItemDetail"
+                android:id="@+id/usernameAmigo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginTop="10dp"
+                android:text="username"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fotoAmigo1" />
+
             <TextView
-                android:id="@+id/tvDescripcionDetail"
-                android:layout_width="match_parent"
+                android:id="@+id/nombreAmigo"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@+id/tvTituloDetail"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"/>
-        </LinearLayout>
+                android:layout_marginTop="10dp"
+                android:text="nombre"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/usernameAmigo" />
+
+            <TextView
+                android:id="@+id/apellidosAmigo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="apellidos"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nombreAmigo"  />
+
+            <TextView
+                android:id="@+id/emailAmigo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="email"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/apellidosAmigo" />
+
+            <Button
+                android:id="@+id/btn_eliminarAmigo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/eliminar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/emailAmigo" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

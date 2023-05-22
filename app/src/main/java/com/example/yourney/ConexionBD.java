@@ -431,6 +431,7 @@ public class ConexionBD extends Worker {
                                 .build();
 
                         MainActivity.fotoPerfil = (String) json.get("FotoPerfil");
+                        DetallesAmigo.fotoPerfil = (String) json.get("FotoPerfil");
 
                         return output;
                     }
