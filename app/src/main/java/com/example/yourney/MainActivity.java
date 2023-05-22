@@ -169,6 +169,16 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        ImageView fotoPerfil = (ImageView) viewHeader.findViewById(R.id.fotoperfil);
+        fotoPerfil.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, EditarPerfil.class));
+                finish();
+            }
+        });
+
         //AÑADIR LA FUNCIONALIDAD AL BOTÓN FLOTANTE DE GRABAR
         ImageView btn_2Add = findViewById(R.id.button2);
         btn_2Add.setOnClickListener(new View.OnClickListener() {
