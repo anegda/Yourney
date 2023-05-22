@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
 
         ImageView fotoPerfil = (ImageView) viewHeader.findViewById(R.id.fotoperfil);
         fotoPerfil.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, EditarPerfil.class));
