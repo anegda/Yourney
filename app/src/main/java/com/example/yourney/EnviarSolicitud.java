@@ -180,4 +180,14 @@ public class EnviarSolicitud extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // Vuelvo a SolicitudesRecibidas
+        Intent intent = new Intent(EnviarSolicitud.this, SolicitudesRecibidas.class);
+        startActivity(intent);
+        finish();
+    }
 }

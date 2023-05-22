@@ -14,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -37,6 +38,7 @@ import java.util.Locale;
 public class ImagenGaleria extends AppCompatActivity {
     private ScaleGestureDetector scaleGestureDetector;
     private float mScaleFactor = 1.0f;
+    private String parent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,14 @@ public class ImagenGaleria extends AppCompatActivity {
         } else {
             nuevaloc = new Locale("es");
         }
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && parent == null ) {
+            parent = extras.getString("parent");
+        }
+        System.out.println("##########################################################");
+        System.out.println(parent);
+        System.out.println("##########################################################");
 
         Locale.setDefault(nuevaloc);
         Configuration configuration = getBaseContext().getResources().getConfiguration();
@@ -106,8 +116,8 @@ public class ImagenGaleria extends AppCompatActivity {
         btn_eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: LLAMAR A LA BD CON UN DELETE
 
+                // Borro la imagen de la bd
                 Data datos = new Data.Builder()
                         .putString("accion", "delete")
                         .putString("consulta", "Imagenes")
@@ -154,4 +164,5 @@ public class ImagenGaleria extends AppCompatActivity {
             return true;
         }
     }
+
 }

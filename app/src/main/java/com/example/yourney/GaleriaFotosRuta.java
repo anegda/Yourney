@@ -56,9 +56,10 @@ public class GaleriaFotosRuta extends AppCompatActivity {
     static ArrayList<Integer> idImgList;
     private RecyclerView imagesRV;
     static RecyclerViewAdapter imageRVAdapter;
-    private Integer idRuta = 1;
+    private Integer idRuta;
     static String fotoNueva;
     private boolean editor;
+    private String parent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +88,7 @@ public class GaleriaFotosRuta extends AppCompatActivity {
         if (extras != null && idRuta == null) {
             idRuta = extras.getInt("idRuta");
             editor = extras.getBoolean("editor");
+            parent = extras.getString("parent");
         }
 
         if(!editor){
@@ -378,5 +380,17 @@ public class GaleriaFotosRuta extends AppCompatActivity {
             }
         }
         return img;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // Vuelvo a VerRuta
+        Intent intent = new Intent(GaleriaFotosRuta.this, VerRuta.class);
+        intent.putExtra("idRuta", idRuta);
+        intent.putExtra("parent", parent);
+        startActivity(intent);
+        finish();
     }
 }
