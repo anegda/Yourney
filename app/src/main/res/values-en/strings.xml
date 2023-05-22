@@ -81,4 +81,6 @@
     <string name="editar_perfil">Edit Profile</string>
     <string name="cerrar_sesion">Log out</string>
     <string name="cancelar_edicion">Are you sure you want to exit? You will lose all unsaved changes</string>
+    <string name="campos_vacios">There are empty fields</string>
+    <string name="mensaje_error_peti">You can\'t send friend requests to yourself</string>
 </resources>

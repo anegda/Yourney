@@ -80,5 +80,7 @@
     <string name="cerrar_sesion">Cerrar sesión</string>
     <string name="msg_aceptar_solicitud">¿Aceptas las solicitud amistad?</string>
     <string name="cancelar_edicion">¿Estás seguro de que quieres salir? Perderás los cambios guardados</string>
+    <string name="campos_vacios">Existen campos vacíos</string>
+    <string name="mensaje_error_peti">No puedes enviarte solicitudes de amistad a ti mismo</string>
 
 </resources>
