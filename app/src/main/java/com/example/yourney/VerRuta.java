@@ -406,7 +406,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
                             Integer i = 0;
                             while(i < jsonResultado.size()){
                                 JSONObject row = (JSONObject) jsonResultado.get(i);
-                                LatLng loc = new LatLng((Double) row.get("Latitud"), (Double) row.get("Longitud"));
+                                LatLng loc = new LatLng(Double.parseDouble((String) row.get("Latitud")), Double.parseDouble((String) row.get("Longitud")));
 
                                 if(i==0){
                                     firstLoc = loc;

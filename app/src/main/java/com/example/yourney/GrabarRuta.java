@@ -98,9 +98,6 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
         tv_duracion_num.setVisibility(View.GONE);
         tv_esperando  = findViewById(R.id.tvEsperando);
 
-
-
-
         //AÑADIMOS LOS LISTENERS A CADA BOTÓN
         empezar_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,6 +221,7 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                                                     WorkManager.getInstance(GrabarRuta.this).enqueue(insertEditor);
 
                                                     //INTRODUCIMOS LAS UBICACIONES DE LA RUTA EN LA BD REMOTA
+                                                    Log.d("DAS", String.valueOf(locationService.getLocations()));
                                                     for (Location location : locationService.getLocations()) {
                                                         Data datosUbi = new Data.Builder()
                                                                 .putString("accion", "insert")
@@ -247,7 +245,7 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
 
                                                         WorkManager.getInstance(GrabarRuta.this).enqueue(insertUbi);
                                                     }
-
+                                                    locationService.guardarRuta();
                                                     startActivity(new Intent(GrabarRuta.this, EditarRuta.class).putExtra("idRuta", Integer.parseInt(idRuta)).putExtra("parent", "GrabarRuta"));
                                                     finish();
 
@@ -265,7 +263,6 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                 });
                 WorkManager.getInstance(GrabarRuta.this).enqueue(insertRuta);
 
-                locationService.guardarRuta();
                 empezar_btn.setEnabled(true);
                 parar_btn.setEnabled(false);
             }
