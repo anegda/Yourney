@@ -72,7 +72,7 @@ public class EditarRuta extends AppCompatActivity {
         getBaseContext().getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_datos_ruta);
+        setContentView(R.layout.activity_editar_ruta);
 
         // Registro la acitividad de la que viene el intent
         parent = getIntent().getStringExtra("parent");
