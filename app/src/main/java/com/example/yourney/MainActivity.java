@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
     private ArrayList<String> nombreImagenes = new ArrayList<String>();
     List<ItemListRuta> items = new ArrayList<>();
     String titulo, descripcion, imagen = "";
+    static String fotoPerfil;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -95,8 +96,29 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         TextView username = (TextView) viewHeader.findViewById(R.id.usuario);
         username.setText(sesion.getUsername());
 
-        ImageView fotoPerfil = (ImageView) viewHeader.findViewById(R.id.fotoperfil);
-
+        //REALIZAMOS EL SELECT NECESARIO PARA ESTABLECER FOTO DE PERFIL
+        Data datosUsuarios = new Data.Builder()
+                .putString("accion", "selectUsuario")
+                .putString("consulta", "Usuarios")
+                .putString("username", sesion.getUsername())
+                .build();
+        OneTimeWorkRequest selectUsuario = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                .setInputData(datosUsuarios)
+                .build();
+        WorkManager.getInstance(MainActivity.this).getWorkInfoByIdLiveData(selectUsuario.getId()).observe(MainActivity.this, new Observer<WorkInfo>() {
+            @Override
+            public void onChanged(WorkInfo workInfo) {
+                if (workInfo != null && workInfo.getState().isFinished()) {
+                    if(fotoPerfil!=null) {
+                        ImageView fotoPerfil_IV = (ImageView) viewHeader.findViewById(R.id.fotoperfil);
+                        byte[] encodeBytes = Base64.getDecoder().decode(fotoPerfil);
+                        Bitmap foto = BitmapFactory.decodeByteArray(encodeBytes, 0, encodeBytes.length);
+                        fotoPerfil_IV.setImageBitmap(foto);
+                    }
+                }
+            }
+        });
+        WorkManager.getInstance(MainActivity.this).enqueue(selectUsuario);
 
         elnavigation.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

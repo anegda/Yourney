@@ -430,7 +430,7 @@ public class ConexionBD extends Worker {
                                 .putString("resultado", "exito")
                                 .build();
 
-                        // Pongo la imagen donde toca (ajustes del perfil)??
+                        MainActivity.fotoPerfil = (String) json.get("FotoPerfil");
 
                         return output;
                     }
