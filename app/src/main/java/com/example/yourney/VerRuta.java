@@ -54,6 +54,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
     boolean editor;
     private boolean esFavorito = false;
     String idRuta2;
+    private String parent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,9 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
 
         //OBTENGO LA RUTA ACTUAL
         idRuta = getIntent().getIntExtra("idRuta",0);
+
+        // Registro la acitividad de la que viene el intent
+        parent = getIntent().getStringExtra("parent");
 
         //OBTENEMOS LOS GENERALES DE LA RUTA
         int idRuta = getIntent().getIntExtra("idRuta",0);
@@ -255,6 +259,8 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
             public void onClick(View view) {
                 Intent i = new Intent(VerRuta.this, EditarRuta.class);
                 i.putExtra("idRuta", idRuta);
+                i.putExtra("parent", "VerRuta");
+                i.putExtra("parentVerRuta", parent);
                 startActivity(i);
                 finish();
             }
@@ -423,5 +429,30 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
             }
         });
         WorkManager.getInstance(VerRuta.this).enqueue(selectRuta);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // Vuelvo a la actividad que toque
+        Intent intent;
+        switch(parent) {
+            case "Main":
+                intent = new Intent(VerRuta.this, MainActivity.class);
+                break;
+            case "PublicRoutes":
+                intent = new Intent(VerRuta.this, PublicRoutesActivity.class);
+                break;
+            case "RutasFavoritas":
+                intent = new Intent(VerRuta.this, RutasFavoritas.class);
+                break;
+            default:
+                intent = new Intent(VerRuta.this, MainActivity.class);
+                break;
+        }
+        startActivity(intent);
+        // Termino esta actividad
+        finish();
     }
 }

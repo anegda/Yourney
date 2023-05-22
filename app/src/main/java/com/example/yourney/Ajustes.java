@@ -39,10 +39,11 @@ public class Ajustes extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Para que la actividad no siga activa al salir de ella
+        // Vuelvo a la actividad Main
         super.onBackPressed();
-        Intent intent = new Intent();
-        setResult(3, intent);
+        Intent intent = new Intent(Ajustes.this, MainActivity.class);
+        startActivity(intent);
+        // Termino esta actividad
         finish();
     }
 

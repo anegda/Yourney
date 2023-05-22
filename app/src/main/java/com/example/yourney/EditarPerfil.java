@@ -275,4 +275,14 @@ public class EditarPerfil extends AppCompatActivity {
         }
         return img;
     }
+
+    @Override
+    public void onBackPressed() {
+        // Vuelvo a la actividad Main
+        super.onBackPressed();
+        Intent intent = new Intent(EditarPerfil.this, MainActivity.class);
+        startActivity(intent);
+        // Termino esta actividad
+        finish();
+    }
 }

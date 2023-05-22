@@ -79,5 +79,6 @@
     <string name="editar_perfil">Editar Perfil</string>
     <string name="cerrar_sesion">Cerrar sesión</string>
     <string name="msg_aceptar_solicitud">¿Aceptas las solicitud amistad?</string>
+    <string name="cancelar_edicion">¿Estás seguro de que quieres salir? Perderás los cambios guardados</string>
 
 </resources>

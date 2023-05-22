@@ -500,6 +500,7 @@ public class ConexionBD extends Worker {
 
         Data datos = this.getInputData();
 
+
         try {
             Data output = null;
             String params = "";
@@ -508,7 +509,9 @@ public class ConexionBD extends Worker {
             String consulta = datos.getString("consulta");
             switch(consulta) {
                 case "Rutas":
-                    params = "?consulta=" + consulta + "&idRuta=" + datos.getString("idRuta");
+                    params = "?consulta=" + consulta + "&idRuta=" + datos.getInt("idRuta", 0);
+                    System.out.println(datos);
+                    System.out.println(url+params);
                     break;
 
                 case "Editores":

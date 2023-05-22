@@ -127,11 +127,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                                 startActivity(intent);
 
-                                                // Cierro las actividades anteriores
-                                                Intent intentFinish = new Intent(LoginActivity.this, LoginRegisterActivity.class);
-                                                intentFinish.setAction("finish");
-                                                sendBroadcast(intent);
-
                                                 finish();
                                             }
                                         }
@@ -158,4 +153,5 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(new Intent(this, LoginRegisterActivity.class));
         finish();
     }
+
 }

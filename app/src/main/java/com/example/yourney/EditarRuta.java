@@ -1,6 +1,7 @@
 package com.example.yourney;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
@@ -46,6 +47,9 @@ public class EditarRuta extends AppCompatActivity {
     EditText informacionExtra;
     ArrayAdapter<String> mAdapter;
     static String fotoDescriptiva;
+    private String parent;
+    private String parent2;
+    private int idRuta;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -68,6 +72,13 @@ public class EditarRuta extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_datos_ruta);
+
+        // Registro la acitividad de la que viene el intent
+        parent = getIntent().getStringExtra("parent");
+        if (parent.equals("VerRuta")) {
+            parent2 = getIntent().getStringExtra("parentVerRuta");
+        }
+        idRuta = getIntent().getIntExtra("idRuta", 0);
 
         fotoDescRuta = findViewById(R.id.fotoDescRuta);
         tituloRuta = findViewById(R.id.tituloRutaEdit);
@@ -116,7 +127,7 @@ public class EditarRuta extends AppCompatActivity {
                 }
 
                 //REALIZAMOS EL UPDATE
-                int idRuta = getIntent().getIntExtra("idRuta",0);
+                idRuta = getIntent().getIntExtra("idRuta",0);
                 Data datos = new Data.Builder()
                         .putString("accion", "update")
                         .putString("consulta", "Rutas")
@@ -137,6 +148,7 @@ public class EditarRuta extends AppCompatActivity {
                         //VOLVEMOS A LA ACTIVIDAD DE VER RUTA
                         Intent i = new Intent(EditarRuta.this, VerRuta.class);
                         i.putExtra("idRuta", idRuta);
+                        i.putExtra("parent", parent2);
                         startActivity(i);
                         finish();
                     }
@@ -273,5 +285,30 @@ public class EditarRuta extends AppCompatActivity {
         dificultad.check(outState.getInt("difitultad"));
         informacionExtra.setText(outState.getString("infoExtra"));
         visibilidad.check(outState.getInt("visibilidad"));
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Vuelvo a la actividad correspondiente
+        Intent intent;
+        switch (parent) {
+            case "VerRuta":
+                intent = new Intent(EditarRuta.this, VerRuta.class);
+                intent.putExtra("idRuta", idRuta);
+                intent.putExtra("parent", parent2);
+                startActivity(intent);
+                finish();
+                break;
+
+            default:
+                System.out.println("DEFAULT");
+                Bundle args = new Bundle();
+                args.putInt("idRuta", idRuta);
+
+                DialogFragment dialogo_cancelar = new DialogoCancelarEdicion();
+                dialogo_cancelar.setArguments(args);
+                dialogo_cancelar.show(getSupportFragmentManager(), "dialogo_cancelar");
+                break;
+        }
     }
 }

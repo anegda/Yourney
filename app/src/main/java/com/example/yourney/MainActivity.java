@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         Intent intent = new Intent(this, VerRuta.class);
         int idRuta = Integer.parseInt(item.getId());
         intent.putExtra("idRuta", idRuta);
+        intent.putExtra("parent", "Main");
         Log.d("DAS", String.valueOf(idRuta));
         startActivity(intent);
     }

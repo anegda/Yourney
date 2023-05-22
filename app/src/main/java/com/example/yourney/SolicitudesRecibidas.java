@@ -186,4 +186,14 @@ public class SolicitudesRecibidas extends AppCompatActivity implements ElAdaptad
         })
         .show();
     }
+
+    @Override
+    public void onBackPressed() {
+        // Vuelvo a la actividad Main
+        super.onBackPressed();
+        Intent intent = new Intent(SolicitudesRecibidas.this, MainActivity.class);
+        startActivity(intent);
+        // Termino esta actividad
+        finish();
+    }
 }

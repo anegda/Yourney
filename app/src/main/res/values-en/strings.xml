@@ -80,4 +80,5 @@
     <string name="configuracion">Settings</string>
     <string name="editar_perfil">Edit Profile</string>
     <string name="cerrar_sesion">Log out</string>
+    <string name="cancelar_edicion">Are you sure you want to exit? You will lose all unsaved changes</string>
 </resources>

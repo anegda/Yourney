@@ -97,7 +97,19 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
         Intent intent = new Intent(this, VerRuta.class);
         int idRuta = Integer.parseInt(item.getId());
         intent.putExtra("idRuta", idRuta);
+        intent.putExtra("parent", "RutasFavoritas");
         Log.d("DAS", String.valueOf(idRuta));
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        // Vuelvo a la actividad Main
+        super.onBackPressed();
+        Intent intent = new Intent(RutasFavoritas.this, MainActivity.class);
+        startActivity(intent);
+        // Termino esta actividad
+        finish();
+    }
+
 }

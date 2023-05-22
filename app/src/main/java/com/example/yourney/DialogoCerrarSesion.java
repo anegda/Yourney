@@ -23,14 +23,10 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 public class DialogoCerrarSesion extends DialogFragment {
 
-    private Context context;
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
-
-        this.context = getActivity();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 

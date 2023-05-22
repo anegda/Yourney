@@ -114,4 +114,14 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         intent.putExtra("username", item.getUsername());
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        // Vuelvo a la actividad Main
+        super.onBackPressed();
+        Intent intent = new Intent(MisAmigos.this, MainActivity.class);
+        startActivity(intent);
+        // Termino esta actividad
+        finish();
+    }
 }
