@@ -52,7 +52,8 @@ public class EditarPerfil extends AppCompatActivity {
     ImageView fotoperfil;
     Button btnGuardar;
     Bitmap bitmap;
-    String fotoen64;
+    static String fotoen64;
+    static String fotoperfilStr;
     private Bitmap bitmapRedimensionado;
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -169,6 +170,7 @@ public class EditarPerfil extends AppCompatActivity {
             public void onChanged(WorkInfo workInfo) {
                 if (workInfo != null && workInfo.getState().isFinished()) {
                     Data output = workInfo.getOutputData();
+                    Log.d("OUTPUT DATA", output.toString());
                     if (!output.getString("resultado").equals("Sin resultado")) {
                         JSONParser parser = new JSONParser();
                         try {
@@ -177,9 +179,8 @@ public class EditarPerfil extends AppCompatActivity {
                             apellido.setText(output.getString("apellidos"));
                             email.setText(output.getString("email"));
 
-                            String fotoPerfil = (String) output.getString("FotoPerfil");
-                            if(fotoPerfil!=null) {
-                                byte[] encodeByte = Base64.getDecoder().decode(fotoPerfil);
+                            if(fotoperfilStr!=null) {
+                                byte[] encodeByte = Base64.getDecoder().decode(fotoperfilStr);
                                 bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
                                 fotoperfil.setImageBitmap(bitmap);
                             }
@@ -196,7 +197,7 @@ public class EditarPerfil extends AppCompatActivity {
     public void update(View v){
         // Validar si el correo electrónico es válido utilizando una expresión regular
 
-        String emailStr = (String) email.getText().toString();
+        String emailStr = email.getText().toString().trim();
         boolean isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(emailStr).matches();
 
         if (isEmailValid) {

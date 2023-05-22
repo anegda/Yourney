@@ -233,7 +233,7 @@ public class ConexionBD extends Worker {
                     params.put("apellidosNew", datos.getString("apellidosNew"));
                     params.put("passwordNew", datos.getString("passwordNew"));
                     params.put("emailNew", datos.getString("emailNew"));
-                    params.put("fotoPerfil", datos.getString("fotoPerfil"));
+                    params.put("fotoPerfil", EditarPerfil.fotoperfilStr);
 
                     out.print(params.toString());
                     out.close();
@@ -431,6 +431,7 @@ public class ConexionBD extends Worker {
                                 .build();
 
                         MainActivity.fotoPerfil = (String) json.get("FotoPerfil");
+                        EditarPerfil.fotoperfilStr = (String) json.get("FotoPerfil");
                         DetallesAmigo.fotoPerfil = (String) json.get("FotoPerfil");
 
                         return output;
