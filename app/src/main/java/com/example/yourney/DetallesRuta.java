@@ -90,7 +90,6 @@ public class DetallesRuta extends AppCompatActivity {
         Sesion sesion = new Sesion(this);
 
         ////////////////////////////////////////////////////////
-        // Añadimos la ruta a la lista de rutas favoritas
         Data datos = new Data.Builder()
                 .putString("accion", "selectRuta")
                 .putString("consulta", "RutasGuardadas2")

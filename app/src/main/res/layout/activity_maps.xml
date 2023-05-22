@@ -35,6 +35,22 @@
             app:layout_constraintTop_toTopOf="@+id/green_rectangle"
             app:layout_constraintVertical_bias="0.533" />
 
+        <ImageButton
+            android:id="@+id/btnFavoritos"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:elevation="4dp"
+            android:src="@drawable/no_favorito"
+            android:background="@android:color/transparent"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@+id/green_rectangle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/green_rectangle"
+            app:layout_constraintVertical_bias="0.533"/>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="100dp"

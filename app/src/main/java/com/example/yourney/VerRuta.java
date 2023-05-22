@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,6 +52,8 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
     int idRuta;
     static String fotoDesc;
     boolean editor;
+    private boolean esFavorito = false;
+    String idRuta2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -260,6 +263,106 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
         //OBTENEMOS EL MAPA Y CREAMOS LA RUTA
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        ////////////////////////////////////////////////////////
+        ImageButton btnFavoritos = (ImageButton) findViewById(R.id.btnFavoritos);
+
+        Data datos2 = new Data.Builder()
+                .putString("accion", "selectRuta")
+                .putString("consulta", "RutasGuardadas2")
+                .putString("username", sesion.getUsername())
+                .build();
+
+        OneTimeWorkRequest selectRutaGuardada = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                .setInputData(datos2)
+                .build();
+
+        WorkManager.getInstance(VerRuta.this).getWorkInfoByIdLiveData(selectRutaGuardada.getId()).observe(VerRuta.this, new Observer<WorkInfo>() {
+            @Override
+            public void onChanged(WorkInfo workInfo) {
+                Log.d("OUTPUT", workInfo.toString());
+                if (workInfo != null && workInfo.getState().isFinished()) {
+                    Data output = workInfo.getOutputData();
+                    Log.d("OUTPUT", output.toString());
+                    if (!output.getString("resultado").equals("Sin resultado")) {
+                        JSONParser parser = new JSONParser();
+                        try {
+                            // Obtengo la informacion de las rutas devueltas
+                            JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
+                            Integer i = 0;
+                            while (i < jsonResultado.size()) {
+                                JSONObject row = (JSONObject) jsonResultado.get(i);
+                                // Vuelco la informacion en las variables creadas anteriormente
+                                idRuta2 = row.get("idRuta").toString();
+                                if(idRuta2.equals(Integer.toString(idRuta))){
+                                    Log.d("ENTRA EN ES FAVORITO", "");
+                                    btnFavoritos.setImageResource(R.drawable.favorito);
+                                    esFavorito = true;
+                                }
+                                i++;
+                            }
+                        } catch (ParseException e) {
+                            System.out.print("ERROR AL BUSCAR RUTA GUARDADA");
+                        }
+                    }
+                }
+            }
+        });
+        WorkManager.getInstance(VerRuta.this).enqueue(selectRutaGuardada);
+        btnFavoritos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int resId = esFavorito ? R.drawable.no_favorito : R.drawable.favorito;
+                btnFavoritos.setImageResource(resId);
+                esFavorito = !esFavorito;
+
+                if(esFavorito){
+                    // Añadimos la ruta a la lista de rutas favoritas
+                    Data datos = new Data.Builder()
+                            .putString("accion", "insert")
+                            .putString("consulta", "RutasGuardadas")
+                            .putInt("idRuta", idRuta)
+                            .putString("username", sesion.getUsername())
+                            .build();
+
+                    OneTimeWorkRequest insertRutaGuardada = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                            .setInputData(datos)
+                            .build();
+
+                    WorkManager.getInstance(VerRuta.this).getWorkInfoByIdLiveData(insertRutaGuardada.getId()).observe(VerRuta.this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState().isFinished()) {
+                            }
+                        }
+                    });
+                    WorkManager.getInstance(VerRuta.this).enqueue(insertRutaGuardada);
+
+                } else {
+                    // Eliminamos la ruta de la lista de rutas favoritas
+                    Data datos = new Data.Builder()
+                            .putString("accion", "delete")
+                            .putString("consulta", "RutasGuardadas")
+                            .putInt("idRuta", idRuta)
+                            .putString("username", sesion.getUsername())
+                            .build();
+
+                    OneTimeWorkRequest deleteRutaGuardada = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                            .setInputData(datos)
+                            .build();
+
+                    WorkManager.getInstance(VerRuta.this).getWorkInfoByIdLiveData(deleteRutaGuardada.getId()).observe(VerRuta.this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState().isFinished()) {
+                            }
+                        }
+                    });
+                    WorkManager.getInstance(VerRuta.this).enqueue(deleteRutaGuardada);
+                }
+            }
+        });
+        ////////////////////////////////////////////////////////
     }
 
     @Override

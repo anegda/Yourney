@@ -42,7 +42,7 @@
 
     <EditText
         android:id="@+id/nombre"
-        style="@style/blanco1"
+        style="@style/f_gO_m"
         android:layout_width="227dp"
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
@@ -56,7 +56,7 @@
 
     <EditText
         android:id="@+id/apellido"
-        style="@style/blanco1"
+        style="@style/f_gO_m"
         android:layout_width="227dp"
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
@@ -69,7 +69,7 @@
 
     <EditText
         android:id="@+id/email"
-        style="@style/blanco1"
+        style="@style/f_gO_m"
         android:layout_width="227dp"
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
@@ -82,12 +82,11 @@
 
     <EditText
         android:id="@+id/contrasenia"
-        style="@style/blanco1"
+        style="@style/f_gO_m"
         android:layout_width="227dp"
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/edittext_rounded_background_opaco"
-        android:gravity="center"
         android:hint="@string/editar_contrasenia"
         android:textColorHint="#636363"
         app:layout_constraintStart_toStartOf="@+id/tvCorreo"
