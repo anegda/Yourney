@@ -1,7 +1,9 @@
 package com.example.yourney;
 
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,12 +30,14 @@ public class TaskGetRutasGuardadas extends AsyncTask<Void, Void, ArrayList<JSONO
     List<ItemListRuta> items = new ArrayList<>();
     ElAdaptadorRecycler adapter;
     SearchView searchView;
+    TextView placeholder;
 
-    public TaskGetRutasGuardadas(String url, RecyclerView recyclerView, SearchView searchView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick) {
+    public TaskGetRutasGuardadas(String url, RecyclerView recyclerView, SearchView searchView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick, TextView placeholder) {
         this.urlString = url;
         this.recyclerView = recyclerView;
         this.searchView = searchView;
         this.recyclerItemClick = recyclerItemClick;
+        this.placeholder = placeholder;
     }
 
     @Override
@@ -52,7 +56,11 @@ public class TaskGetRutasGuardadas extends AsyncTask<Void, Void, ArrayList<JSONO
 
             // Obtengo un string con el resultado de la consulta
             while ( (row = reader.readLine()) != null ) {
+                if (row.equals("Sin resultado")) {
+                    return null;
+                }
                 stringBuilder.append(row);
+
             }
 
             // Lo transformo en un JSON para devolver los datos
@@ -78,9 +86,10 @@ public class TaskGetRutasGuardadas extends AsyncTask<Void, Void, ArrayList<JSONO
 
     @Override
     protected void onPostExecute(ArrayList<JSONObject> rutasGuardadas) {
-        if (rutasGuardadas.isEmpty()) {
+        if (rutasGuardadas == null) {
             // No ha habido resultado para la consulta --> no existen rutas publicas
-
+            // Cambio la visibilidad del placeholder
+            placeholder.setVisibility(View.VISIBLE);
 
         } else {
             // Asigno la info de los json devueltos a donde toque

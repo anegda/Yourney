@@ -26,6 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -42,6 +43,8 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
     RecyclerView lalista;
     private List<ItemListAmigo> items = new ArrayList<ItemListAmigo>();
     ElAdaptadorRecyclerAmigos adapter = new ElAdaptadorRecyclerAmigos(items, MisAmigos.this);
+    TextView placeholder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -71,6 +74,9 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(manager);
 
+        placeholder = findViewById(R.id.placeholder);
+        placeholder.setVisibility(View.GONE);
+
         // OBTENGO EL USUARIO ACTUAL
         Sesion sesion = new Sesion(this);
         String username = sesion.getUsername();
@@ -81,7 +87,7 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         String paramsAmigos = "?consulta=Amigos&username=" + username;
         String paramsUsuarios = "?consulta=Usuarios&username=";
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TaskGetAmigos taskGetAmigos = new TaskGetAmigos(urlAmigos + paramsAmigos,urlUsuarios + paramsUsuarios, buscadorUsuarios, recyclerView, MisAmigos.this, username);
+        TaskGetAmigos taskGetAmigos = new TaskGetAmigos(urlAmigos + paramsAmigos,urlUsuarios + paramsUsuarios, buscadorUsuarios, recyclerView, MisAmigos.this, username, placeholder);
         taskGetAmigos.execute();
 
         buscadorUsuarios.setOnQueryTextListener(MisAmigos.this);

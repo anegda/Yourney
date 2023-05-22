@@ -129,4 +129,14 @@ public class DetallesAmigo extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // Vuelvo a MisAmigos
+        Intent intent = new Intent(DetallesAmigo.this, MisAmigos.class);
+        startActivity(intent);
+        finish();
+    }
 }

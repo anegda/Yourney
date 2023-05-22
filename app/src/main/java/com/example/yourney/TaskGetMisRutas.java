@@ -26,15 +26,13 @@ public class TaskGetMisRutas extends AsyncTask<Void, Void, ArrayList<JSONObject>
     private final String urlString;
     private RecyclerView recyclerView;
     private ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick;
-    private TextView placeHolder;
     List<ItemListRuta> items = new ArrayList<>();
     ElAdaptadorRecycler adapter;
 
-    public TaskGetMisRutas(String url, RecyclerView recyclerView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick, TextView placeHolder) {
+    public TaskGetMisRutas(String url, RecyclerView recyclerView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick) {
         this.urlString = url;
         this.recyclerView = recyclerView;
         this.recyclerItemClick = recyclerItemClick;
-        this.placeHolder = placeHolder;
     }
 
     @Override
@@ -56,13 +54,10 @@ public class TaskGetMisRutas extends AsyncTask<Void, Void, ArrayList<JSONObject>
 
             // Obtengo un string con el resultado de la consulta
             while ( (row = reader.readLine()) != null ) {
-                System.out.println(row);
-                stringBuilder.append(row);
-
                 if (row.equals("Sin resultado")) {
-                    // Se devuelve la lista vacia --> la consulta no ha tenido resultados
-                    return misRutas;
+                    return null;
                 }
+                stringBuilder.append(row);
             }
 
             // Lo transformo en un JSON para devolver los datos
@@ -87,7 +82,7 @@ public class TaskGetMisRutas extends AsyncTask<Void, Void, ArrayList<JSONObject>
 
     @Override
     protected void onPostExecute(ArrayList<JSONObject> misRutas) {
-        if (misRutas.isEmpty()) {
+        if (misRutas == null) {
             // No ha habido resultado para la consulta --> el usuario no ha creado ninguna ruta
 
 

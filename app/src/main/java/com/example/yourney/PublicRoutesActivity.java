@@ -10,13 +10,16 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.simple.JSONObject;
@@ -35,8 +38,10 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
     SearchView searchView;
     ElAdaptadorRecycler adapter;
     List<ItemListRuta> items = new ArrayList<>();
+    TextView placeholder;
 
     String titulo, descripcion, imagen = "";
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -63,6 +68,8 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
         buscadorRutas = findViewById(R.id.search_view);
         lalista = findViewById(R.id.elreciclerview);
         searchView = findViewById(R.id.search_view);
+        placeholder = findViewById(R.id.placeholder);
+        placeholder.setVisibility(View.GONE);
 
         LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(manager);
@@ -75,7 +82,7 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
         String params = "?consulta=RutasPublicas&username=" + sesion.getUsername();
         System.out.println(url + params);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TaskGetRutasPublicas taskGetRutasPublicas = new TaskGetRutasPublicas(url + params, lalista, searchView,PublicRoutesActivity.this);
+        TaskGetRutasPublicas taskGetRutasPublicas = new TaskGetRutasPublicas(url + params, lalista, searchView,PublicRoutesActivity.this, placeholder);
         taskGetRutasPublicas.execute();
 
 

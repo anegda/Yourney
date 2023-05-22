@@ -3,6 +3,7 @@ package com.example.yourney;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +11,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,12 +31,14 @@ public class TaskGetRutasPublicas extends AsyncTask<Void, Void, ArrayList<JSONOb
     List<ItemListRuta> items = new ArrayList<>();
     ElAdaptadorRecycler adapter;
     SearchView searchView;
+    TextView placeholder;
 
-    public TaskGetRutasPublicas(String url, RecyclerView recyclerView, SearchView searchView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick) {
+    public TaskGetRutasPublicas(String url, RecyclerView recyclerView, SearchView searchView, ElAdaptadorRecycler.RecyclerItemClick recyclerItemClick, TextView placeholder) {
         this.urlString = url;
         this.recyclerView = recyclerView;
         this.searchView = searchView;
         this.recyclerItemClick = recyclerItemClick;
+        this.placeholder = placeholder;
     }
 
     @Override
@@ -52,6 +56,9 @@ public class TaskGetRutasPublicas extends AsyncTask<Void, Void, ArrayList<JSONOb
 
             // Obtengo un string con el resultado de la consulta
             while ( (row = reader.readLine()) != null ) {
+                if (row.equals("Sin resultado")) {
+                    return null;
+                }
                 stringBuilder.append(row);
             }
 
@@ -78,9 +85,10 @@ public class TaskGetRutasPublicas extends AsyncTask<Void, Void, ArrayList<JSONOb
 
     @Override
     protected void onPostExecute(ArrayList<JSONObject> misRutas) {
-        if (misRutas.isEmpty()) {
+        if (misRutas == null) {
             // No ha habido resultado para la consulta --> no existen rutas publicas
-
+            // Hago el placeholder visible
+            placeholder.setVisibility(View.VISIBLE);
 
         } else {
             // Asigno la info de los json devueltos a donde toque
