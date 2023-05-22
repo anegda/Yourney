@@ -17,6 +17,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -192,6 +193,36 @@ public class EditarRuta extends AppCompatActivity {
                 }catch (Exception e){
                     Log.d("DAS","Error la imagen no se carga correctamente");
                 }
+            }
+        });
+
+        //AÑADIMOS BOTÓN ELIMINAR Y SU FUNCIONALIDAD
+        ImageView btn_eliminar = (ImageView) findViewById(R.id.btn_eliminar);
+        btn_eliminar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Elimino la info guardada de la ruta hasta el momento
+                Data datos = new Data.Builder()
+                        .putString("accion", "delete")
+                        .putString("consulta", "Rutas")
+                        .putInt("idRuta", idRuta)
+                        .build();
+
+                OneTimeWorkRequest delete = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                        .setInputData(datos)
+                        .build();
+
+                WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(delete.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            System.out.println("Ruta eliminada");
+                            startActivity(new Intent(EditarRuta.this, MainActivity.class));
+                            finish();
+                        }
+                    }
+                });
+                WorkManager.getInstance(EditarRuta.this).enqueue(delete);
             }
         });
     }

@@ -226,7 +226,7 @@
         app:layout_constraintTop_toTopOf="@+id/btn_guardarDatosRuta">
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/btn_eliminar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp"
