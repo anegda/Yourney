@@ -3,12 +3,16 @@ package com.example.yourney;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
+import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -32,6 +36,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Locale;
 
 public class EditarRuta extends AppCompatActivity {
 
@@ -43,6 +48,24 @@ public class EditarRuta extends AppCompatActivity {
     static String fotoDescriptiva;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Cargo la pagina en el idioma elegido
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Locale nuevaloc;
+        if (prefs.getString("idiomaPref", "1").equals("2")) {
+            nuevaloc = new Locale("en");
+        } else {
+            nuevaloc = new Locale("es");
+        }
+
+        Locale.setDefault(nuevaloc);
+        Configuration configuration = getBaseContext().getResources().getConfiguration();
+        configuration.setLocale(nuevaloc);
+        configuration.setLayoutDirection(nuevaloc);
+
+        Context context = getBaseContext().createConfigurationContext(configuration);
+        getBaseContext().getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_datos_ruta);
 

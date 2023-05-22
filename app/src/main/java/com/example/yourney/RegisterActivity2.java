@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
+import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
@@ -19,6 +20,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -45,6 +47,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
+import java.util.Locale;
 
 public class RegisterActivity2 extends AppCompatActivity {
 
@@ -122,6 +125,23 @@ public class RegisterActivity2 extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Cargo la pagina en el idioma elegido
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Locale nuevaloc;
+        if (prefs.getString("idiomaPref", "1").equals("2")) {
+            nuevaloc = new Locale("en");
+        } else {
+            nuevaloc = new Locale("es");
+        }
+
+        Locale.setDefault(nuevaloc);
+        Configuration configuration = getBaseContext().getResources().getConfiguration();
+        configuration.setLocale(nuevaloc);
+        configuration.setLayoutDirection(nuevaloc);
+
+        Context context = getBaseContext().createConfigurationContext(configuration);
+        getBaseContext().getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register2);

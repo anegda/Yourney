@@ -3,12 +3,16 @@ package com.example.yourney;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
+import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -38,6 +42,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.util.Base64;
+import java.util.Locale;
 
 public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
 
@@ -49,6 +54,24 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Cargo la pagina en el idioma elegido
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Locale nuevaloc;
+        if (prefs.getString("idiomaPref", "1").equals("2")) {
+            nuevaloc = new Locale("en");
+        } else {
+            nuevaloc = new Locale("es");
+        }
+
+        Locale.setDefault(nuevaloc);
+        Configuration configuration = getBaseContext().getResources().getConfiguration();
+        configuration.setLocale(nuevaloc);
+        configuration.setLayoutDirection(nuevaloc);
+
+        Context context = getBaseContext().createConfigurationContext(configuration);
+        getBaseContext().getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
+
         super.onCreate(savedInstanceState);
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());

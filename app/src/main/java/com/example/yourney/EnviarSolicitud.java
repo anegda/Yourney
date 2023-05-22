@@ -2,11 +2,15 @@ package com.example.yourney;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.preference.PreferenceManager;
 import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,10 +23,30 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.util.Locale;
+
 public class EnviarSolicitud extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Cargo la pagina en el idioma elegido
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Locale nuevaloc;
+        if (prefs.getString("idiomaPref", "1").equals("2")) {
+            nuevaloc = new Locale("en");
+        } else {
+            nuevaloc = new Locale("es");
+        }
+
+        Locale.setDefault(nuevaloc);
+        Configuration configuration = getBaseContext().getResources().getConfiguration();
+        configuration.setLocale(nuevaloc);
+        configuration.setLayoutDirection(nuevaloc);
+
+        Context context = getBaseContext().createConfigurationContext(configuration);
+        getBaseContext().getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enviar_solicitud);
 
