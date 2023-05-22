@@ -230,8 +230,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            DialogFragment dialogoCerrarSesion = new DialogoCerrarSesion();
-            dialogoCerrarSesion.show(getSupportFragmentManager(), "cerrar_sesion");
+            finish();
         }
     }
 }
