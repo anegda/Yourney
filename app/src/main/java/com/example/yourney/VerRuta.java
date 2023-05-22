@@ -49,7 +49,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
-    int idRuta;
+    Integer idRuta;
     static String fotoDesc;
     boolean editor;
     private boolean esFavorito = false;
@@ -81,11 +81,14 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //OBTENGO LA RUTA ACTUAL
-        idRuta = getIntent().getIntExtra("idRuta",0);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && idRuta == null) {
+            //OBTENGO LA RUTA ACTUAL
+            idRuta = extras.getInt("idRuta",0);
 
-        // Registro la acitividad de la que viene el intent
-        parent = getIntent().getStringExtra("parent");
+            // Registro la acitividad de la que viene el intent
+            parent = extras.getString("parent");
+        }
 
         //OBTENEMOS LOS GENERALES DE LA RUTA
         int idRuta = getIntent().getIntExtra("idRuta",0);
@@ -231,6 +234,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
                 Intent i = new Intent(VerRuta.this, GaleriaFotosRuta.class);
                 i.putExtra("idRuta", idRuta);
                 i.putExtra("editor", editor);
+                i.putExtra("parent", parent);
                 startActivity(i);
                 finish();
             }

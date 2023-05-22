@@ -9,6 +9,7 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -168,5 +169,15 @@ public class EnviarSolicitud extends AppCompatActivity {
                 WorkManager.getInstance(EnviarSolicitud.this).enqueue(select);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // Vuelvo a SolicitudesRecibidas
+        Intent intent = new Intent(EnviarSolicitud.this, SolicitudesRecibidas.class);
+        startActivity(intent);
+        finish();
     }
 }
