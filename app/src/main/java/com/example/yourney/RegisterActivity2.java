@@ -187,7 +187,6 @@ public class RegisterActivity2 extends AppCompatActivity {
             }
         };
         orientationEventListener.enable();
-
     }
 
     public void login(View v){
@@ -303,6 +302,12 @@ public class RegisterActivity2 extends AppCompatActivity {
                                             Intent intent = new Intent(RegisterActivity2.this, MainActivity.class);
                                             startActivity(intent);
 
+                                            // Cerramos la anterior actividad
+                                            Intent i = new Intent();
+                                            i.setAction("finish");
+                                            sendBroadcast(i);
+
+                                            // Cerramos esta actividad
                                             finish();
                                         }
                                     }

@@ -41,21 +41,6 @@ public class LoginRegisterActivity extends AppCompatActivity {
         Context context = getBaseContext().createConfigurationContext(configuration);
         getBaseContext().getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
 
-        // Para cerrar la actividad cuando toque
-        /**BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String action = intent.getAction();
-                System.out.println("****** RECEIVED ******");
-                System.out.println(action);
-                if (action.equals("finish")) {
-                    finish();
-                }
-            }
-        };
-        IntentFilter filter = new IntentFilter("finish");
-        registerReceiver(broadcastReceiver, filter);**/
-
         // Si no se tienen permisos para notificaciones, se piden
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 11);
@@ -80,9 +65,11 @@ public class LoginRegisterActivity extends AppCompatActivity {
     public void login(View v) {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
     public void registrarse(View v) {
         Intent intent = new Intent(this, RegisterActivity1.class);
         startActivity(intent);
+        finish();
     }
 }

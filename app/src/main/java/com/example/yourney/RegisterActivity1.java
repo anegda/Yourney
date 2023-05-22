@@ -3,8 +3,10 @@ package com.example.yourney;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -54,7 +56,19 @@ public class RegisterActivity1 extends AppCompatActivity {
 
         editUser = findViewById(R.id.editUsuario);
 
+        //BROADCAST RECEIVER PARA CERRAR ESTA ACTIVIDAD UNA VEZ COMPLETADO EL REGISTRO
+        IntentFilter filter = new IntentFilter();
+
+        filter.addAction("finish");
+        registerReceiver(broadcastReceiver, filter);
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
 
     public void siguiente (View v){
 
@@ -71,5 +85,12 @@ public class RegisterActivity1 extends AppCompatActivity {
         }else{
             Toast.makeText(this, R.string.str9, Toast.LENGTH_LONG).show();
         }
+    }
+
+    //VOLVEMOS A LOGINREGISTER SI PULSAMOS ATRAS
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, LoginRegisterActivity.class));
+        finish();
     }
 }

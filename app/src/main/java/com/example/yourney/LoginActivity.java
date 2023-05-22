@@ -151,4 +151,11 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.str9, Toast.LENGTH_LONG).show();
         }
     }
+
+    //VOLVEMOS A LOGINREGISTER SI PULSAMOS ATRAS
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, LoginRegisterActivity.class));
+        finish();
+    }
 }
