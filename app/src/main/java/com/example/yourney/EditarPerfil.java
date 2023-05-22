@@ -1,5 +1,8 @@
 package com.example.yourney;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +41,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.Locale;
@@ -51,6 +55,59 @@ public class EditarPerfil extends AppCompatActivity {
     String fotoen64;
     private Bitmap bitmapRedimensionado;
     private static final int PICK_IMAGE_REQUEST = 1;
+
+    private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() == RESULT_OK && result.getData()!= null) {
+            Bundle bundle = result.getData().getExtras();
+            ImageView img_perfil = findViewById(R.id.fotoPerfilEditarPerfil);
+            Bitmap miniatura = (Bitmap) bundle.get("data");
+            img_perfil.setImageBitmap(miniatura);
+
+            /** Código para convertir un BitMap en un String
+             *  Pregunta de StackOverflow: https://stackoverflow.com/questions/13562429/how-many-ways-to-convert-bitmap-to-string-and-vice-versa
+             *  Autor de la respuesta: https://stackoverflow.com/users/1191766/sachin10
+             */
+            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            miniatura.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
+            byte[] img_bytes = byteStream.toByteArray();
+            fotoen64 = java.util.Base64.getEncoder().encodeToString(img_bytes);
+            System.out.println(fotoen64);
+
+        } else {
+            Log.d("TakenPicture", "No photo taken");
+        }
+    });
+
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+        if (uri != null) {
+            Log.d("PhotoPicker", "Selected URI: " + uri);
+            Bitmap bmap = null;
+            try {
+                /** Código utilizado para obtener el BitMap de una imagen sacada de la galería mediante una URI
+                 *  Pregunta de StackOverflow: https://stackoverflow.com/questions/3879992/how-to-get-bitmap-from-an-uri
+                 *  Autor de la respuesta: https://stackoverflow.com/users/986/mark-ingram
+                 */
+                bmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+
+                /** Código para convertir un BitMap en un String
+                 *  Pregunta de StackOverflow: https://stackoverflow.com/questions/13562429/how-many-ways-to-convert-bitmap-to-string-and-vice-versa
+                 *  Autor de la respuesta: https://stackoverflow.com/users/1191766/sachin10
+                 */
+                ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                bmap.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
+                byte[] img_bytes =byteStream.toByteArray();
+                fotoen64 = java.util.Base64.getEncoder().encodeToString(img_bytes);
+                System.out.println(fotoen64);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            ImageView img_perfil = findViewById(R.id.fotoPerfilEditarPerfil);
+            img_perfil.setImageURI(uri);
+        } else {
+            Log.d("PhotoPicker", "No media selected");
+        }
+    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +141,18 @@ public class EditarPerfil extends AppCompatActivity {
         btnGuardar = findViewById(R.id.btnGuardarEditarUsuario);
         Sesion sesion = new Sesion(this);
 
+        // si hay alguna imagen colocada por el usuario recuperarla y colocarla; sino colocar la default
+        if (savedInstanceState != null) {
+            String fotoen64 = savedInstanceState.getString("fotoen64");
+            if (fotoen64!=null){
+                byte[] decodedBytes = Base64.getDecoder().decode(fotoen64);
+                bitmapRedimensionado = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+                fotoperfil.setImageBitmap(bitmapRedimensionado);
+            }
+        }else{
+            fotoperfil.setImageResource(R.drawable.perfil);
+        }
+
         // Comprobar credenciales contra la BD
         Data datos = new Data.Builder()
                 .putString("accion", "selectUsuario")
@@ -112,6 +181,7 @@ public class EditarPerfil extends AppCompatActivity {
                             if(fotoPerfil!=null) {
                                 byte[] encodeByte = Base64.getDecoder().decode(fotoPerfil);
                                 bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                                fotoperfil.setImageBitmap(bitmap);
                             }
                         } catch (Exception e) {
                             throw new RuntimeException(e);
@@ -121,13 +191,6 @@ public class EditarPerfil extends AppCompatActivity {
             }
         });
         WorkManager.getInstance(EditarPerfil.this).enqueue(select);
-
-        fotoperfil.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setFotopPerfil(view);
-            }
-        });
     }
 
     public void update(View v){
@@ -139,12 +202,15 @@ public class EditarPerfil extends AppCompatActivity {
         if (isEmailValid) {
             // obtener bitmap del imageview actual --> comprimirla --> convertirlo en base64 para subirlo a la bbdd
             //if (fotoperfil.getDrawable()!=null) {
-            if (fotoen64 != null) {
-                Bitmap bitmap = ((BitmapDrawable) fotoperfil.getDrawable()).getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream.toByteArray();
-                fotoen64 = new String(Base64.getEncoder().encode(byteArray));
+            if (fotoen64 == null) {
+                ImageView fotoPerfil = (ImageView) findViewById(R.id.fotoPerfilEditarPerfil);
+                Bitmap img = ((BitmapDrawable) fotoPerfil.getDrawable()).getBitmap();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                img.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] b = baos.toByteArray();
+                //PARA QUE NO EXISTAN PROBLEMAS CON EL TAMAÑO DE LA IMAGEN
+                b = tratarImagen(b);
+                fotoen64 = Base64.getEncoder().encodeToString(b);
             }
 
             System.out.println("******** BOTON PULSADO ********");
@@ -195,7 +261,7 @@ public class EditarPerfil extends AppCompatActivity {
         }
     }
 
-    public void setFotopPerfil(View v){
+    public void setFotoPerfil(View v){
         try{
             Intent i1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
@@ -216,32 +282,27 @@ public class EditarPerfil extends AppCompatActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
             try {
                 Uri imageUri = data.getData();
-                Bitmap bitmapOriginal = null;
                 if(imageUri==null){
-                    bitmapOriginal = (Bitmap) data.getExtras().get("data");
+                    Bitmap foto = (Bitmap) data.getExtras().get("data");
+                    ImageView fotoPerfil = (ImageView) findViewById(R.id.fotoPerfilEditarPerfil);
+                    fotoPerfil.setImageBitmap(foto);
                 }else {
                     InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                    bitmapOriginal = BitmapFactory.decodeStream(imageStream);
+                    Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                    ImageView fotoPerfil = (ImageView) findViewById(R.id.fotoPerfilEditarPerfil);
+                    fotoPerfil.setImageBitmap(selectedImage);
                 }
-                //Pasar de bitmap a string y guardar en la variable
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmapOriginal.compress(Bitmap.CompressFormat.PNG, 80, baos);
-                byte[] b = baos.toByteArray();
-                b = tratarImagen(b);
-                fotoen64 = Base64.getEncoder().encodeToString(b);
-
-                //Poner el array comprimido como foto
-                Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-                fotoperfil.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(EditarPerfil.this, "ERROR", Toast.LENGTH_SHORT).show();
             }
+        }else {
+            Toast.makeText(EditarPerfil.this,  "ERROR",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -266,12 +327,22 @@ public class EditarPerfil extends AppCompatActivity {
          * Modificado por Ane García para traducir varios términos y adaptarlo a la aplicación
          */
         Log.d("DAS", String.valueOf(img.length));
-        while(img.length > 50000){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
-            Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.3), (int)(bitmap.getHeight()*0.3), true);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            img = stream.toByteArray();
+        if (img.length > 10000000){
+            while(img.length > 50000){
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.3), (int)(bitmap.getHeight()*0.3), true);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                img = stream.toByteArray();
+            }
+        }else{
+            while(img.length > 50000){
+                Bitmap bitmap = BitmapFactory.decodeByteArray(img, 0, img.length);
+                Bitmap compacto = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth()*0.8), (int)(bitmap.getHeight()*0.8), true);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                compacto.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                img = stream.toByteArray();
+            }
         }
         return img;
     }

@@ -129,8 +129,9 @@
                 android:id="@+id/fotoPerfilEditarPerfil"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
+                android:onClick="setFotoPerfil"
                 android:scaleType="centerCrop"
-                tools:srcCompat="@drawable/perfil" />
+                tools:srcCompat="@drawable/perfil"/>
 
         </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
