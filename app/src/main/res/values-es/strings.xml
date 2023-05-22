@@ -69,4 +69,5 @@
     <string name="preferencias">Preferencias</string>
     <string name="msg_cerrar_sesion">¿Estás seguro de que quieres cerrar sesión y salir?</string>
     <string name="si">Sí</string>
+    <string name="msg_aceptar_solicitud">¿Aceptas la solicitud de amistad?</string>
 </resources>

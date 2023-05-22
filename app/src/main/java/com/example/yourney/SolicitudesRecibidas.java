@@ -1,5 +1,6 @@
 package com.example.yourney;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,8 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SearchView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -58,7 +62,7 @@ public class SolicitudesRecibidas extends AppCompatActivity implements ElAdaptad
 
         buscadorUsuarios.setOnQueryTextListener(SolicitudesRecibidas.this);
 
-        Button añadirAmigo = (Button) findViewById(R.id.añadirAmigo);
+        ImageView añadirAmigo = (ImageView) findViewById(R.id.añadirAmigo);
         añadirAmigo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,8 +86,81 @@ public class SolicitudesRecibidas extends AppCompatActivity implements ElAdaptad
 
     @Override
     public void itemClick(ItemListAmigo item) {
-        Intent intent = new Intent(this, DetallesAmigo.class);
-        intent.putExtra("itemDetail", item);
-        startActivity(intent);
+        new AlertDialog.Builder(this).setIcon(R.drawable.logocolor).setTitle(getString(R.string.msg_aceptar_solicitud)).setMessage(item.getUsername()+": "+item.getNombre())
+        .setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // OBTENGO EL USUARIO ACTUAL
+                Sesion sesion = new Sesion(SolicitudesRecibidas.this);
+                String username = sesion.getUsername();
+
+                //ELIMINAMOS LA PETICIÓN
+                Data datosPeti = new Data.Builder()
+                        .putString("accion", "delete")
+                        .putString("consulta", "Peticiones")
+                        .putString("username1", item.getUsername())
+                        .putString("username2", username)
+                        .build();
+                OneTimeWorkRequest deletePeticion = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                        .setInputData(datosPeti)
+                        .build();
+                WorkManager.getInstance(SolicitudesRecibidas.this).getWorkInfoByIdLiveData(deletePeticion.getId()).observe(SolicitudesRecibidas.this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        Log.d("DAS", "solicitud eliminada");
+                    }
+                });
+                WorkManager.getInstance(SolicitudesRecibidas.this).enqueue(deletePeticion);
+
+                //AÑADIMOS AMIGO
+                Data datosAmistad = new Data.Builder()
+                        .putString("accion", "insert")
+                        .putString("consulta", "Amigos")
+                        .putString("username1", item.getUsername())
+                        .putString("username2", username)
+                        .build();
+                OneTimeWorkRequest insertAmigo = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                        .setInputData(datosAmistad)
+                        .build();
+                WorkManager.getInstance(SolicitudesRecibidas.this).getWorkInfoByIdLiveData(insertAmigo.getId()).observe(SolicitudesRecibidas.this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        Log.d("DAS", "amistad insertada");
+                        startActivity(new Intent(SolicitudesRecibidas.this, SolicitudesRecibidas.class));
+                        finish();
+                    }
+                });
+                WorkManager.getInstance(SolicitudesRecibidas.this).enqueue(insertAmigo);
+            }
+        })
+        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // OBTENGO EL USUARIO ACTUAL
+                Sesion sesion = new Sesion(SolicitudesRecibidas.this);
+                String username = sesion.getUsername();
+
+                //ELIMINAMOS LA PETICIÓN
+                Data datosPeti = new Data.Builder()
+                        .putString("accion", "delete")
+                        .putString("consulta", "Peticiones")
+                        .putString("username1", item.getUsername())
+                        .putString("username2", username)
+                        .build();
+                OneTimeWorkRequest deletePeticion = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                        .setInputData(datosPeti)
+                        .build();
+                WorkManager.getInstance(SolicitudesRecibidas.this).getWorkInfoByIdLiveData(deletePeticion.getId()).observe(SolicitudesRecibidas.this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        Log.d("DAS", "solicitud eliminada");
+                        startActivity(new Intent(SolicitudesRecibidas.this, SolicitudesRecibidas.class));
+                        finish();
+                    }
+                });
+                WorkManager.getInstance(SolicitudesRecibidas.this).enqueue(deletePeticion);
+            }
+        })
+        .show();
     }
 }

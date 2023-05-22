@@ -515,11 +515,9 @@ public class ConexionBD extends Worker {
                     break;
 
                 case "Amigos":
-                    params = "?consulta=" + consulta + "&username1=" + datos.getString("username1") + "&username2=" + datos.getString("username2");
-                    break;
 
                 case "Peticiones":
-                    params = "?consulta=" + consulta + "&username=" + datos.getString("username");
+                    params = "?consulta=" + consulta + "&username1=" + datos.getString("username1") + "&username2=" + datos.getString("username2");
                     break;
 
                 case "RutasGuardadas":
