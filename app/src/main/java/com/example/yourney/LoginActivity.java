@@ -118,13 +118,6 @@ public class LoginActivity extends AppCompatActivity {
             });
             WorkManager.getInstance(LoginActivity.this).enqueue(selectLogin);
 
-            /**
-            Sesion sesion = new Sesion(this);
-            sesion.setUsername(editUser.getText().toString());
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            **/
-
         }else{
             Toast.makeText(this, R.string.str9, Toast.LENGTH_LONG).show();
         }

@@ -67,4 +67,6 @@
     <string name="mis_rutas">My Routes</string>
     <string name="perfil">Profile</string>
     <string name="preferencias">Preferences</string>
+    <string name="msg_cerrar_sesion">Are you sure you want to log out and exit?</string>
+    <string name="si">Yes</string>
 </resources>

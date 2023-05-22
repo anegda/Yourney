@@ -285,6 +285,7 @@ public class ConexionBD extends Worker {
 
             // Miro a que tabla se realiza la consulta
             String consulta = datos.getString("consulta");
+            System.out.println(consulta);
 
             // Diferentes parametros para cada consulta
             switch(consulta) {
@@ -531,7 +532,7 @@ public class ConexionBD extends Worker {
                     break;
 
                 case "Tokens":
-                    params = "?consulta=" + consulta + "&username=" + datos.getString("username");
+                    params = "?consulta=" + consulta + "&username=" + datos.getString("username") + "&token=" + datos.getString("token");
                     break;
 
                 default:

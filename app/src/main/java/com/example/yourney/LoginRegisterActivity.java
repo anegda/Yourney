@@ -1,6 +1,7 @@
 package com.example.yourney;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.WorkManager;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,14 +15,17 @@ public class LoginRegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginregister);
 
-        /**
-         Sesion sesion = new Sesion(this);
-         String username = sesion.getUsername();
-         if (!username.equals("")) {
-         Intent intent = new Intent(this, MainActivity.class);
-         startActivity(intent);
-         }
-         **/
+        // Parar posibles tareas que se hayan quedado encoladas
+        WorkManager.getInstance(this).cancelAllWork();
+
+        Sesion sesion = new Sesion(this);
+        String username = sesion.getUsername();
+        if (!username.equals("")) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
     }
 
     public void login(View v) {

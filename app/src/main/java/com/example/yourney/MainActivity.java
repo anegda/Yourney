@@ -3,7 +3,9 @@ package com.example.yourney;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -105,12 +108,12 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
                        finish();
                        break;
                    case R.id.CerrarSesion:
-                       //FINALIZAMOS LA SESION
-                       Sesion sesion = new Sesion(MainActivity.this);
-                       sesion.deleteUsername();
-                       //VOLVEMOS A LA PANTALLA DE INICIO
-                       startActivity(new Intent(MainActivity.this, LoginRegisterActivity.class));
-                       finish();
+                       // Cierro el drawer
+                       DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                       drawer.closeDrawer(GravityCompat.START);
+                       // Desplegamos el dialogo de cerrar sesion
+                       DialogFragment dialogoCerrarSesion = new DialogoCerrarSesion();
+                       dialogoCerrarSesion.show(getSupportFragmentManager(), "cerrar_sesion");
                        break;
                    default:
                        break;
@@ -130,6 +133,23 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
                 finish();
             }
         });
+
+        /*************************** ruta a mostrar de ejemplo **********************************
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fotoruta);
+
+         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+         byte[] byteArray = byteArrayOutputStream.toByteArray();
+         String fotoen64 = new String(Base64.getEncoder().encode(byteArray));
+
+        String foto = fotoen64;
+        String nombre = "Ruta Ejemplo";
+        String descr = "Este es un ejemplo de una ruta creada por defecto. Así se van a ver el resto de rutas que crees a lo largo de tu aventura";
+        ItemListRuta rutaEjemplo = new ItemListRuta(foto, nombre, descr);
+        items.add(rutaEjemplo);
+
+        /****************************************************************************************/
 
         // Llamada al AsyncTask
         String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
@@ -172,5 +192,17 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Si esta abierto el Drawer lo cierro, si no despliego el mensaje de cerrar sesion
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            DialogFragment dialogoCerrarSesion = new DialogoCerrarSesion();
+            dialogoCerrarSesion.show(getSupportFragmentManager(), "cerrar_sesion");
+        }
     }
 }
