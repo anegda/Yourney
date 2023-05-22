@@ -233,7 +233,7 @@ public class ConexionBD extends Worker {
                     params.put("apellidosNew", datos.getString("apellidosNew"));
                     params.put("passwordNew", datos.getString("passwordNew"));
                     params.put("emailNew", datos.getString("emailNew"));
-                    params.put("fotoPerfil", EditarPerfil.fotoperfilStr);
+                    params.put("fotoPerfil", EditarPerfil.fotoen64);
 
                     out.print(params.toString());
                     out.close();

@@ -62,13 +62,9 @@ public class RegisterActivity2 extends AppCompatActivity {
     static String fotoen64;
     private Button btnLogin;
     private Bitmap bitmapRedimensionado;
-    private Bitmap bitmapOriginal;
-
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 2;
 
-    private int anchoDestino;
-    private int altoDestino;
 
     private ActivityResultLauncher<Intent> takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() == RESULT_OK && result.getData()!= null) {
@@ -152,7 +148,6 @@ public class RegisterActivity2 extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         }
-
 
         // inicializar los elementos del layout
         editEmail = findViewById(R.id.editEmail);

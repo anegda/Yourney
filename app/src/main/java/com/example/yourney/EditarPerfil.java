@@ -258,7 +258,7 @@ public class EditarPerfil extends AppCompatActivity {
             WorkManager.getInstance(EditarPerfil.this).enqueue(update);
 
         } else {
-            Toast.makeText(this, "Registro incorrecto", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Error al editar los datos", Toast.LENGTH_LONG).show();
         }
     }
 
