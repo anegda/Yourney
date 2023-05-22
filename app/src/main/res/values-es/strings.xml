@@ -70,4 +70,14 @@
     <string name="msg_cerrar_sesion">¿Estás seguro de que quieres cerrar sesión y salir?</string>
     <string name="si">Sí</string>
     <string name="msg_aceptar_solicitud">¿Aceptas la solicitud de amistad?</string>
+    <string name="buscar_rutas">Buscar rutas</string>
+    <string name="rutas_favoritas">Rutas Favoritas</string>
+    <string name="crear_ruta">Crear Ruta</string>
+    <string name="mis_amigos">Mis Amigos</string>
+    <string name="solicitudes_amistad">Solicitudes de Amistad</string>
+    <string name="rutas">Rutas</string>
+    <string name="amigos">Amigos</string>
+    <string name="configuracion">Configuración</string>
+    <string name="editar_perfil">Editar Perfil</string>
+    <string name="cerrar_sesion">Cerrar sesión</string>
 </resources>

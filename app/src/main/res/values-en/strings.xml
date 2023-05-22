@@ -51,7 +51,7 @@
     <string name="login_correcto">Welcome again</string>
     <string name="registro_incorrecto">The username already exists</string>
     <string name="registro_correcto">Welcome</string>
-    <string name="buscarUsuarios">Find users by username</string>
+    <string name="buscarUsuarios">Find users</string>
     <string name="galeria">"Image gallery "</string>
     <string name="enviar">Send</string>
     <string name="mensaje">Message</string>
@@ -70,4 +70,14 @@
     <string name="msg_cerrar_sesion">Are you sure you want to log out and exit?</string>
     <string name="si">Yes</string>
     <string name="msg_aceptar_solicitud">¿Do you accept this friend request?</string>
+    <string name="buscar_rutas">Search for routes</string>
+    <string name="rutas_favoritas">Favorite Routes</string>
+    <string name="crear_ruta">Create Route</string>
+    <string name="mis_amigos">My Friends</string>
+    <string name="solicitudes_amistad">Friendship Requests</string>
+    <string name="rutas">Routes</string>
+    <string name="amigos">Friends</string>
+    <string name="configuracion">Settings</string>
+    <string name="editar_perfil">Edit Profile</string>
+    <string name="cerrar_sesion">Log out</string>
 </resources>

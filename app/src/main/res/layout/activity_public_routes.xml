@@ -24,7 +24,7 @@
         android:background="@drawable/edittext_rounded_background_opaco"
         android:elevation="6dp"
         android:gravity="center"
-        android:queryHint="Buscar rutas"
+        android:queryHint="@string/buscar_rutas"
         android:iconifiedByDefault="false"
         android:inputType="text"
         android:maxLines="1"
