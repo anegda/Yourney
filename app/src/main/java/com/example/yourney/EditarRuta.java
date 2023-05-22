@@ -17,6 +17,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
@@ -50,7 +51,7 @@ public class EditarRuta extends AppCompatActivity {
     static String fotoDescriptiva;
     private String parent;
     private String parent2;
-    private int idRuta;
+    static int idRuta;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -81,13 +82,67 @@ public class EditarRuta extends AppCompatActivity {
         }
         idRuta = getIntent().getIntExtra("idRuta", 0);
 
-        fotoDescRuta = findViewById(R.id.fotoDescRuta);
-        tituloRuta = findViewById(R.id.tituloRutaEdit);
-        dificultad = findViewById(R.id.dificultadRutaGroup);
-        informacionExtra = findViewById(R.id.otrosMutilineText);
-        visibilidad = findViewById(R.id.visibilidadRutaGroup);
+        //OBTENEMOS LOS GENERALES DE LA RUTA
+        int idRuta = getIntent().getIntExtra("idRuta",0);
+        Data datos = new Data.Builder()
+                .putString("accion", "selectRuta")
+                .putString("consulta", "InfoRuta")
+                .putInt("idRuta", idRuta)
+                .build();
+        OneTimeWorkRequest selectRuta = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                .setInputData(datos)
+                .build();
+        WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(selectRuta.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
+            @Override
+            public void onChanged(WorkInfo workInfo) {
+                if (workInfo != null && workInfo.getState().isFinished()) {
+                    Data output = workInfo.getOutputData();
+                    if (!output.getString("resultado").equals("Sin resultado")) {
+                        try {
+                            String titulo = output.getString("Nombre");
+                            String descripcion = output.getString("Descripcion");
+                            String dificultad = output.getString("Dificultad");
+                            int visibilidad = output.getInt("Visibilidad", 0);
 
-        restaurarCampos();
+                            EditText tituloEdit = findViewById(R.id.tituloRutaEdit);
+                            tituloEdit.setText(titulo);
+                            EditText otrosEdit = findViewById(R.id.otrosMutilineText);
+                            otrosEdit.setText(descripcion);
+
+                            if(dificultad.equals("Fácil")){
+                                RadioButton b = (RadioButton) findViewById(R.id.facil);
+                                b.setChecked(true);
+                            }else if(dificultad.equals("Medio")){
+                                RadioButton b = (RadioButton) findViewById(R.id.medio);
+                                b.setChecked(true);
+                            }else{
+                                RadioButton b = (RadioButton) findViewById(R.id.dificil);
+                                b.setChecked(true);
+                            }
+
+                            if(visibilidad==0){
+                                RadioButton b = (RadioButton) findViewById(R.id.privada);
+                                b.setChecked(true);
+                            } else{
+                                RadioButton b = (RadioButton) findViewById(R.id.publica);
+                                b.setChecked(false);
+                            }
+
+                            if (fotoDescriptiva!=null){
+                                byte[] encodeByte = Base64.getDecoder().decode(fotoDescriptiva);
+                                Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                                Drawable d = new BitmapDrawable(getResources(), bitmap);
+                                ImageView fotoDescRuta = findViewById(R.id.fotoDescRuta);
+                                fotoDescRuta.setImageBitmap(bitmap);
+                            }
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            }
+        });
+        WorkManager.getInstance(EditarRuta.this).enqueue(selectRuta);
 
         Button btn_guardar = (Button) findViewById(R.id.btn_guardarDatosRuta);
         ImageView btn_editores = (ImageView) findViewById(R.id.btn_anadirEditores);
@@ -115,47 +170,54 @@ public class EditarRuta extends AppCompatActivity {
 
                 RadioGroup dificultadGroup = findViewById(R.id.dificultadRutaGroup);
                 int difRadioButtonID = dificultadGroup.getCheckedRadioButtonId();
-                RadioButton difRadioButtonSelected = (RadioButton) findViewById(difRadioButtonID);
-                String dificultad = difRadioButtonSelected.getText().toString();
 
                 RadioGroup visibilidadGroup = findViewById(R.id.visibilidadRutaGroup);
                 int visRadioButtonID = visibilidadGroup.getCheckedRadioButtonId();
-                RadioButton visRadioButtonSelected = (RadioButton) findViewById(visRadioButtonID);
-                String visibilidadString = visRadioButtonSelected.getText().toString();
-                int visibilidad = 1;
-                if (visibilidadString.equals(getString(R.string.privado))){
-                    visibilidad = 0;
-                }
 
-                //REALIZAMOS EL UPDATE
-                idRuta = getIntent().getIntExtra("idRuta",0);
-                Data datos = new Data.Builder()
-                        .putString("accion", "update")
-                        .putString("consulta", "Rutas")
-                        .putInt("idRuta", idRuta)
-                        .putString("nombre", titulo)
-                        .putString("descripcion", descr)
-                        .putString("dificultad", dificultad)
-                        .putInt("visibilidad", visibilidad)
-                        .build();
 
-                OneTimeWorkRequest updateRuta = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                        .setInputData(datos)
-                        .build();
+                if (titulo.equals("") || descr.equals("") || visRadioButtonID == -1 || difRadioButtonID==-1) {
+                    Toast.makeText(EditarRuta.this, R.string.campos_vacios, Toast.LENGTH_LONG).show();
+                } else {
+                    //OBTENEMOS LA DIFICULTAD Y LA VISIBILIDAD
+                    RadioButton difRadioButtonSelected = (RadioButton) findViewById(difRadioButtonID);
+                    String dificultad = difRadioButtonSelected.getText().toString();
 
-                WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(updateRuta.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        //VOLVEMOS A LA ACTIVIDAD DE VER RUTA
-                        Intent i = new Intent(EditarRuta.this, VerRuta.class);
-                        i.putExtra("idRuta", idRuta);
-                        i.putExtra("parent", parent2);
-                        startActivity(i);
-                        finish();
+                    RadioButton visRadioButtonSelected = (RadioButton) findViewById(visRadioButtonID);
+                    String visibilidadString = visRadioButtonSelected.getText().toString();
+                    int visibilidad = 1;
+                    if (visibilidadString.equals(getString(R.string.privado))) {
+                        visibilidad = 0;
                     }
-                });
 
-                WorkManager.getInstance(EditarRuta.this).enqueue(updateRuta);
+                    //REALIZAMOS EL UPDATE
+                    Data datos = new Data.Builder()
+                            .putString("accion", "update")
+                            .putString("consulta", "Rutas")
+                            .putInt("idRuta", idRuta)
+                            .putString("nombre", titulo)
+                            .putString("descripcion", descr)
+                            .putString("dificultad", dificultad)
+                            .putInt("visibilidad", visibilidad)
+                            .build();
+
+                    OneTimeWorkRequest updateRuta = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                            .setInputData(datos)
+                            .build();
+
+                    WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(updateRuta.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            //VOLVEMOS A LA ACTIVIDAD DE VER RUTA
+                            Intent i = new Intent(EditarRuta.this, VerRuta.class);
+                            i.putExtra("idRuta", idRuta);
+                            i.putExtra("parent", parent2);
+                            startActivity(i);
+                            finish();
+                        }
+                    });
+
+                    WorkManager.getInstance(EditarRuta.this).enqueue(updateRuta);
+                }
             }
         });
 

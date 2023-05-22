@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DatosRuta">
+    tools:context=".EditarRuta">
 
     <View
         android:id="@+id/green_rectangle"
@@ -124,6 +124,7 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
+        android:checkedButton="@+id/facil"
         app:layout_constraintTop_toBottomOf="@id/dificultadRutaText">
         <RadioButton android:id="@+id/facil"
             android:layout_width="wrap_content"
