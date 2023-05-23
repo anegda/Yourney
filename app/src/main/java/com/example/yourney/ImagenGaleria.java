@@ -38,7 +38,10 @@ import java.util.Locale;
 public class ImagenGaleria extends AppCompatActivity {
     private ScaleGestureDetector scaleGestureDetector;
     private float mScaleFactor = 1.0f;
+    private Integer idRuta;
+    private boolean editor;
     private String parent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +56,12 @@ public class ImagenGaleria extends AppCompatActivity {
         }
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null && parent == null ) {
+        if (extras != null && idRuta == null ) {
+            idRuta = extras.getInt("idRuta");
+            editor = extras.getBoolean("editor");
             parent = extras.getString("parent");
+
         }
-        System.out.println("##########################################################");
-        System.out.println(parent);
-        System.out.println("##########################################################");
 
         Locale.setDefault(nuevaloc);
         Configuration configuration = getBaseContext().getResources().getConfiguration();
@@ -136,7 +139,11 @@ public class ImagenGaleria extends AppCompatActivity {
                             System.out.println("Imagen borrada");
 
                             //CERRAMOS LA ACTIVIDAD Y VOLVEMOS A LA GALERÍA
-                            startActivity(new Intent(ImagenGaleria.this, GaleriaFotosRuta.class));
+                            Intent intent = new Intent(ImagenGaleria.this, GaleriaFotosRuta.class);
+                            intent.putExtra("idRuta", idRuta);
+                            intent.putExtra("editor", editor);
+                            intent.putExtra("parent", parent);
+                            startActivity(intent);
                             finish();
                         }
                     }
