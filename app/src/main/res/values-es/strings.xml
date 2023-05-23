@@ -100,4 +100,5 @@
     <string name="salir_grabar">¿Estás seguro de que desea salir?</string>
     <string name="salir_grabar2">Se perderá la grabación de la ruta</string>
     <string name="enviar_peticion">Petición de amistad</string>
+    <string name="existe_amistad_peticion">Ya existe una petición o ya eres amigo con este usuario</string>
 </resources>
