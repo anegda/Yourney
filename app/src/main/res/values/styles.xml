@@ -73,5 +73,10 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="RoundedDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@drawable/dialog_rounded_background</item>
+    </style>
+
+
 
 </resources>
