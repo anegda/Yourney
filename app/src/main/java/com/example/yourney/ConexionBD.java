@@ -467,6 +467,7 @@ public class ConexionBD extends Worker {
             if(consulta.equals("Editores")){
                 params = params + "&idRuta=" + Integer.toString(datos.getInt("idRuta",0));
             }
+            System.out.println(url+params);
             URL urlFinal = new URL(url + params);
             urlConnection = (HttpURLConnection) urlFinal.openConnection();
 

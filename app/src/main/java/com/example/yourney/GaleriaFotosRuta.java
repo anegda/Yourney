@@ -10,8 +10,10 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -56,10 +58,10 @@ public class GaleriaFotosRuta extends AppCompatActivity {
     static ArrayList<Integer> idImgList;
     private RecyclerView imagesRV;
     static RecyclerViewAdapter imageRVAdapter;
-    private Integer idRuta;
+    static Integer idRuta;
     static String fotoNueva;
-    private boolean editor;
-    private String parent;
+    static boolean editor;
+    static String parent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +173,20 @@ public class GaleriaFotosRuta extends AppCompatActivity {
                 }
             }
         });
+
+        // //BROADCAST RECEIVER PARA CERRAR ESTA ACTIVIDAD
+        IntentFilter filter = new IntentFilter();
+
+        filter.addAction("finish");
+        registerReceiver(broadcastReceiver, filter);
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    };
 
     private void prepareRecyclerView() {
         imageRVAdapter = new RecyclerViewAdapter(GaleriaFotosRuta.this, idImgList, imageBlobs);
@@ -219,6 +234,10 @@ public class GaleriaFotosRuta extends AppCompatActivity {
                                 System.out.println("Imagen insertada");
 
                                 // Añado el ID de la imagen que acabo de insertar
+                                /**Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);**/
+
                                 Data datos = new Data.Builder()
                                         .putString("accion", "select")
                                         .putString("consulta", "UltimaImagen")
@@ -235,10 +254,16 @@ public class GaleriaFotosRuta extends AppCompatActivity {
                                     public void onChanged(WorkInfo workInfo) {
                                         if (workInfo != null && workInfo.getState().isFinished()) {
                                             Data output = workInfo.getOutputData();
-                                            if (output.getString("resultado").equals("Sin resultado")) {
+                                            System.out.println("##################" + output);
+                                            if (!output.getString("resultado").equals("Sin resultado")) {
                                                 JSONParser parser = new JSONParser();
 
                                                 try {
+
+                                                    System.out.println("####################################");
+                                                    System.out.println(idImgList);
+                                                    System.out.println("####################################");
+
                                                     JSONArray jsonResultado = (JSONArray) parser.parse(output.getString("resultado"));
                                                     JSONObject row = (JSONObject) jsonResultado.get(0); // Solo hay un elemento
 
@@ -246,6 +271,15 @@ public class GaleriaFotosRuta extends AppCompatActivity {
                                                     if (id != null) {
                                                         idImgList.add(id);
                                                     }
+
+                                                    System.out.println("####################################");
+                                                    System.out.println(idImgList);
+                                                    System.out.println("####################################");
+
+                                                    imageBlobs.add(fotoNueva);
+                                                    prepareRecyclerView();
+                                                    imageRVAdapter.notifyDataSetChanged();
+
 
                                                 } catch (ParseException e) {
                                                     throw new RuntimeException(e);
@@ -263,6 +297,7 @@ public class GaleriaFotosRuta extends AppCompatActivity {
                     WorkManager.getInstance(GaleriaFotosRuta.this).enqueue(insert);
 
                     imageBlobs.add(fotoNueva);
+                    prepareRecyclerView();
                     imageRVAdapter.notifyDataSetChanged();
 
                 }else {
@@ -292,6 +327,7 @@ public class GaleriaFotosRuta extends AppCompatActivity {
                             .setInputData(datos)
                             .build();
 
+
                     WorkManager.getInstance(GaleriaFotosRuta.this).getWorkInfoByIdLiveData(insert.getId()).observe(GaleriaFotosRuta.this, new Observer<WorkInfo>() {
                         @Override
                         public void onChanged(WorkInfo workInfo) {
@@ -299,6 +335,10 @@ public class GaleriaFotosRuta extends AppCompatActivity {
                                 System.out.println("Imagen insertada");
 
                                 // Añado el ID de la imagen que acabo de insertar
+                                /**Intent intent = getIntent();
+                                finish();
+                                startActivity(intent);**/
+
                                 Data datos = new Data.Builder()
                                         .putString("accion", "select")
                                         .putString("consulta", "UltimaImagen")
@@ -315,10 +355,15 @@ public class GaleriaFotosRuta extends AppCompatActivity {
                                     public void onChanged(WorkInfo workInfo) {
                                         if (workInfo != null && workInfo.getState().isFinished()) {
                                             Data output = workInfo.getOutputData();
-                                            if (output.getString("resultado").equals("Sin resultado")) {
+                                            if (!output.getString("resultado").equals("Sin resultado")) {
                                                 JSONParser parser = new JSONParser();
 
                                                 try {
+
+                                                    System.out.println("####################################");
+                                                    System.out.println(idImgList);
+                                                    System.out.println("####################################");
+
                                                     JSONArray jsonResultado = (JSONArray) parser.parse(output.getString("resultado"));
                                                     JSONObject row = (JSONObject) jsonResultado.get(0); // Solo hay un elemento
 
@@ -326,6 +371,14 @@ public class GaleriaFotosRuta extends AppCompatActivity {
                                                     if (id != null) {
                                                         idImgList.add(Integer.parseInt(id));
                                                     }
+
+                                                    System.out.println("####################################");
+                                                    System.out.println(idImgList);
+                                                    System.out.println("####################################");
+
+                                                    imageBlobs.add(fotoNueva);
+                                                    prepareRecyclerView();
+                                                    imageRVAdapter.notifyDataSetChanged();
 
                                                 } catch (ParseException e) {
                                                     throw new RuntimeException(e);
@@ -341,8 +394,7 @@ public class GaleriaFotosRuta extends AppCompatActivity {
                     });
                     WorkManager.getInstance(GaleriaFotosRuta.this).enqueue(insert);
 
-                    imageBlobs.add(fotoNueva);
-                    imageRVAdapter.notifyDataSetChanged();
+
 
                 }
             } catch (FileNotFoundException e) {

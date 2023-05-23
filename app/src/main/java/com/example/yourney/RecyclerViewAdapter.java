@@ -53,9 +53,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 public void onClick(View v) {
                     Intent i = new Intent(context, ImagenGaleria.class);
                     i.putExtra("imgBlob", "nananananana");
+                    i.putExtra("idRuta", GaleriaFotosRuta.idRuta);
+                    i.putExtra("editor", GaleriaFotosRuta.editor);
+                    i.putExtra("parent", GaleriaFotosRuta.parent);
                     fotoElegidaBlob = imageBlobArrayList.get(position);
                     idImgElegida = idImgList.get(position);
                     context.startActivity(i);
+
+                    // Cierro la actividad anterior
+                    Intent intent = new Intent();
+                    intent.setAction("finish");
+                    context.sendBroadcast(i);
                 }
             });
         }
