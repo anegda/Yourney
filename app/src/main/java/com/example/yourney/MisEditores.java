@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -39,7 +40,7 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
     ArrayList<String> editores = new ArrayList<String>();
     ElAdaptadorRecyclerEditor adapter = new ElAdaptadorRecyclerEditor(items, MisEditores.this);
     private String parent;
-
+    TextView placeholder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -63,6 +64,8 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mis_editores);
 
+        parent = getIntent().getStringExtra("parent");
+
         buscadorUsuarios = findViewById(R.id.buscar_editores);
         lalista = findViewById(R.id.elreciclerview);
         btnGuardar = findViewById(R.id.btnGuardarEditores);
@@ -76,6 +79,7 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
 
         ArrayList<String> amigos = new ArrayList<String>();
 
+        /**
         // CONSULTAMOS A LA BD POR AMIGOS
         Data datos = new Data.Builder()
                 .putString("accion", "select")
@@ -124,6 +128,18 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
         adapter = new ElAdaptadorRecyclerEditor(items, MisEditores.this);
         lalista.setAdapter(adapter);
         buscadorUsuarios.setOnQueryTextListener(MisEditores.this);
+        **/
+
+        // Llamada al asynctask
+        String urlAmigos = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selects.php";
+        String urlUsuarios = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectUsuarios.php";
+        String paramsAmigos = "?consulta=Amigos&username=" + username;
+        String paramsUsuarios = "?consulta=Usuarios&username=";
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
+        TaskGetEditores taskGetAmigos = new TaskGetEditores(urlAmigos + paramsAmigos,urlUsuarios + paramsUsuarios, buscadorUsuarios, recyclerView, MisEditores.this, username);
+        taskGetAmigos.execute();
+
+        buscadorUsuarios.setOnQueryTextListener(MisEditores.this);
 
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +151,8 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
                 intent.putExtra("dificultadRuta", getIntent().getIntExtra("dificultadRuta", 1));
                 intent.putExtra("infoRuta", getIntent().getStringExtra("infoRuta"));
                 intent.putExtra("visibilidadRuta", getIntent().getIntExtra("visibilidadRuta", 1));
+                intent.putExtra("parent", "VerRuta");
+                intent.putExtra("parentVerRuta", parent);
 
                 startActivity(intent);
             }
@@ -193,6 +211,10 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
         intent.putExtra("dificultadRuta", getIntent().getIntExtra("dificultadRuta", 1));
         intent.putExtra("infoRuta", getIntent().getStringExtra("infoRuta"));
         intent.putExtra("visibilidadRuta", getIntent().getIntExtra("visibilidadRuta", 1));
+        intent.putExtra("parent", parent);
+        if(parent.equals("VerRuta")){
+            intent.putExtra("parentVerRuta", getIntent().getStringExtra("parentVerRuta"));
+        }
         startActivity(intent);
         finish();
     }

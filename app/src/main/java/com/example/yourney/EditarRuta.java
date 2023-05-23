@@ -77,6 +77,7 @@ public class EditarRuta extends AppCompatActivity {
 
         // Registro la acitividad de la que viene el intent
         parent = getIntent().getStringExtra("parent");
+        Log.d("PARENT", parent);
         if(parent.equals("VerRuta")) {
             parent2 = getIntent().getStringExtra("parentVerRuta");
         }
@@ -249,6 +250,8 @@ public class EditarRuta extends AppCompatActivity {
                 i.putExtra("dificultadRuta", difRadioButtonID);
                 i.putExtra("infoRuta", descr);
                 i.putExtra("visibilidadRuta", visRadioButtonID);
+                i.putExtra("parent", parent);
+                i.putExtra("parentVerRuta", parent2);
                 startActivity(i);
                 finish();
             }
@@ -307,6 +310,7 @@ public class EditarRuta extends AppCompatActivity {
                 WorkManager.getInstance(EditarRuta.this).enqueue(delete);
             }
         });
+        restaurarCampos();
     }
 
     //PARA ESTABLECER IMAGEN
@@ -373,10 +377,18 @@ public class EditarRuta extends AppCompatActivity {
             listView.setAdapter(mAdapter);
         }
 
-        tituloRuta.setText(getIntent().getStringExtra("tituloRuta"));
-        dificultad.check(getIntent().getIntExtra("dificultadRuta", 1));
-        informacionExtra.setText(getIntent().getStringExtra("infoRuta"));
-        visibilidad.check(getIntent().getIntExtra("visibilidadRuta",  1));
+        EditText tituloEdit = findViewById(R.id.tituloRutaEdit);
+
+        EditText otrosEdit = findViewById(R.id.otrosMutilineText);
+
+        RadioGroup dificultadGroup = findViewById(R.id.dificultadRutaGroup);
+
+        RadioGroup visibilidadGroup = findViewById(R.id.visibilidadRutaGroup);
+
+        tituloEdit.setText(getIntent().getStringExtra("tituloRuta"));
+        dificultadGroup.check(getIntent().getIntExtra("dificultadRuta", 1));
+        otrosEdit.setText(getIntent().getStringExtra("infoRuta"));
+        visibilidadGroup.check(getIntent().getIntExtra("visibilidadRuta",  1));
     }
 
     @Override
