@@ -89,7 +89,7 @@
             android:id="@+id/fotoPerfilEditarPerfil"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onClick="setFotopPerfil"
+            android:onClick="setFotoPerfil"
             android:scaleType="centerCrop"
             tools:srcCompat="@drawable/perfil" />
     </androidx.cardview.widget.CardView>
