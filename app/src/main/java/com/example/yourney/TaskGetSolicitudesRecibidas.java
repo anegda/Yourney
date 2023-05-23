@@ -3,6 +3,8 @@ package com.example.yourney;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,13 +33,15 @@ public class TaskGetSolicitudesRecibidas extends AsyncTask<Void, Void, ArrayList
     private String username;
     List<ItemListAmigo> items = new ArrayList<ItemListAmigo>();
     ElAdaptadorRecyclerAmigos adapter;
+    TextView placeholder;
 
-    public TaskGetSolicitudesRecibidas(String urlAmigos, String urlUsuarios, RecyclerView recyclerView, ElAdaptadorRecyclerAmigos.RecyclerItemClick recyclerItemClick, String username) {
+    public TaskGetSolicitudesRecibidas(String urlAmigos, String urlUsuarios, RecyclerView recyclerView, ElAdaptadorRecyclerAmigos.RecyclerItemClick recyclerItemClick, String username, TextView placeholder) {
         this.urlStringAmigos = urlAmigos;
         this.urlStringUsuarios = urlUsuarios;
         this.recyclerView = recyclerView;
         this.recyclerItemClick = recyclerItemClick;
         this.username = username;
+        this.placeholder = placeholder;
     }
 
     @Override
@@ -130,6 +134,9 @@ public class TaskGetSolicitudesRecibidas extends AsyncTask<Void, Void, ArrayList
     protected void onPostExecute(ArrayList<JSONObject> misAmigos) {
         if (misAmigos == null) {
             // No ha habido resultado para la consulta --> el usuario no tiene peticiones de amistad
+            // Cambio la visibilidad del placeholder
+            placeholder.setVisibility(View.VISIBLE);
+
         } else {
             // Asigno la info de los json devueltos a donde toque
             for (int i = 0; i < misAmigos.size(); i++) {

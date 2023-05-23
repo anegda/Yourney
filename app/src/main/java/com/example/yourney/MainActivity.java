@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         System.out.println(url + params);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
         TextView placeHolder = (TextView) findViewById(R.id.tvDescrRutPers);
-        TaskGetMisRutas taskGetMisRutas = new TaskGetMisRutas(url + params, recyclerView, MainActivity.this, placeHolder);
+        TaskGetMisRutas taskGetMisRutas = new TaskGetMisRutas(url + params, recyclerView, MainActivity.this);
         taskGetMisRutas.execute();
 
 

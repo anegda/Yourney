@@ -10,7 +10,7 @@
         android:id="@+id/green_rectangle"
         android:layout_width="match_parent"
         android:layout_height="125dp"
-        android:background="#75a064"
+        android:background="#65a34d"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,8 +58,9 @@
         android:clipToPadding="true"
         android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/green_rectangle" />
+        app:layout_constraintTop_toBottomOf="@+id/placeholder" />
 
     <TextView
         android:id="@+id/textView2"
@@ -74,5 +75,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_view" />
+
+    <TextView
+        android:id="@+id/placeholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        style="@style/f_gc_s"
+        android:text="@string/placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/green_rectangle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

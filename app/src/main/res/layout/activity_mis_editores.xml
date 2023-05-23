@@ -9,12 +9,27 @@
     <View
         android:id="@+id/green_rectangle"
         android:layout_width="411dp"
-        android:layout_height="105dp"
-        android:background="#75a064"
+        android:layout_height="115dp"
+        android:background="#65a34d"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="6dp"
+        android:text="@string/mis_editores"
+        android:textColor="#ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/green_rectangle"
+        app:layout_constraintEnd_toEndOf="@+id/buscar_editores"
+        app:layout_constraintStart_toStartOf="@+id/buscar_editores"
+        app:layout_constraintTop_toBottomOf="@+id/buscar_editores"
+        app:layout_constraintVertical_bias="0.533" />
 
     <SearchView
         android:id="@+id/buscar_editores"
@@ -65,7 +80,7 @@
         android:id="@+id/btnGuardarEditores"
         android:layout_width="250dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="28dp"
         android:background="@drawable/round_btn_verde"
         android:gravity="center"
         android:text="@string/guardar"

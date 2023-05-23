@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,6 +42,8 @@ public class SolicitudesRecibidas extends AppCompatActivity implements ElAdaptad
     RecyclerView lalista;
     private List<ItemListAmigo> items = new ArrayList<ItemListAmigo>();
     ElAdaptadorRecyclerAmigos adapter = new ElAdaptadorRecyclerAmigos(items, SolicitudesRecibidas.this);
+    TextView placeholder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -67,6 +70,9 @@ public class SolicitudesRecibidas extends AppCompatActivity implements ElAdaptad
         buscadorUsuarios = findViewById(R.id.search_friends);
         lalista = findViewById(R.id.elreciclerview);
 
+        placeholder = findViewById(R.id.placeholder);
+        placeholder.setVisibility(View.GONE);
+
         LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(manager);
 
@@ -80,7 +86,7 @@ public class SolicitudesRecibidas extends AppCompatActivity implements ElAdaptad
         String paramsPeticiones = "?consulta=Peticiones&username=" + username;
         String paramsUsuarios = "?consulta=Usuarios&username=";
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TaskGetSolicitudesRecibidas taskGetPeticiones = new TaskGetSolicitudesRecibidas(urlPeticiones + paramsPeticiones, urlUsuarios + paramsUsuarios, recyclerView, SolicitudesRecibidas.this, username);
+        TaskGetSolicitudesRecibidas taskGetPeticiones = new TaskGetSolicitudesRecibidas(urlPeticiones + paramsPeticiones, urlUsuarios + paramsUsuarios, recyclerView, SolicitudesRecibidas.this, username, placeholder);
         taskGetPeticiones.execute();
 
         buscadorUsuarios.setOnQueryTextListener(SolicitudesRecibidas.this);

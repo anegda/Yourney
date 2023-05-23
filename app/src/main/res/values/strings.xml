@@ -80,7 +80,20 @@
     <string name="cerrar_sesion">Cerrar sesión</string>
     <string name="msg_aceptar_solicitud">¿Aceptas las solicitud amistad?</string>
     <string name="cancelar_edicion">¿Estás seguro de que quieres salir? Perderás los cambios guardados</string>
+    <string name="placeholder">Vaya, parece que todavía no hay nada aquí...</string>
     <string name="campos_vacios">Existen campos vacíos</string>
     <string name="mensaje_error_peti">No puedes enviarte solicitudes de amistad a ti mismo</string>
+    <string name="username">Usuario</string>
+    <string name="nombre">Nombre</string>
+    <string name="apellido">Apellido</string>
+    <string name="email">Email</string>
+    <string name="peticion">Enviar petición de amistad</string>
+    <string name="imagen">Imagen</string>
+    <string name="editar_ruta">Editar ruta</string>
+    <string name="esperando">Esperando a grabar</string>
+    <string name="galeria1">Esta es la galería de imágenes de tu ruta.</string>
+    <string name="galeria2">Desde aquí puedes añadir nuevas fotos o descargar el álbum entero.</string>
+    <string name="rutas_publicas">Rutas públicas</string>
+    <string name="mis_editores">Mis editores</string>
 
 </resources>

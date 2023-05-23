@@ -16,7 +16,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +35,7 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
     RecyclerView lalista;
     ElAdaptadorRecycler adapter;
     List<ItemListRuta> items = new ArrayList<>();
+    TextView placeholder;
     String titulo, descripcion, imagen = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +73,16 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
 
         buscadorRutas.setOnQueryTextListener(this);
 
+        placeholder = findViewById(R.id.placeholder);
+        placeholder.setVisibility(View.GONE);
+
         // Llamada al AsyncTask
         Sesion sesion = new Sesion(this);
         String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
         String params = "?consulta=RutasGuardadas&username=" + sesion.getUsername();
         System.out.println(url + params);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TaskGetRutasGuardadas taskGetRutasGuardadas = new TaskGetRutasGuardadas(url + params, recyclerView, buscadorRutas, RutasFavoritas.this);
+        TaskGetRutasGuardadas taskGetRutasGuardadas = new TaskGetRutasGuardadas(url + params, recyclerView, buscadorRutas, RutasFavoritas.this, placeholder);
         taskGetRutasGuardadas.execute();
     }
 

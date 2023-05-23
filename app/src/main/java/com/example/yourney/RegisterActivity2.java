@@ -235,7 +235,7 @@ public class RegisterActivity2 extends AppCompatActivity {
                             Data datos = new Data.Builder()
                                     .putString("accion", "insert")
                                     .putString("consulta", "Usuarios")
-                                    .putString("username", user)
+                                    .putString("username", user.trim())
                                     .putString("nombre", nombre)
                                     .putString("apellidos", apellidos)
                                     .putString("password", pass)

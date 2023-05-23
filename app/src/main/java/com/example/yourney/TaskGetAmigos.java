@@ -3,7 +3,9 @@ package com.example.yourney;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,14 +35,16 @@ public class TaskGetAmigos extends AsyncTask<Void, Void, ArrayList<JSONObject>> 
     private String username;
     List<ItemListAmigo> items = new ArrayList<ItemListAmigo>();
     ElAdaptadorRecyclerAmigos adapter;
+    TextView placeholder;
 
-    public TaskGetAmigos(String urlAmigos, String urlUsuarios, SearchView searchView, RecyclerView recyclerView, ElAdaptadorRecyclerAmigos.RecyclerItemClick recyclerItemClick, String username) {
+    public TaskGetAmigos(String urlAmigos, String urlUsuarios, SearchView searchView, RecyclerView recyclerView, ElAdaptadorRecyclerAmigos.RecyclerItemClick recyclerItemClick, String username, TextView placeholder) {
         this.urlStringAmigos = urlAmigos;
         this.urlStringUsuarios = urlUsuarios;
         this.recyclerView = recyclerView;
         this.searchView = searchView;
         this.recyclerItemClick = recyclerItemClick;
         this.username = username;
+        this.placeholder = placeholder;
     }
 
     @Override
@@ -136,7 +140,7 @@ public class TaskGetAmigos extends AsyncTask<Void, Void, ArrayList<JSONObject>> 
     protected void onPostExecute(ArrayList<JSONObject> misAmigos) {
         if (misAmigos == null) {
             // No ha habido resultado para la consulta --> el usuario no tiene amigos registrados
-
+            placeholder.setVisibility(View.VISIBLE);
 
         } else {
             // Asigno la info de los json devueltos a donde toque

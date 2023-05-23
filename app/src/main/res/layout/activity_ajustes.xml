@@ -12,7 +12,7 @@
         android:id="@+id/green_rectangle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#75a064"
+        android:background="#65a34d"
         android:elevation="4dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
