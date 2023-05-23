@@ -46,7 +46,12 @@
         <activity
             android:name=".SolicitudesRecibidas"
             android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false">
+            <intent-filter>
+                <action android:name="OPEN_PETICIONES" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MisAmigos"
             android:screenOrientation="portrait"
