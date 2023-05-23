@@ -20,7 +20,7 @@ public class ServicioFirebase extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Intent intent = new Intent(this, SolicitudesRecibidas.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
             NotificationCompat.Builder builder = new  NotificationCompat.Builder(this, "1")
                     .setSmallIcon(R.drawable.logocolor)
                     .setContentTitle(remoteMessage.getNotification().getTitle())
