@@ -142,21 +142,6 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         dialog.setContentView(R.layout.dialog_peticion);
         dialog.setCancelable(true);
 
-        // Establecer márgenes izquierdo y derecho
-        Window window = dialog.getWindow();
-        if (window != null) {
-            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-            layoutParams.copyFrom(window.getAttributes());
-
-            int marginInPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30,
-                    getResources().getDisplayMetrics());
-
-            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-            layoutParams.horizontalMargin = marginInPixels / getResources().getDisplayMetrics().widthPixels;
-
-            window.setAttributes(layoutParams);
-        }
-
         Button btn_enviar = dialog.findViewById(R.id.btn_enviarSolicitud);
         btn_enviar.setOnClickListener(new View.OnClickListener() {
             @Override
