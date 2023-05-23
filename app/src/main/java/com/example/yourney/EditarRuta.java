@@ -158,7 +158,7 @@ public class EditarRuta extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ArrayList<String> lista = (ArrayList<String>) getIntent().getSerializableExtra("editores");
-                if(lista == null) {
+                if(lista != null) {
                     for (int i = 0; i < lista.size(); i++) {
                         Data datos = new Data.Builder()
                                 .putString("accion", "insert")
