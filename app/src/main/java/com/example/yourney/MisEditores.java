@@ -151,6 +151,7 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
                 intent.putExtra("dificultadRuta", getIntent().getIntExtra("dificultadRuta", 1));
                 intent.putExtra("infoRuta", getIntent().getStringExtra("infoRuta"));
                 intent.putExtra("visibilidadRuta", getIntent().getIntExtra("visibilidadRuta", 1));
+                intent.putExtra("idRuta", getIntent().getIntExtra("idRuta", 1));
                 intent.putExtra("parent", "VerRuta");
                 intent.putExtra("parentVerRuta", parent);
 
