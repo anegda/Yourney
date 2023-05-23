@@ -1,6 +1,7 @@
 package com.example.yourney;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.arch.core.executor.DefaultTaskExecutor;
 import androidx.core.app.ActivityCompat;
@@ -15,6 +16,7 @@ import androidx.work.WorkManager;
 import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -440,5 +442,25 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
             }
             mMap.addPolyline(line);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this).setIcon(R.drawable.logocolor).setTitle(getString(R.string.salir_grabar)).setMessage(getString(R.string.salir_grabar2))
+                .setPositiveButton(getString(R.string.si), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        locationService.guardarRuta();
+                        startActivity(new Intent(GrabarRuta.this, MainActivity.class));
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
     }
 }

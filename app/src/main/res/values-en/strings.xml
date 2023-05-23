@@ -97,4 +97,6 @@
     <string name="rutas_publicas">Public routes</string>
     <string name="mis_editores">My editors</string>
     <string name="solicitud_enviada">Friend request sent!</string>
+    <string name="salir_grabar">Are you sure you want to exit?</string>
+    <string name="salir_grabar2">You will lose the route record</string>
 </resources>
