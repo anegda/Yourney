@@ -96,4 +96,5 @@
     <string name="galeria2">From here you can add new photos or download the entire album.</string>
     <string name="rutas_publicas">Public routes</string>
     <string name="mis_editores">My editors</string>
+    <string name="solicitud_enviada">Friend request sent!</string>
 </resources>
