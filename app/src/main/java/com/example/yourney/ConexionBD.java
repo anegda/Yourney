@@ -468,7 +468,7 @@ public class ConexionBD extends Worker {
                 params = params + "&idRuta=" + Integer.toString(datos.getInt("idRuta",0));
             }
             if(consulta.equals("PeticionLegal")){
-                params = params + "&username2=" + Integer.toString(datos.getInt("username2",0));
+                params = params + "&username2=" + datos.getString("username2");
             }
             System.out.println(url+params);
             URL urlFinal = new URL(url + params);
