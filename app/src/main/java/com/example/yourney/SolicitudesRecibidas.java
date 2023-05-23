@@ -70,7 +70,7 @@ public class SolicitudesRecibidas extends AppCompatActivity implements ElAdaptad
         getBaseContext().getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mis_amigos);
+        setContentView(R.layout.activity_mis_solicitudes);
 
         buscadorUsuarios = findViewById(R.id.search_friends);
         lalista = findViewById(R.id.elreciclerview);

@@ -3,6 +3,8 @@ package com.example.yourney;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
@@ -22,6 +24,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -79,6 +84,13 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
 
         //AÑADIMOS EL ACTION BAR Y EL NAVIGATIONDRAWER
         setSupportActionBar(findViewById(R.id.labarra));
+
+        Toolbar toolbar = findViewById(R.id.labarra);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false); // Oculta el título por defecto
+        }
+
 
         final DrawerLayout elmenudesplegable = findViewById(R.id.drawer_layout);
         NavigationView elnavigation = findViewById(R.id.elnavigationview);
@@ -212,6 +224,12 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         LinearLayoutManager elLayoutLineal= new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         lalista.setLayoutManager(elLayoutLineal);
 
+        Drawable navigationIcon = toolbar.getNavigationIcon();
+        // Cambia el color del icono del desplegable
+        if (navigationIcon != null) {
+            navigationIcon.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            toolbar.setNavigationIcon(navigationIcon);
+        }
     }
 
     @Override

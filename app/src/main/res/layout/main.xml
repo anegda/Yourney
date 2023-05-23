@@ -3,65 +3,69 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center_horizontal"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/labarra"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/labarra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#65a34d"
+            android:elevation="4dp"/>
+
+        <TextView
+            android:id="@+id/tvRutinasPers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="31dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="31dp"
+            android:text="@string/mis_rutas"
+            android:textSize="35sp"
+            style="@style/f_go_xl_b" />
+
+        <TextView
+            android:id="@+id/tvDescrRutPers"
+            android:layout_width="347dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="31dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="31dp"
+            style="@style/f_gc_s"
+            android:text="@string/descr_rutas" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/elreciclerview"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5pt"
+            android:clipToPadding="true"
+            android:scrollbars="vertical" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="135dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginLeft="50dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <TextView
-        android:id="@+id/tvRutinasPers"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="31dp"
-        android:text="@string/mis_rutas"
-        android:textSize="35sp"
-        style="@style/f_go_xl_b"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labarra" />
-
-    <TextView
-        android:id="@+id/tvDescrRutPers"
-        android:layout_width="347dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        style="@style/f_gc_s"
-        android:text="@string/descr_rutas"
-        app:layout_constraintStart_toStartOf="@+id/tvRutinasPers"
-        app:layout_constraintTop_toBottomOf="@+id/tvRutinasPers" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/elreciclerview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:clipToPadding="true"
-        android:scrollbars="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDescrRutPers" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/yourblnaco2"
+        tools:ignore="NotSibling" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:cardBackgroundColor="#75a064"
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="#65a34d"
         app:cardCornerRadius="30dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -74,6 +78,5 @@
             android:src="@drawable/annadiruta2" />
 
     </androidx.cardview.widget.CardView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
