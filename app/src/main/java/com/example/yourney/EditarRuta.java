@@ -157,6 +157,30 @@ public class EditarRuta extends AppCompatActivity {
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ArrayList<String> lista = (ArrayList<String>) getIntent().getSerializableExtra("editores");
+                if(lista != null) {
+                    for (int i = 0; i < lista.size(); i++) {
+                        Data datos = new Data.Builder()
+                                .putString("accion", "insert")
+                                .putString("consulta", "Editores")
+                                .putInt("idRuta", idRuta)
+                                .putString("username", lista.get(i).toString())
+                                .build();
+
+                        OneTimeWorkRequest insertEditores = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                .setInputData(datos)
+                                .build();
+                        WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(insertEditores.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
+                            @Override
+                            public void onChanged(WorkInfo workInfo) {
+                                Log.d("INSERTADO", "Insert");
+                            }
+                        });
+
+                        WorkManager.getInstance(EditarRuta.this).enqueue(insertEditores);
+                    }
+                }
+
                 //COGEMOS LA FOTO DEL IMAGEVIEW
                 if (fotoDescriptiva == null) {
                     ImageView fotoDesc = (ImageView) findViewById(R.id.fotoDescRuta);
@@ -250,6 +274,7 @@ public class EditarRuta extends AppCompatActivity {
                 i.putExtra("dificultadRuta", difRadioButtonID);
                 i.putExtra("infoRuta", descr);
                 i.putExtra("visibilidadRuta", visRadioButtonID);
+                i.putExtra("idRuta", idRuta);
                 i.putExtra("parent", parent);
                 i.putExtra("parentVerRuta", parent2);
                 startActivity(i);
