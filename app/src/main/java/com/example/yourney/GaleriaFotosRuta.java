@@ -87,17 +87,22 @@ public class GaleriaFotosRuta extends AppCompatActivity {
         setContentView(R.layout.activity_galeria_fotos_ruta);
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null && idRuta == null) {
+        if (extras != null) {
             idRuta = extras.getInt("idRuta");
             editor = extras.getBoolean("editor");
             parent = extras.getString("parent");
         }
 
+        System.out.println("############### EDITOR: " + editor);
+        System.out.println("############### IDRUTA: " + idRuta);
+
         if(!editor){
             ImageView descargar = findViewById(R.id.btnDescargar);
             descargar.setEnabled(false);
+            descargar.setVisibility(View.GONE);
             ImageView btn_anadir = findViewById(R.id.btnAdd);
             btn_anadir.setEnabled(false);
+            btn_anadir.setVisibility(View.GONE);
         }
 
         idImgList = new ArrayList<>();
@@ -442,7 +447,7 @@ public class GaleriaFotosRuta extends AppCompatActivity {
         Intent intent = new Intent(GaleriaFotosRuta.this, VerRuta.class);
         intent.putExtra("idRuta", idRuta);
         intent.putExtra("parent", parent);
-        startActivity(intent);
         finish();
+        startActivity(intent);
     }
 }

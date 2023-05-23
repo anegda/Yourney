@@ -54,7 +54,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     Intent i = new Intent(context, ImagenGaleria.class);
                     i.putExtra("imgBlob", "nananananana");
                     i.putExtra("idRuta", GaleriaFotosRuta.idRuta);
+                    System.out.println("############### IDRUTA: " + GaleriaFotosRuta.idRuta);
                     i.putExtra("editor", GaleriaFotosRuta.editor);
+                    System.out.println("############### EDITOR: " + GaleriaFotosRuta.editor);
                     i.putExtra("parent", GaleriaFotosRuta.parent);
                     fotoElegidaBlob = imageBlobArrayList.get(position);
                     idImgElegida = idImgList.get(position);

@@ -1,6 +1,7 @@
 package com.example.yourney;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 import androidx.work.Data;
@@ -62,6 +63,9 @@ public class ImagenGaleria extends AppCompatActivity {
             parent = extras.getString("parent");
 
         }
+
+        System.out.println("############### EDITOR: " + editor);
+        System.out.println("############### IDRUTA: " + idRuta);
 
         Locale.setDefault(nuevaloc);
         Configuration configuration = getBaseContext().getResources().getConfiguration();
@@ -151,6 +155,19 @@ public class ImagenGaleria extends AppCompatActivity {
                 WorkManager.getInstance(ImagenGaleria.this).enqueue(delete);
             }
         });
+
+        // Cambio la visibilidad en caso de no ser editor
+        if (!editor) {
+            btn_eliminar.setEnabled(false);
+            CardView card_eliminar = findViewById(R.id.cardView);
+            card_eliminar.setVisibility(View.GONE);
+            btn_eliminar.setVisibility(View.GONE);
+
+            btn_descargar.setEnabled(false);
+            CardView card_descargar = findViewById(R.id.cardView);
+            card_descargar.setVisibility(View.GONE);
+            btn_descargar.setVisibility(View.GONE);
+        }
     }
 
     @Override
