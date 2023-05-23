@@ -18,7 +18,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -138,7 +140,7 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
 
     void showDialogoPeticion() {
         // Creo el dialogo de login con el layout
-        Dialog dialog = new Dialog(this, R.style.RoundedDialogStyle);
+        Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_peticion);
         dialog.setCancelable(true);
 
@@ -295,6 +297,9 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
                 }
             }
         });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
 
         dialog.show();
     }
