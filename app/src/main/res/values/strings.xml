@@ -98,5 +98,6 @@
     <string name="solicitud_enviada">Solicitud de amistad enviada!</string>
     <string name="salir_grabar">¿Estás seguro de que desea salir?</string>
     <string name="salir_grabar2">Se perderá la grabación de la ruta</string>
+    <string name="enviar_peticion">Petición de amistad</string>
 
 </resources>
