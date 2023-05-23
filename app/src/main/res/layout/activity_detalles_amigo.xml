@@ -43,7 +43,7 @@
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+        android:id="@+id/btn_eliminar"
         android:layout_width="190dp"
         android:layout_height="50dp"
         android:layout_margin="10dp"
@@ -59,7 +59,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/btn_eliminar"
+                android:id="@+id/btn_eliminar2"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="5dp"
@@ -77,9 +77,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Eliminar amigo"
-                app:layout_constraintBottom_toBottomOf="@id/btn_eliminar"
-                app:layout_constraintStart_toEndOf="@id/btn_eliminar"
-                app:layout_constraintTop_toTopOf="@id/btn_eliminar" />
+                app:layout_constraintBottom_toBottomOf="@id/btn_eliminar2"
+                app:layout_constraintStart_toEndOf="@id/btn_eliminar2"
+                app:layout_constraintTop_toTopOf="@id/btn_eliminar2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

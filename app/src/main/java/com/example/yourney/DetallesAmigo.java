@@ -1,6 +1,7 @@
 package com.example.yourney;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 import androidx.work.Data;
@@ -97,7 +98,7 @@ public class DetallesAmigo extends AppCompatActivity {
         });
         WorkManager.getInstance(DetallesAmigo.this).enqueue(selectUsuario);
 
-        ImageView btnEliminar = findViewById(R.id.btn_eliminar);
+        CardView btnEliminar = findViewById(R.id.btn_eliminar);
         btnEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
