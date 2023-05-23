@@ -10,7 +10,7 @@
         android:id="@+id/green_rectangle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="#3B7E26"
+        android:background="#65a34d"
         android:elevation="4dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:elevation="6dp"
-        android:text="Guardar Ruta"
+        android:text="@string/editar_ruta"
         android:textColor="#ffffff"
         android:textSize="20dp"
         android:textStyle="bold"
@@ -54,6 +54,56 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tituloRutaText" />
 
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/dificultadRutaText"
+        app:layout_constraintTop_toBottomOf="@+id/tituloRutaEdit"
+        tools:ignore="NotSibling"
+        tools:layout_editor_absoluteX="10dp" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/visibilidadRutaText"
+        app:layout_constraintTop_toBottomOf="@+id/otrosMutilineText"
+        tools:ignore="NotSibling"
+        tools:layout_editor_absoluteX="10dp" />
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/editoresText"
+        app:layout_constraintTop_toBottomOf="@+id/visibilidadRutaGroup"
+        tools:ignore="NotSibling"
+        tools:layout_editor_absoluteX="10dp" />
+
+    <View
+        android:id="@+id/view6"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/btn_guardarDatosRuta"
+        tools:ignore="NotSibling"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintBottom_toTopOf="@+id/informacionExtraRutaText"
+        app:layout_constraintTop_toBottomOf="@+id/dificultadRutaGroup"
+        tools:ignore="NotSibling"
+        tools:layout_editor_absoluteX="10dp" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="90dp"
@@ -82,7 +132,7 @@
         android:layout_height="wrap_content"
         style="@style/f_gO_m_b"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:text="@string/dificultad"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tituloRutaEdit" />
@@ -91,15 +141,16 @@
     <TextView
         android:id="@+id/editoresText"
         style="@style/f_gO_m_b"
-        android:layout_width="81dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="15dp"
+        android:layout_width="82dp"
+        android:layout_height="26dp"
         android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
         android:text="Editores"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/visibilidadRutaGroup" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView3"
         android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -149,7 +200,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         style="@style/f_gO_m_b"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:text="@string/infoExtra"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dificultadRutaGroup" />
@@ -176,7 +227,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="25dp"
         android:text="@string/visibilidad"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/otrosMutilineText" />
@@ -239,8 +290,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="30dp"
         android:layout_height="30dp"
-        app:cardBackgroundColor="#3B7E26"
-        app:cardCornerRadius="10dp"
+        app:cardBackgroundColor="#65a34d"
+        app:cardCornerRadius="30dp"
         app:layout_constraintBottom_toBottomOf="@+id/editoresText"
         app:layout_constraintStart_toEndOf="@+id/editoresText"
         app:layout_constraintTop_toTopOf="@+id/editoresText">
@@ -249,7 +300,7 @@
             android:id="@+id/btn_anadirEditores"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="6dp"
+            android:padding="8dp"
             android:scaleType="centerInside"
             android:src="@drawable/anadir" />
 

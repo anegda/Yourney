@@ -97,7 +97,7 @@ public class DetallesAmigo extends AppCompatActivity {
         });
         WorkManager.getInstance(DetallesAmigo.this).enqueue(selectUsuario);
 
-        Button btnEliminar = (Button) findViewById(R.id.btn_eliminarAmigo);
+        ImageView btnEliminar = findViewById(R.id.btn_eliminar);
         btnEliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

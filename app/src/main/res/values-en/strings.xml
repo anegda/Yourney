@@ -84,4 +84,16 @@
     <string name="campos_vacios">There are empty fields</string>
     <string name="mensaje_error_peti">You can\'t send friend requests to yourself</string>
     <string name="placeholder">Oops, looks like there\'s nothing here yet...</string>
+    <string name="username">Username</string>
+    <string name="nombre">Name</string>
+    <string name="apellido">Surname</string>
+    <string name="email">Email</string>
+    <string name="peticion">Send friend request</string>
+    <string name="imagen">Image</string>
+    <string name="editar_ruta">Edit route</string>
+    <string name="esperando">Waiting to record</string>
+    <string name="galeria1">This is the gallery of images of your route.</string>
+    <string name="galeria2">From here you can add new photos or download the entire album.</string>
+    <string name="rutas_publicas">Public routes</string>
+    <string name="mis_editores">My editors</string>
 </resources>

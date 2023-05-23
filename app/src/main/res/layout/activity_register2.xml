@@ -70,7 +70,7 @@
         android:layout_width="227dp"
         android:layout_height="84dp"
         android:layout_marginTop="116dp"
-        android:alpha=".65"
+        android:alpha=".75"
         android:gravity="center"
         android:text="@string/str15"
         app:layout_constraintEnd_toEndOf="parent"
