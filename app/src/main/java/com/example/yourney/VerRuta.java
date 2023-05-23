@@ -202,10 +202,14 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
                     if (output.getString("resultado").equals("Sin resultado")) {
                         Button btn_editarRuta = findViewById(R.id.btn_editar);
                         btn_editarRuta.setEnabled(false);
+                        btn_editarRuta.setVisibility(View.GONE);
                         editor=false;
                     }else{
                         editor=true;
                     }
+                    System.out.println("############### EDITOR: " + editor);
+                    System.out.println("############### IDRUTA: " + idRuta);
+
                 }
             }
         });
