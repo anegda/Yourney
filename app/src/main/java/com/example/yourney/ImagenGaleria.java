@@ -87,6 +87,21 @@ public class ImagenGaleria extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         imgView.setImageBitmap(bitmap);
 
+        if (!editor) {
+            CardView cardDescargar = findViewById(R.id.cardView);
+            ImageView descargar = findViewById(R.id.btn_descargar_img);
+            cardDescargar.setVisibility(View.GONE);
+            cardDescargar.setVisibility(View.GONE);
+            descargar.setEnabled(false);
+
+            CardView cardEliminar = findViewById(R.id.cardView2);
+            ImageView eliminar = findViewById(R.id.btn_eliminar_img);
+            cardEliminar.setVisibility(View.GONE);
+            eliminar.setVisibility(View.GONE);
+            eliminar.setEnabled(false);
+
+        }
+
         ImageView btn_descargar = findViewById(R.id.btn_descargar_img);
         btn_descargar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,18 +171,6 @@ public class ImagenGaleria extends AppCompatActivity {
             }
         });
 
-        // Cambio la visibilidad en caso de no ser editor
-        if (!editor) {
-            btn_eliminar.setEnabled(false);
-            CardView card_eliminar = findViewById(R.id.cardView);
-            card_eliminar.setVisibility(View.GONE);
-            btn_eliminar.setVisibility(View.GONE);
-
-            btn_descargar.setEnabled(false);
-            CardView card_descargar = findViewById(R.id.cardView);
-            card_descargar.setVisibility(View.GONE);
-            btn_descargar.setVisibility(View.GONE);
-        }
     }
 
     @Override

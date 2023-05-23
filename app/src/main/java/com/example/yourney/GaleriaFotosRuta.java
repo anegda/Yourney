@@ -1,6 +1,7 @@
 package com.example.yourney;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -97,12 +98,17 @@ public class GaleriaFotosRuta extends AppCompatActivity {
         System.out.println("############### IDRUTA: " + idRuta);
 
         if(!editor){
+            CardView cardDescargar = findViewById(R.id.cardView);
             ImageView descargar = findViewById(R.id.btnDescargar);
             descargar.setEnabled(false);
             descargar.setVisibility(View.GONE);
+            cardDescargar.setVisibility(View.GONE);
+
+            CardView cardAnadir = findViewById(R.id.cardView2);
             ImageView btn_anadir = findViewById(R.id.btnAdd);
             btn_anadir.setEnabled(false);
             btn_anadir.setVisibility(View.GONE);
+            cardAnadir.setVisibility(View.GONE);
         }
 
         idImgList = new ArrayList<>();
