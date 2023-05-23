@@ -77,7 +77,7 @@ public class EditarRuta extends AppCompatActivity {
 
         // Registro la acitividad de la que viene el intent
         parent = getIntent().getStringExtra("parent");
-        if (parent.equals("VerRuta")) {
+        if(parent.equals("VerRuta")) {
             parent2 = getIntent().getStringExtra("parentVerRuta");
         }
         idRuta = getIntent().getIntExtra("idRuta", 0);
@@ -231,11 +231,24 @@ public class EditarRuta extends AppCompatActivity {
         btn_editores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //COGEMOS LOS DATOS DE LOS CAMPOS
+                EditText tituloEdit = findViewById(R.id.tituloRutaEdit);
+                String titulo = tituloEdit.getText().toString();
+
+                EditText otrosEdit = findViewById(R.id.otrosMutilineText);
+                String descr = otrosEdit.getText().toString();
+
+                RadioGroup dificultadGroup = findViewById(R.id.dificultadRutaGroup);
+                int difRadioButtonID = dificultadGroup.getCheckedRadioButtonId();
+
+                RadioGroup visibilidadGroup = findViewById(R.id.visibilidadRutaGroup);
+                int visRadioButtonID = visibilidadGroup.getCheckedRadioButtonId();
+
                 Intent i = new Intent(EditarRuta.this, MisEditores.class);
-                i.putExtra("tituloRuta", tituloRuta.getText().toString());
-                i.putExtra("dificultadRuta", dificultad.indexOfChild(dificultad.findViewById(dificultad.getCheckedRadioButtonId())));
-                i.putExtra("infoRuta", informacionExtra.getText().toString());
-                i.putExtra("visibilidadRuta", visibilidad.indexOfChild(visibilidad.findViewById(visibilidad.getCheckedRadioButtonId())));
+                i.putExtra("tituloRuta", titulo);
+                i.putExtra("dificultadRuta", difRadioButtonID);
+                i.putExtra("infoRuta", descr);
+                i.putExtra("visibilidadRuta", visRadioButtonID);
                 startActivity(i);
                 finish();
             }

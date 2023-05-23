@@ -38,6 +38,8 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
     List<ItemListEditor> items = new ArrayList<ItemListEditor>();
     ArrayList<String> editores = new ArrayList<String>();
     ElAdaptadorRecyclerEditor adapter = new ElAdaptadorRecyclerEditor(items, MisEditores.this);
+    private String parent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -65,7 +67,7 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
         lalista = findViewById(R.id.elreciclerview);
         btnGuardar = findViewById(R.id.btnGuardarEditores);
 
-        LinearLayoutManager manager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         lalista.setLayoutManager(manager);
 
         // OBTENGO EL USUARIO ACTUAL
@@ -94,7 +96,7 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
                         JSONParser parser = new JSONParser();
                         try {
                             // Obtengo la informacion de las rutas devueltas
-                            JSONArray jsonResultado =(JSONArray) parser.parse(output.getString("resultado"));
+                            JSONArray jsonResultado = (JSONArray) parser.parse(output.getString("resultado"));
 
                             Integer i = 0;
                             System.out.println("***** " + jsonResultado + " *****");
@@ -106,7 +108,7 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
                             }
 
                             items = getItems(amigos);
-                            adapter = new ElAdaptadorRecyclerEditor(items,MisEditores.this);
+                            adapter = new ElAdaptadorRecyclerEditor(items, MisEditores.this);
                             lalista.setAdapter(adapter);
 
                         } catch (ParseException e) {
@@ -140,11 +142,13 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
 
     }
 
-    /** Metodo para probar si funciona el reciclerView, luego se cambiara por una llamada a la BD **/
+    /**
+     * Metodo para probar si funciona el reciclerView, luego se cambiara por una llamada a la BD
+     **/
     private List<ItemListEditor> getItems(ArrayList<String> amigos) {
         List<ItemListEditor> itemListAmigos = new ArrayList<>();
         for (String amigo : amigos) {
-            ItemListEditor amigoAct = new ItemListEditor(amigo, "prueba","prueba", false);
+            ItemListEditor amigoAct = new ItemListEditor(amigo, "prueba", "prueba", false);
             itemListAmigos.add(amigoAct);
         }
         return itemListAmigos;
@@ -164,9 +168,9 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
 
     @Override
     public void itemClick(ItemListEditor item) {
-        if(item.isChecked){
-            for (int i=0;i<editores.size();i++) {
-                if(editores.get(i)==item.getUsername()){
+        if (item.isChecked) {
+            for (int i = 0; i < editores.size(); i++) {
+                if (editores.get(i) == item.getUsername()) {
                     editores.remove(i);
                 }
             }
@@ -177,5 +181,19 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
             editores.add(item.getUsername());
             System.out.println(editores);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        // Vuelvo a la actividad que toque
+        Intent intent = new Intent(MisEditores.this, EditarRuta.class);
+        intent.putExtra("tituloRuta", getIntent().getStringExtra("tituloRuta"));
+        intent.putExtra("dificultadRuta", getIntent().getIntExtra("dificultadRuta", 1));
+        intent.putExtra("infoRuta", getIntent().getStringExtra("infoRuta"));
+        intent.putExtra("visibilidadRuta", getIntent().getIntExtra("visibilidadRuta", 1));
+        startActivity(intent);
+        finish();
     }
 }
