@@ -95,5 +95,6 @@
     <string name="galeria2">Desde aquí puedes añadir nuevas fotos o descargar el álbum entero.</string>
     <string name="rutas_publicas">Rutas públicas</string>
     <string name="mis_editores">Mis editores</string>
+    <string name="solicitud_enviada">Solicitud de amistad enviada!</string>
 
 </resources>

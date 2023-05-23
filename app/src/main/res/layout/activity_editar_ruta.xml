@@ -175,7 +175,6 @@
         android:layout_marginTop="5dp"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        android:checkedButton="@+id/facil"
         app:layout_constraintTop_toBottomOf="@id/dificultadRutaText">
         <RadioButton android:id="@+id/facil"
             android:layout_width="wrap_content"

@@ -108,7 +108,7 @@ public class EnviarSolicitud extends AppCompatActivity {
                                     WorkManager.getInstance(EnviarSolicitud.this).getWorkInfoByIdLiveData(insert.getId()).observe(EnviarSolicitud.this, new Observer<WorkInfo>() {
                                         @Override
                                         public void onChanged(WorkInfo workInfo) {
-                                            Toast.makeText(EnviarSolicitud.this, "OK", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(EnviarSolicitud.this, getString(R.string.solicitud_enviada), Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                     WorkManager.getInstance(EnviarSolicitud.this).enqueue(insert);
