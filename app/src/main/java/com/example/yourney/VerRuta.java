@@ -42,6 +42,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.text.DecimalFormat;
 import java.util.Base64;
 import java.util.Locale;
 
@@ -129,6 +130,9 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
                             final String duracionFormato = String.format("%02d:%02d:%02d", hours, minutes, seconds);
                             final String distanciaFormato = String.format("%.2f KM", distancia);
                             final String velocidadFormato = String.format("%.2f KM/H", velocidad);
+                            double calorias = pasos/1000.0 *35;
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            String caloriasFormato = decimalFormat.format(calorias);
 
                             //OBTENEMOS LOS TEXTVIEWS y el IMAGEVIEW
                             ImageView fotoDescR = (ImageView) findViewById(R.id.fotoDescR);
@@ -151,7 +155,6 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
                                 Drawable d = new BitmapDrawable(getResources(), bitmap);
                                 fotoDescR.setImageBitmap(bitmap);
                             }
-
                             tituloRText.setText(titulo);
                             descripcionRText.setText(descripcion);
                             creadorRText.setText(creador);
@@ -166,7 +169,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
                             distanciaRNum.setText(distanciaFormato);
                             velocidadRNum.setText(velocidadFormato);
                             pasosRNum.setText(String.valueOf(pasos));
-                            caloriasRNum.setText(String.valueOf(pasos/1000*35));
+                            caloriasRNum.setText(caloriasFormato);
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
