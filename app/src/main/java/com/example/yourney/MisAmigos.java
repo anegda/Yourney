@@ -23,7 +23,10 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -138,6 +141,21 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         Dialog dialog = new Dialog(this, R.style.RoundedDialogStyle);
         dialog.setContentView(R.layout.dialog_peticion);
         dialog.setCancelable(true);
+
+        // Establecer márgenes izquierdo y derecho
+        Window window = dialog.getWindow();
+        if (window != null) {
+            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+            layoutParams.copyFrom(window.getAttributes());
+
+            int marginInPixels = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30,
+                    getResources().getDisplayMetrics());
+
+            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+            layoutParams.horizontalMargin = marginInPixels / getResources().getDisplayMetrics().widthPixels;
+
+            window.setAttributes(layoutParams);
+        }
 
         Button btn_enviar = dialog.findViewById(R.id.btn_enviarSolicitud);
         btn_enviar.setOnClickListener(new View.OnClickListener() {
