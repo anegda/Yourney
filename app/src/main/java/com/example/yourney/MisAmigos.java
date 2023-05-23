@@ -241,8 +241,7 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
                                                             WorkManager.getInstance(MisAmigos.this).getWorkInfoByIdLiveData(notif.getId()).observe(MisAmigos.this, new Observer<WorkInfo>() {
                                                                 @Override
                                                                 public void onChanged(WorkInfo workInfo) {
-                                                                    startActivity(new Intent(MisAmigos.this, SolicitudesRecibidas.class));
-                                                                    finish();
+                                                                    dialog.cancel();
                                                                 }
                                                             });
                                                             WorkManager.getInstance(MisAmigos.this).enqueue(notif);
