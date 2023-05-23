@@ -427,8 +427,8 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
 
                             float zoom = 15.0f;
                             if (lastLoc != null && firstLoc != null) {
-                                mMap.addMarker(new MarkerOptions().position(firstLoc).title("Comienzo"));
-                                mMap.addMarker(new MarkerOptions().position(lastLoc).title("Fin"));
+                                mMap.addMarker(new MarkerOptions().position(firstLoc).title(getString(R.string.comienzo)));
+                                mMap.addMarker(new MarkerOptions().position(lastLoc).title(getString(R.string.fin)));
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstLoc, zoom));
                             }
                             mMap.addPolyline(line);

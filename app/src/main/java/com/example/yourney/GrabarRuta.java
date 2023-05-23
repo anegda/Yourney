@@ -437,7 +437,7 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
 
             float zoom = 15.0f;
             if (firstLoc != null) {
-                mMap.addMarker(new MarkerOptions().position(firstLoc).title("Comienzo"));
+                mMap.addMarker(new MarkerOptions().position(firstLoc).title(getString(R.string.comienzo)));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(firstLoc, zoom));
             }
             mMap.addPolyline(line);
