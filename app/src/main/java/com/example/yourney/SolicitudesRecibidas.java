@@ -207,7 +207,7 @@ public class SolicitudesRecibidas extends AppCompatActivity implements ElAdaptad
 
     void showDialogoPeticion() {
         // Creo el dialogo de login con el layout
-        Dialog dialog = new Dialog(this);
+        Dialog dialog = new Dialog(this, R.style.RoundedDialogStyle);
         dialog.setContentView(R.layout.dialog_peticion);
         dialog.setCancelable(true);
 
