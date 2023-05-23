@@ -158,24 +158,27 @@ public class EditarRuta extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ArrayList<String> lista = (ArrayList<String>) getIntent().getSerializableExtra("editores");
-                Log.d("LISTA EDITORES", lista.toString());
-                for(int i=0;i<lista.size();i++) {
-                    Data datos = new Data.Builder()
-                            .putString("accion", "insert")
-                            .putString("consulta", "Editores")
-                            .putInt("idRuta", idRuta)
-                            .putString("username", lista.get(i).toString())
-                            .build();
+                if(lista == null) {
+                    for (int i = 0; i < lista.size(); i++) {
+                        Data datos = new Data.Builder()
+                                .putString("accion", "insert")
+                                .putString("consulta", "Editores")
+                                .putInt("idRuta", idRuta)
+                                .putString("username", lista.get(i).toString())
+                                .build();
 
-                    OneTimeWorkRequest insertEditores = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                            .setInputData(datos)
-                            .build();
-                    WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(insertEditores.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
-                        @Override
-                        public void onChanged(WorkInfo workInfo) {
-                            Log.d("INSERTADO", "Insert");
-                        }
-                    });
+                        OneTimeWorkRequest insertEditores = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                .setInputData(datos)
+                                .build();
+                        WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(insertEditores.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
+                            @Override
+                            public void onChanged(WorkInfo workInfo) {
+                                Log.d("INSERTADO", "Insert");
+                            }
+                        });
+
+                        WorkManager.getInstance(EditarRuta.this).enqueue(insertEditores);
+                    }
                 }
 
                 //COGEMOS LA FOTO DEL IMAGEVIEW
