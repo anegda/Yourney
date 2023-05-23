@@ -82,67 +82,74 @@ public class EditarRuta extends AppCompatActivity {
         }
         idRuta = getIntent().getIntExtra("idRuta", 0);
 
-        //OBTENEMOS LOS GENERALES DE LA RUTA
-        int idRuta = getIntent().getIntExtra("idRuta",0);
-        Data datos = new Data.Builder()
-                .putString("accion", "selectRuta")
-                .putString("consulta", "InfoRuta")
-                .putInt("idRuta", idRuta)
-                .build();
-        OneTimeWorkRequest selectRuta = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                .setInputData(datos)
-                .build();
-        WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(selectRuta.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
-            @Override
-            public void onChanged(WorkInfo workInfo) {
-                if (workInfo != null && workInfo.getState().isFinished()) {
-                    Data output = workInfo.getOutputData();
-                    if (!output.getString("resultado").equals("Sin resultado")) {
-                        try {
-                            String titulo = output.getString("Nombre");
-                            String descripcion = output.getString("Descripcion");
-                            String dificultad = output.getString("Dificultad");
-                            int visibilidad = output.getInt("Visibilidad", 0);
+        if(parent.equals("VerRuta")) {
+            //OBTENEMOS LOS GENERALES DE LA RUTA (SOLO SI VENIMOS DE VER RUTA)
+            int idRuta = getIntent().getIntExtra("idRuta", 0);
+            Data datos = new Data.Builder()
+                    .putString("accion", "selectRuta")
+                    .putString("consulta", "InfoRuta")
+                    .putInt("idRuta", idRuta)
+                    .build();
+            OneTimeWorkRequest selectRuta = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                    .setInputData(datos)
+                    .build();
+            WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(selectRuta.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
+                @Override
+                public void onChanged(WorkInfo workInfo) {
+                    if (workInfo != null && workInfo.getState().isFinished()) {
+                        Data output = workInfo.getOutputData();
+                        if (!output.getString("resultado").equals("Sin resultado")) {
+                            try {
+                                String titulo = output.getString("Nombre");
+                                String descripcion = output.getString("Descripcion");
+                                String dificultad = output.getString("Dificultad");
+                                int visibilidad = output.getInt("Visibilidad", 0);
 
-                            EditText tituloEdit = findViewById(R.id.tituloRutaEdit);
-                            tituloEdit.setText(titulo);
-                            EditText otrosEdit = findViewById(R.id.otrosMutilineText);
-                            otrosEdit.setText(descripcion);
+                                EditText tituloEdit = findViewById(R.id.tituloRutaEdit);
+                                tituloEdit.setText(titulo);
+                                EditText otrosEdit = findViewById(R.id.otrosMutilineText);
+                                otrosEdit.setText(descripcion);
 
-                            if(dificultad.equals("Fácil")){
-                                RadioButton b = (RadioButton) findViewById(R.id.facil);
-                                b.setChecked(true);
-                            }else if(dificultad.equals("Medio")){
-                                RadioButton b = (RadioButton) findViewById(R.id.medio);
-                                b.setChecked(true);
-                            }else{
-                                RadioButton b = (RadioButton) findViewById(R.id.dificil);
-                                b.setChecked(true);
+                                RadioGroup dificultadGroup = findViewById(R.id.dificultadRutaGroup);
+                                RadioGroup visibilidadGroup = findViewById(R.id.visibilidadRutaGroup);
+                                dificultadGroup.clearCheck();
+                                visibilidadGroup.clearCheck();
+
+                                if (dificultad.equals("Fácil")) {
+                                    RadioButton b = (RadioButton) findViewById(R.id.facil);
+                                    b.setChecked(true);
+                                } else if (dificultad.equals("Medio")) {
+                                    RadioButton b = (RadioButton) findViewById(R.id.medio);
+                                    b.setChecked(true);
+                                } else {
+                                    RadioButton b = (RadioButton) findViewById(R.id.dificil);
+                                    b.setChecked(true);
+                                }
+
+                                if (visibilidad == 0) {
+                                    RadioButton b = (RadioButton) findViewById(R.id.privada);
+                                    b.setChecked(true);
+                                } else {
+                                    RadioButton b = (RadioButton) findViewById(R.id.publica);
+                                    b.setChecked(true);
+                                }
+
+                                if (fotoDescriptiva != null) {
+                                    byte[] encodeByte = Base64.getDecoder().decode(fotoDescriptiva);
+                                    Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                                    Drawable d = new BitmapDrawable(getResources(), bitmap);
+                                    ImageView fotoDescRuta = findViewById(R.id.fotoDescRuta);
+                                    fotoDescRuta.setImageBitmap(bitmap);
+                                }
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
                             }
-
-                            if(visibilidad==0){
-                                RadioButton b = (RadioButton) findViewById(R.id.privada);
-                                b.setChecked(true);
-                            } else{
-                                RadioButton b = (RadioButton) findViewById(R.id.publica);
-                                b.setChecked(false);
-                            }
-
-                            if (fotoDescriptiva!=null){
-                                byte[] encodeByte = Base64.getDecoder().decode(fotoDescriptiva);
-                                Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-                                Drawable d = new BitmapDrawable(getResources(), bitmap);
-                                ImageView fotoDescRuta = findViewById(R.id.fotoDescRuta);
-                                fotoDescRuta.setImageBitmap(bitmap);
-                            }
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
                         }
                     }
                 }
-            }
-        });
-        WorkManager.getInstance(EditarRuta.this).enqueue(selectRuta);
+            });
+            WorkManager.getInstance(EditarRuta.this).enqueue(selectRuta);
+        }
 
         Button btn_guardar = (Button) findViewById(R.id.btn_guardarDatosRuta);
         ImageView btn_editores = (ImageView) findViewById(R.id.btn_anadirEditores);
