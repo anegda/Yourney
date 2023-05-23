@@ -11,6 +11,7 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,9 +25,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -96,8 +99,7 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         añadirAmigo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MisAmigos.this, EnviarSolicitud.class));
-                finish();
+                showDialogoPeticion();
             }
         });
     }
@@ -129,5 +131,143 @@ public class MisAmigos extends AppCompatActivity implements ElAdaptadorRecyclerA
         startActivity(intent);
         // Termino esta actividad
         finish();
+    }
+
+    void showDialogoPeticion() {
+        // Creo el dialogo de login con el layout
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_peticion);
+        dialog.setCancelable(true);
+
+        Button btn_enviar = dialog.findViewById(R.id.btn_enviarSolicitud);
+        btn_enviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Cogemos del campo el nombre de usuario / mensaje / usuario actual
+                EditText userEdit = dialog.findViewById(R.id.usuarioEdit);
+                String userPeti = userEdit.getText().toString();
+                EditText mensajeEdit = dialog.findViewById(R.id.mensajeEdit);
+                String mensaje = mensajeEdit.getText().toString();
+                Sesion sesion = new Sesion(MisAmigos.this);
+                String username = sesion.getUsername();
+
+                // Comprobar que los campos no estén vacíos
+                if (mensaje.equals("") || userPeti.equals("")) {
+                    Toast.makeText(MisAmigos.this, R.string.campos_vacios, Toast.LENGTH_LONG).show();
+                }
+                else if(userPeti.equals(username)){
+                    Toast.makeText(MisAmigos.this, R.string.mensaje_error_peti, Toast.LENGTH_LONG).show();
+                }
+                else{
+                    // Comprobar credenciales contra la BD
+                    Data datos = new Data.Builder()
+                            .putString("accion", "selectUsuario")
+                            .putString("consulta", "Usuarios")
+                            .putString("username", userPeti)
+                            .build();
+
+                    // Peticion al Worker
+                    OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                            .setInputData(datos)
+                            .build();
+
+                    WorkManager.getInstance(MisAmigos.this).getWorkInfoByIdLiveData(select.getId()).observe(MisAmigos.this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            // Gestiono la respuesta de la peticion
+                            if (workInfo != null && workInfo.getState().isFinished()) {
+                                Data output = workInfo.getOutputData();
+                                if (!output.getString("resultado").equals("Sin resultado")) {
+                                    //si el usuario existe hacemos el insert
+
+                                    Data datosInsert = new Data.Builder()
+                                            .putString("accion", "insert")
+                                            .putString("consulta", "Peticiones")
+                                            .putString("username1", username)
+                                            .putString("username2", userPeti)
+                                            .putString("mensaje", mensaje)
+                                            .putInt("estado", 0)
+                                            .build();
+
+                                    OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                            .setInputData(datosInsert)
+                                            .build();
+
+                                    WorkManager.getInstance(MisAmigos.this).getWorkInfoByIdLiveData(insert.getId()).observe(MisAmigos.this, new Observer<WorkInfo>() {
+                                        @Override
+                                        public void onChanged(WorkInfo workInfo) {
+                                            Toast.makeText(MisAmigos.this, getString(R.string.solicitud_enviada), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    WorkManager.getInstance(MisAmigos.this).enqueue(insert);
+
+                                    //mientras también cogemos el token del receptor
+                                    Data datosSelectToken = new Data.Builder()
+                                            .putString("accion", "select")
+                                            .putString("consulta", "Tokens")
+                                            .putString("username", userPeti)
+                                            .build();
+
+                                    OneTimeWorkRequest selectToken = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                            .setInputData(datosSelectToken)
+                                            .build();
+                                    WorkManager.getInstance(MisAmigos.this).getWorkInfoByIdLiveData(selectToken.getId()).observe(MisAmigos.this, new Observer<WorkInfo>() {
+                                        @Override
+                                        public void onChanged(WorkInfo workInfo) {
+                                            if (workInfo != null && workInfo.getState().isFinished()) {
+                                                Data output = workInfo.getOutputData();
+                                                if (!output.getString("resultado").equals("Sin resultado")) {
+                                                    //si el usuario está logeado en algún dispositivo
+                                                    JSONParser parser = new JSONParser();
+                                                    try {
+                                                        JSONArray jsonResultado = (JSONArray) parser.parse(output.getString("resultado"));
+
+                                                        Integer i = 0;
+                                                        System.out.println("***** " + jsonResultado + " *****");
+                                                        while (i < jsonResultado.size()) {
+                                                            JSONObject row = (JSONObject) jsonResultado.get(i);
+                                                            System.out.println("***** " + row + " *****");
+                                                            String Token = (String) row.get("Token");
+
+                                                            Data datosNoti = new Data.Builder()
+                                                                    .putString("accion", "notifPeticion")
+                                                                    .putString("emisor", username)
+                                                                    .putString("receptor", Token)
+                                                                    .putString("mensaje", mensaje)
+                                                                    .build();
+                                                            OneTimeWorkRequest notif = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                                                    .setInputData(datosNoti)
+                                                                    .build();
+                                                            WorkManager.getInstance(MisAmigos.this).getWorkInfoByIdLiveData(notif.getId()).observe(MisAmigos.this, new Observer<WorkInfo>() {
+                                                                @Override
+                                                                public void onChanged(WorkInfo workInfo) {
+                                                                    startActivity(new Intent(MisAmigos.this, SolicitudesRecibidas.class));
+                                                                    finish();
+                                                                }
+                                                            });
+                                                            WorkManager.getInstance(MisAmigos.this).enqueue(notif);
+                                                            i = i + 1;
+                                                        }
+                                                    } catch (ParseException e) {
+                                                        throw new RuntimeException(e);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                    WorkManager.getInstance(MisAmigos.this).enqueue(selectToken);
+
+                                } else {
+                                    Toast.makeText(MisAmigos.this, R.string.peticion_incorrecta, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
+                    WorkManager.getInstance(MisAmigos.this).enqueue(select);
+                }
+            }
+        });
+
+        dialog.show();
     }
 }
