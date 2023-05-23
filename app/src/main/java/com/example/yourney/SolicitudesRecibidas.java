@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -207,7 +209,7 @@ public class SolicitudesRecibidas extends AppCompatActivity implements ElAdaptad
 
     void showDialogoPeticion() {
         // Creo el dialogo de login con el layout
-        Dialog dialog = new Dialog(this, R.style.RoundedDialogStyle);
+        Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_peticion);
         dialog.setCancelable(true);
 
@@ -338,6 +340,7 @@ public class SolicitudesRecibidas extends AppCompatActivity implements ElAdaptad
                 }
             }
         });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.show();
     }

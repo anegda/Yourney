@@ -73,7 +73,7 @@ public class LocationService extends Service {
     protected void guardarRuta() {
         //AQUI RESETEAMOS LOS PARÁMETROS
         locationListener.grabando = false;
-        fin = SystemClock.elapsedRealtime();
+        fin = 0;
         comienzo = 0;
         locationListener = new MyLocationListener();
     }

@@ -83,13 +83,14 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grabar_ruta);
 
+        locationService=null;
+
         //DE PRIMERAS HABILITAMOS EL BOTÓN DE EMPEZAR Y DESHABILITAMOS EL DE PARAR
         Button parar_btn = (Button) findViewById(R.id.btnParar);
         Button empezar_btn = (Button) findViewById(R.id.btnEmpezar);
         empezar_btn.setEnabled(true);
         empezar_btn.setBackgroundResource(R.drawable.round_btn_verde);
         parar_btn.setEnabled(false);
-
 
         // DESHABILITAR EL TEXTVIEW QUE DICE GRABANDO RUTA Y AÑADIR PARPADEO
         btn_grabando = findViewById(R.id.grabando);
@@ -248,6 +249,7 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                                                         WorkManager.getInstance(GrabarRuta.this).enqueue(insertUbi);
                                                     }
                                                     locationService.guardarRuta();
+                                                    unbindService(conexion);
                                                     startActivity(new Intent(GrabarRuta.this, EditarRuta.class).putExtra("idRuta", Integer.parseInt(idRuta)).putExtra("parent", "GrabarRuta"));
                                                     finish();
 
@@ -417,7 +419,6 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacks(runnable);
-        unbindService(conexion);
     }
 
     @Override
@@ -451,6 +452,7 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         locationService.guardarRuta();
+                        unbindService(conexion);
                         startActivity(new Intent(GrabarRuta.this, MainActivity.class));
                         finish();
                     }
