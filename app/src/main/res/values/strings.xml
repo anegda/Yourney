@@ -102,5 +102,6 @@
     <string name="existe_amistad_peticion">Ya existe una petición o ya eres amigo con este usuario</string>
     <string name="comienzo">Comienzo</string>
     <string name="fin">Fin</string>
+    <string name="mis_solicitudes">Mis solicitudes de amistad</string>
 
 </resources>
