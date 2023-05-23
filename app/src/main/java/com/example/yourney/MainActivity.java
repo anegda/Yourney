@@ -222,6 +222,7 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
         intent.putExtra("parent", "Main");
         Log.d("DAS", String.valueOf(idRuta));
         startActivity(intent);
+        finish();
     }
 
     @Override
