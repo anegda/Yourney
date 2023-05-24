@@ -250,7 +250,10 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                                                     }
                                                     locationService.guardarRuta();
                                                     unbindService(conexion);
-                                                    startActivity(new Intent(GrabarRuta.this, EditarRuta.class).putExtra("idRuta", Integer.parseInt(idRuta)).putExtra("parent", "GrabarRuta"));
+                                                    Intent intent = new Intent(GrabarRuta.this, EditarRuta.class);
+                                                    intent.putExtra("idRuta", Integer.parseInt(idRuta));
+                                                    intent.putExtra("parent", "GrabarRuta");
+                                                    startActivity(intent);
                                                     finish();
 
                                                 } catch (ParseException e) {

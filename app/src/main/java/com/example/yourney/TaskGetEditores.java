@@ -35,14 +35,16 @@ public class TaskGetEditores extends AsyncTask<Void, Void, ArrayList<JSONObject>
     private String username;
     List<ItemListEditor> items = new ArrayList<ItemListEditor>();
     ElAdaptadorRecyclerEditor adapter;
+    TextView placeholder;
 
-    public TaskGetEditores(String urlAmigos, String urlUsuarios, SearchView searchView, RecyclerView recyclerView, ElAdaptadorRecyclerEditor.RecyclerItemClick recyclerItemClick, String username) {
+    public TaskGetEditores(String urlAmigos, String urlUsuarios, SearchView searchView, RecyclerView recyclerView, ElAdaptadorRecyclerEditor.RecyclerItemClick recyclerItemClick, String username, TextView placeholder) {
         this.urlStringAmigos = urlAmigos;
         this.urlStringUsuarios = urlUsuarios;
         this.recyclerView = recyclerView;
         this.searchView = searchView;
         this.recyclerItemClick = recyclerItemClick;
         this.username = username;
+        this.placeholder = placeholder;
     }
 
     @Override
@@ -138,6 +140,7 @@ public class TaskGetEditores extends AsyncTask<Void, Void, ArrayList<JSONObject>
     protected void onPostExecute(ArrayList<JSONObject> misAmigos) {
         if (misAmigos == null) {
             // No ha habido resultado para la consulta --> el usuario no tiene amigos registrados
+            placeholder.setVisibility(View.VISIBLE);
 
         } else {
             // Asigno la info de los json devueltos a donde toque

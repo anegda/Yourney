@@ -39,8 +39,11 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
     List<ItemListEditor> items = new ArrayList<ItemListEditor>();
     ArrayList<String> editores = new ArrayList<String>();
     ElAdaptadorRecyclerEditor adapter = new ElAdaptadorRecyclerEditor(items, MisEditores.this);
+    private Integer idRuta;
     private String parent;
     TextView placeholder;
+    private String parent2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -66,9 +69,18 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
 
         parent = getIntent().getStringExtra("parent");
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            idRuta = extras.getInt("idRuta", 0);
+            parent = extras.getString("parent");
+            parent2 = extras.getString("parent2");
+        }
+
         buscadorUsuarios = findViewById(R.id.buscar_editores);
         lalista = findViewById(R.id.elreciclerview);
         btnGuardar = findViewById(R.id.btnGuardarEditores);
+        placeholder = findViewById(R.id.placeholder);
+        placeholder.setVisibility(View.GONE);
 
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         lalista.setLayoutManager(manager);
@@ -79,64 +91,13 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
 
         ArrayList<String> amigos = new ArrayList<String>();
 
-        /**
-        // CONSULTAMOS A LA BD POR AMIGOS
-        Data datos = new Data.Builder()
-                .putString("accion", "select")
-                .putString("consulta", "Amigos")
-                .putString("username", username)
-                .build();
-
-        OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                .setInputData(datos)
-                .build();
-
-        WorkManager.getInstance(MisEditores.this).getWorkInfoByIdLiveData(select.getId()).observe(MisEditores.this, new Observer<WorkInfo>() {
-            @Override
-            public void onChanged(WorkInfo workInfo) {
-                if (workInfo != null && workInfo.getState().isFinished()) {
-                    Data output = workInfo.getOutputData();
-                    if (!output.getString("resultado").equals("Sin resultado")) {
-                        JSONParser parser = new JSONParser();
-                        try {
-                            // Obtengo la informacion de las rutas devueltas
-                            JSONArray jsonResultado = (JSONArray) parser.parse(output.getString("resultado"));
-
-                            Integer i = 0;
-                            System.out.println("***** " + jsonResultado + " *****");
-                            while (i < jsonResultado.size()) {
-                                JSONObject row = (JSONObject) jsonResultado.get(i);
-                                System.out.println("***** " + row + " *****");
-                                amigos.add((String) row.get("Username2"));
-                                i++;
-                            }
-
-                            items = getItems(amigos);
-                            adapter = new ElAdaptadorRecyclerEditor(items, MisEditores.this);
-                            lalista.setAdapter(adapter);
-
-                        } catch (ParseException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                }
-            }
-        });
-        WorkManager.getInstance(MisEditores.this).enqueue(select);
-
-        Log.d("DAS", String.valueOf(items));
-        adapter = new ElAdaptadorRecyclerEditor(items, MisEditores.this);
-        lalista.setAdapter(adapter);
-        buscadorUsuarios.setOnQueryTextListener(MisEditores.this);
-        **/
-
         // Llamada al asynctask
         String urlAmigos = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selects.php";
         String urlUsuarios = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectUsuarios.php";
         String paramsAmigos = "?consulta=Amigos&username=" + username;
         String paramsUsuarios = "?consulta=Usuarios&username=";
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TaskGetEditores taskGetAmigos = new TaskGetEditores(urlAmigos + paramsAmigos,urlUsuarios + paramsUsuarios, buscadorUsuarios, recyclerView, MisEditores.this, username);
+        TaskGetEditores taskGetAmigos = new TaskGetEditores(urlAmigos + paramsAmigos,urlUsuarios + paramsUsuarios, buscadorUsuarios, recyclerView, MisEditores.this, username, placeholder);
         taskGetAmigos.execute();
 
         buscadorUsuarios.setOnQueryTextListener(MisEditores.this);
@@ -144,6 +105,7 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
         btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(MisEditores.this, EditarRuta.class);
                 intent.putExtra("editores", editores);
 
@@ -151,7 +113,7 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
                 intent.putExtra("dificultadRuta", getIntent().getIntExtra("dificultadRuta", 1));
                 intent.putExtra("infoRuta", getIntent().getStringExtra("infoRuta"));
                 intent.putExtra("visibilidadRuta", getIntent().getIntExtra("visibilidadRuta", 1));
-                intent.putExtra("idRuta", getIntent().getIntExtra("idRuta", 1));
+                intent.putExtra("idRuta", idRuta);
                 intent.putExtra("parent", "VerRuta");
                 intent.putExtra("parentVerRuta", parent);
 
@@ -212,6 +174,7 @@ public class MisEditores extends AppCompatActivity implements ElAdaptadorRecycle
         intent.putExtra("dificultadRuta", getIntent().getIntExtra("dificultadRuta", 1));
         intent.putExtra("infoRuta", getIntent().getStringExtra("infoRuta"));
         intent.putExtra("visibilidadRuta", getIntent().getIntExtra("visibilidadRuta", 1));
+        intent.putExtra("idRuta", idRuta);
         intent.putExtra("parent", parent);
         if(parent.equals("VerRuta")){
             intent.putExtra("parentVerRuta", getIntent().getStringExtra("parentVerRuta"));
