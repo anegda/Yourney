@@ -30,6 +30,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -40,6 +42,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -101,30 +104,36 @@ public class GrabarRuta extends FragmentActivity implements OnMapReadyCallback {
         empezar_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                locationService.grabarRuta();
-                empezar_btn.setEnabled(false);
-                empezar_btn.setBackgroundResource(R.drawable.round_btn_gris);
-                parar_btn.setEnabled(true);
-                btn_grabando.setVisibility(View.VISIBLE);
-                parar_btn.setBackgroundResource(R.drawable.round_btn_verde);
-                tv_grabando.setVisibility(View.VISIBLE);
-                tv_duracion_num.setVisibility(View.VISIBLE);
-                tv_esperando.setVisibility(View.GONE);
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+                if(connected) {
+                    locationService.grabarRuta();
+                    empezar_btn.setEnabled(false);
+                    empezar_btn.setBackgroundResource(R.drawable.round_btn_gris);
+                    parar_btn.setEnabled(true);
+                    btn_grabando.setVisibility(View.VISIBLE);
+                    parar_btn.setBackgroundResource(R.drawable.round_btn_verde);
+                    tv_grabando.setVisibility(View.VISIBLE);
+                    tv_duracion_num.setVisibility(View.VISIBLE);
+                    tv_esperando.setVisibility(View.GONE);
 
-                btn_grabando = findViewById(R.id.grabando);
-                runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (btn_grabando.getVisibility() == View.VISIBLE) {
-                            btn_grabando.setVisibility(View.INVISIBLE);
-                        } else {
-                            btn_grabando.setVisibility(View.VISIBLE);
+                    btn_grabando = findViewById(R.id.grabando);
+                    runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if (btn_grabando.getVisibility() == View.VISIBLE) {
+                                btn_grabando.setVisibility(View.INVISIBLE);
+                            } else {
+                                btn_grabando.setVisibility(View.VISIBLE);
+                            }
+                            handler.postDelayed(this, 1000); // Cambia la duración a tu preferencia
                         }
-                        handler.postDelayed(this, 1000); // Cambia la duración a tu preferencia
-                    }
-                };
+                    };
 
-                handler.postDelayed(runnable, 1000); // Cambia la duración a tu preferencia
+                    handler.postDelayed(runnable, 1000); // Cambia la duración a tu preferencia
+                }else{
+                    Toast.makeText(GrabarRuta.this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
+                }
             }
         });
 
