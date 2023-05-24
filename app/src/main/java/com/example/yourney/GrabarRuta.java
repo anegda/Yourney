@@ -47,6 +47,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Base64;
 
@@ -60,13 +61,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.yourney.databinding.ActivityMapsBinding;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class GrabarRuta extends FragmentActivity implements SensorEventListener, OnMapReadyCallback {
+public class GrabarRuta extends FragmentActivity implements OnMapReadyCallback {
     private LocationService.LocationServiceBinder locationService;
-
-    private Sensor contadorPasos;
-    private SensorManager sensorManager;
-    private int pasosHist = 0;
-    private boolean iniciar = false;
     static String fotoDesc;
     private Runnable runnable;
     private ServiceConnection conexion;
@@ -111,7 +107,6 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                 parar_btn.setEnabled(true);
                 btn_grabando.setVisibility(View.VISIBLE);
                 parar_btn.setBackgroundResource(R.drawable.round_btn_verde);
-                iniciar = true;
                 tv_grabando.setVisibility(View.VISIBLE);
                 tv_duracion_num.setVisibility(View.VISIBLE);
                 tv_esperando.setVisibility(View.GONE);
@@ -312,10 +307,16 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                                 velocidad = distanciaKM / (duracion / 3600);
                             }
 
+                            int pasosAct = locationService.getPasosAct();
+                            double caloriasAct = locationService.getCaloriasAct();
+
                             //APLICAMOS EL FORMATO
                             final String duracionFormato = String.format("%02d:%02d:%02d", hours, minutes, seconds);
                             final String distanciaFormato = String.format("%.2f KM", distanciaKM);
                             final String velocidadFormato = String.format("%.2f KM/H", velocidad);
+                            final String pasosFormato = Integer.toString(pasosAct);
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            String caloriasFormato = decimalFormat.format(caloriasAct);
 
                             //ACTUALIZAMOS LOS TEXTVIEWS TRAS MEDIO SEGUNDO
                             handler.post(new Runnable() {
@@ -325,9 +326,12 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
                                     TextView distanciaNum = findViewById(R.id.distanciaNum);
                                     TextView velocidadNum = findViewById(R.id.velocidadNum);
                                     TextView pasosNum = findViewById(R.id.pasosNum);
+                                    TextView caloriasNum = findViewById(R.id.caloriasNum);
                                     duracionNum.setText(duracionFormato);
                                     distanciaNum.setText(distanciaFormato);
                                     velocidadNum.setText(velocidadFormato);
+                                    pasosNum.setText(pasosFormato);
+                                    caloriasNum.setText(caloriasFormato);
 
                                     //OBTENEMOS EL MAPA Y CREAMOS LA RUTA
                                     SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -351,12 +355,6 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
             public void onServiceDisconnected(ComponentName componentName) {locationService=null;}
         };
         bindService(new Intent(this, LocationService.class), conexion, Context.BIND_AUTO_CREATE);
-
-        //OBTENEMOS LOS PASOS
-        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null){
-            contadorPasos = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        }
 
         //OBTENEMOS EL MAPA Y CREAMOS LA RUTA
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -386,33 +384,9 @@ public class GrabarRuta extends FragmentActivity implements SensorEventListener,
         }
     }
 
-    //NECESARIOS PARA CONTAR LOS PASOS Y LAS CALORIAS
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        if(sensorEvent.sensor == contadorPasos && iniciar){
-            int pasos = (int) sensorEvent.values[0] - pasosHist;
-            TextView pasosNum = (TextView) findViewById(R.id.pasosNum);
-            pasosNum.setText(String.valueOf(pasos));
-
-            int calorias = Math.round(pasos/1000 * 35);
-            TextView caloriasNum = (TextView) findViewById(R.id.caloriasNum);
-            caloriasNum.setText(String.valueOf(calorias));
-        }else{
-            pasosHist = (int) sensorEvent.values[0];
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        if(sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)!=null){
-            sensorManager.registerListener(this, contadorPasos, SensorManager.SENSOR_DELAY_NORMAL);
-        }
     }
 
     @Override
