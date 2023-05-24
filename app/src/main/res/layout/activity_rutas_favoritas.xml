@@ -9,15 +9,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="115dp">
 
         <TextView
             android:id="@+id/placeholder"
+            style="@style/f_gc_s"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="135dp"
             android:layout_gravity="center"
-            style="@style/f_gc_s"
+            android:layout_marginTop="20dp"
             android:text="@string/placeholder"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,16 +36,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/placeholder" />
+            app:layout_constraintTop_toBottomOf="@+id/green_rectangle" />
 
 
     </LinearLayout>
 
-
     <View
         android:id="@+id/green_rectangle"
-        android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_width="411dp"
+        android:layout_height="115dp"
         android:background="#65a34d"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,37 +67,35 @@
         android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="178dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="20dp"
-        android:elevation="6dp"
-        app:layout_constraintEnd_toEndOf="@+id/green_rectangle"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="@+id/green_rectangle"
-        app:layout_constraintTop_toTopOf="@+id/green_rectangle"
-        app:srcCompat="@drawable/yourblnaco" />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="15dp"
         android:elevation="6dp"
-        android:text="@string/rutasFavoritas"
+        android:text="@string/rutas_favoritas"
         android:textColor="#ffffff"
-        android:textSize="15sp"
+        android:textSize="22dp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/search_view"
+        app:layout_constraintStart_toStartOf="@+id/search_view"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="91dp"
+        android:layout_height="10dp"
+        android:layout_weight="1"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="@+id/green_rectangle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_view" />
+        app:layout_constraintTop_toBottomOf="@+id/search_view"
+        app:srcCompat="@drawable/yourblnaco2" />
 
 
 
