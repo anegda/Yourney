@@ -19,6 +19,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -87,73 +89,79 @@ public class EditarRuta extends AppCompatActivity {
         System.out.println(idRuta);
         System.out.println("####################################");
 
-        if(parent.equals("VerRuta")) {
-            //OBTENEMOS LOS GENERALES DE LA RUTA (SOLO SI VENIMOS DE VER RUTA)
-            int idRuta = getIntent().getIntExtra("idRuta", 0);
-            Data datos = new Data.Builder()
-                    .putString("accion", "selectRuta")
-                    .putString("consulta", "InfoRuta")
-                    .putInt("idRuta", idRuta)
-                    .build();
-            OneTimeWorkRequest selectRuta = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                    .setInputData(datos)
-                    .build();
-            WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(selectRuta.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
-                @Override
-                public void onChanged(WorkInfo workInfo) {
-                    if (workInfo != null && workInfo.getState().isFinished()) {
-                        Data output = workInfo.getOutputData();
-                        if (!output.getString("resultado").equals("Sin resultado")) {
-                            try {
-                                String titulo = output.getString("Nombre");
-                                String descripcion = output.getString("Descripcion");
-                                String dificultad = output.getString("Dificultad");
-                                int visibilidad = output.getInt("Visibilidad", 0);
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        if(connected) {
+            if (parent.equals("VerRuta")) {
+                //OBTENEMOS LOS GENERALES DE LA RUTA (SOLO SI VENIMOS DE VER RUTA)
+                int idRuta = getIntent().getIntExtra("idRuta", 0);
+                Data datos = new Data.Builder()
+                        .putString("accion", "selectRuta")
+                        .putString("consulta", "InfoRuta")
+                        .putInt("idRuta", idRuta)
+                        .build();
+                OneTimeWorkRequest selectRuta = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                        .setInputData(datos)
+                        .build();
+                WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(selectRuta.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            Data output = workInfo.getOutputData();
+                            if (!output.getString("resultado").equals("Sin resultado")) {
+                                try {
+                                    String titulo = output.getString("Nombre");
+                                    String descripcion = output.getString("Descripcion");
+                                    String dificultad = output.getString("Dificultad");
+                                    int visibilidad = output.getInt("Visibilidad", 0);
 
-                                EditText tituloEdit = findViewById(R.id.tituloRutaEdit);
-                                tituloEdit.setText(titulo);
-                                EditText otrosEdit = findViewById(R.id.otrosMutilineText);
-                                otrosEdit.setText(descripcion);
+                                    EditText tituloEdit = findViewById(R.id.tituloRutaEdit);
+                                    tituloEdit.setText(titulo);
+                                    EditText otrosEdit = findViewById(R.id.otrosMutilineText);
+                                    otrosEdit.setText(descripcion);
 
-                                RadioGroup dificultadGroup = findViewById(R.id.dificultadRutaGroup);
-                                RadioGroup visibilidadGroup = findViewById(R.id.visibilidadRutaGroup);
-                                dificultadGroup.clearCheck();
-                                visibilidadGroup.clearCheck();
+                                    RadioGroup dificultadGroup = findViewById(R.id.dificultadRutaGroup);
+                                    RadioGroup visibilidadGroup = findViewById(R.id.visibilidadRutaGroup);
+                                    dificultadGroup.clearCheck();
+                                    visibilidadGroup.clearCheck();
 
-                                if (dificultad.equals("Fácil")) {
-                                    RadioButton b = (RadioButton) findViewById(R.id.facil);
-                                    b.setChecked(true);
-                                } else if (dificultad.equals("Medio")) {
-                                    RadioButton b = (RadioButton) findViewById(R.id.medio);
-                                    b.setChecked(true);
-                                } else {
-                                    RadioButton b = (RadioButton) findViewById(R.id.dificil);
-                                    b.setChecked(true);
+                                    if (dificultad.equals("Fácil")) {
+                                        RadioButton b = (RadioButton) findViewById(R.id.facil);
+                                        b.setChecked(true);
+                                    } else if (dificultad.equals("Medio")) {
+                                        RadioButton b = (RadioButton) findViewById(R.id.medio);
+                                        b.setChecked(true);
+                                    } else {
+                                        RadioButton b = (RadioButton) findViewById(R.id.dificil);
+                                        b.setChecked(true);
+                                    }
+
+                                    if (visibilidad == 0) {
+                                        RadioButton b = (RadioButton) findViewById(R.id.privada);
+                                        b.setChecked(true);
+                                    } else {
+                                        RadioButton b = (RadioButton) findViewById(R.id.publica);
+                                        b.setChecked(true);
+                                    }
+
+                                    if (fotoDescriptiva != null) {
+                                        byte[] encodeByte = Base64.getDecoder().decode(fotoDescriptiva);
+                                        Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                                        Drawable d = new BitmapDrawable(getResources(), bitmap);
+                                        ImageView fotoDescRuta = findViewById(R.id.fotoDescRuta);
+                                        fotoDescRuta.setImageBitmap(bitmap);
+                                    }
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
                                 }
-
-                                if (visibilidad == 0) {
-                                    RadioButton b = (RadioButton) findViewById(R.id.privada);
-                                    b.setChecked(true);
-                                } else {
-                                    RadioButton b = (RadioButton) findViewById(R.id.publica);
-                                    b.setChecked(true);
-                                }
-
-                                if (fotoDescriptiva != null) {
-                                    byte[] encodeByte = Base64.getDecoder().decode(fotoDescriptiva);
-                                    Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-                                    Drawable d = new BitmapDrawable(getResources(), bitmap);
-                                    ImageView fotoDescRuta = findViewById(R.id.fotoDescRuta);
-                                    fotoDescRuta.setImageBitmap(bitmap);
-                                }
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
                             }
                         }
                     }
-                }
-            });
-            WorkManager.getInstance(EditarRuta.this).enqueue(selectRuta);
+                });
+                WorkManager.getInstance(EditarRuta.this).enqueue(selectRuta);
+            }
+        }else{
+            Toast.makeText(this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
         }
 
         Button btn_guardar = (Button) findViewById(R.id.btn_guardarDatosRuta);
@@ -161,106 +169,113 @@ public class EditarRuta extends AppCompatActivity {
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ArrayList<String> lista = (ArrayList<String>) getIntent().getSerializableExtra("editores");
-                System.out.println("**************************************");
-                System.out.println(lista);
-                System.out.println("**************************************");
+                //COMPROBAMOS SI EXISTE CONEXIÓN A INTERNET
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+                if(connected) {
+                    ArrayList<String> lista = (ArrayList<String>) getIntent().getSerializableExtra("editores");
+                    System.out.println("**************************************");
+                    System.out.println(lista);
+                    System.out.println("**************************************");
 
-                if(lista != null) {
-                    for (int i = 0; i < lista.size(); i++) {
+                    if (lista != null) {
+                        for (int i = 0; i < lista.size(); i++) {
+                            Data datos = new Data.Builder()
+                                    .putString("accion", "insert")
+                                    .putString("consulta", "Editores")
+                                    .putInt("idRuta", idRuta)
+                                    .putString("username", lista.get(i).toString())
+                                    .build();
+
+                            OneTimeWorkRequest insertEditores = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                    .setInputData(datos)
+                                    .build();
+                            WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(insertEditores.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
+                                @Override
+                                public void onChanged(WorkInfo workInfo) {
+                                    Log.d("INSERTADO", "Insert");
+                                }
+                            });
+
+                            WorkManager.getInstance(EditarRuta.this).enqueue(insertEditores);
+                        }
+                    }
+
+                    //COGEMOS LA FOTO DEL IMAGEVIEW
+                    if (fotoDescriptiva == null) {
+                        ImageView fotoDesc = (ImageView) findViewById(R.id.fotoDescRuta);
+                        Bitmap img = ((BitmapDrawable) fotoDesc.getDrawable()).getBitmap();
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        img.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                        byte[] b = baos.toByteArray();
+                        //PARA QUE NO EXISTAN PROBLEMAS CON EL TAMAÑO DE LA IMAGEN
+                        b = tratarImagen(b);
+                        fotoDescriptiva = Base64.getEncoder().encodeToString(b);
+                    }
+
+                    //COGEMOS LOS DATOS DE LOS CAMPOS
+                    EditText tituloEdit = findViewById(R.id.tituloRutaEdit);
+                    String titulo = tituloEdit.getText().toString();
+
+                    EditText otrosEdit = findViewById(R.id.otrosMutilineText);
+                    String descr = otrosEdit.getText().toString();
+
+                    RadioGroup dificultadGroup = findViewById(R.id.dificultadRutaGroup);
+                    int difRadioButtonID = dificultadGroup.getCheckedRadioButtonId();
+
+                    RadioGroup visibilidadGroup = findViewById(R.id.visibilidadRutaGroup);
+                    int visRadioButtonID = visibilidadGroup.getCheckedRadioButtonId();
+
+
+                    if (titulo.equals("") || descr.equals("") || visRadioButtonID == -1 || difRadioButtonID == -1) {
+                        Toast.makeText(EditarRuta.this, R.string.campos_vacios, Toast.LENGTH_LONG).show();
+                    } else {
+                        //OBTENEMOS LA DIFICULTAD Y LA VISIBILIDAD
+                        RadioButton difRadioButtonSelected = (RadioButton) findViewById(difRadioButtonID);
+                        String dificultad = difRadioButtonSelected.getText().toString();
+
+                        RadioButton visRadioButtonSelected = (RadioButton) findViewById(visRadioButtonID);
+                        String visibilidadString = visRadioButtonSelected.getText().toString();
+                        int visibilidad = 1;
+                        if (visibilidadString.equals(getString(R.string.privado))) {
+                            visibilidad = 0;
+                        }
+
+                        //REALIZAMOS EL UPDATE
                         Data datos = new Data.Builder()
-                                .putString("accion", "insert")
-                                .putString("consulta", "Editores")
+                                .putString("accion", "update")
+                                .putString("consulta", "Rutas")
                                 .putInt("idRuta", idRuta)
-                                .putString("username", lista.get(i).toString())
+                                .putString("nombre", titulo)
+                                .putString("descripcion", descr)
+                                .putString("dificultad", dificultad)
+                                .putInt("visibilidad", visibilidad)
                                 .build();
 
-                        OneTimeWorkRequest insertEditores = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                        OneTimeWorkRequest updateRuta = new OneTimeWorkRequest.Builder(ConexionBD.class)
                                 .setInputData(datos)
                                 .build();
-                        WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(insertEditores.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
+
+                        WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(updateRuta.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
                             @Override
                             public void onChanged(WorkInfo workInfo) {
-                                Log.d("INSERTADO", "Insert");
+                                //VOLVEMOS A LA ACTIVIDAD DE VER RUTA
+                                Intent i = new Intent(EditarRuta.this, VerRuta.class);
+                                i.putExtra("idRuta", idRuta);
+                                if (parent.equals("GrabarRuta")) {
+                                    i.putExtra("parent", "Main");
+                                } else {
+                                    i.putExtra("parent", parent2);
+                                }
+                                startActivity(i);
+                                finish();
                             }
                         });
 
-                        WorkManager.getInstance(EditarRuta.this).enqueue(insertEditores);
+                        WorkManager.getInstance(EditarRuta.this).enqueue(updateRuta);
                     }
-                }
-
-                //COGEMOS LA FOTO DEL IMAGEVIEW
-                if (fotoDescriptiva == null) {
-                    ImageView fotoDesc = (ImageView) findViewById(R.id.fotoDescRuta);
-                    Bitmap img = ((BitmapDrawable) fotoDesc.getDrawable()).getBitmap();
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    img.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                    byte[] b = baos.toByteArray();
-                    //PARA QUE NO EXISTAN PROBLEMAS CON EL TAMAÑO DE LA IMAGEN
-                    b = tratarImagen(b);
-                    fotoDescriptiva = Base64.getEncoder().encodeToString(b);
-                }
-
-                //COGEMOS LOS DATOS DE LOS CAMPOS
-                EditText tituloEdit = findViewById(R.id.tituloRutaEdit);
-                String titulo = tituloEdit.getText().toString();
-
-                EditText otrosEdit = findViewById(R.id.otrosMutilineText);
-                String descr = otrosEdit.getText().toString();
-
-                RadioGroup dificultadGroup = findViewById(R.id.dificultadRutaGroup);
-                int difRadioButtonID = dificultadGroup.getCheckedRadioButtonId();
-
-                RadioGroup visibilidadGroup = findViewById(R.id.visibilidadRutaGroup);
-                int visRadioButtonID = visibilidadGroup.getCheckedRadioButtonId();
-
-
-                if (titulo.equals("") || descr.equals("") || visRadioButtonID == -1 || difRadioButtonID==-1) {
-                    Toast.makeText(EditarRuta.this, R.string.campos_vacios, Toast.LENGTH_LONG).show();
-                } else {
-                    //OBTENEMOS LA DIFICULTAD Y LA VISIBILIDAD
-                    RadioButton difRadioButtonSelected = (RadioButton) findViewById(difRadioButtonID);
-                    String dificultad = difRadioButtonSelected.getText().toString();
-
-                    RadioButton visRadioButtonSelected = (RadioButton) findViewById(visRadioButtonID);
-                    String visibilidadString = visRadioButtonSelected.getText().toString();
-                    int visibilidad = 1;
-                    if (visibilidadString.equals(getString(R.string.privado))) {
-                        visibilidad = 0;
-                    }
-
-                    //REALIZAMOS EL UPDATE
-                    Data datos = new Data.Builder()
-                            .putString("accion", "update")
-                            .putString("consulta", "Rutas")
-                            .putInt("idRuta", idRuta)
-                            .putString("nombre", titulo)
-                            .putString("descripcion", descr)
-                            .putString("dificultad", dificultad)
-                            .putInt("visibilidad", visibilidad)
-                            .build();
-
-                    OneTimeWorkRequest updateRuta = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                            .setInputData(datos)
-                            .build();
-
-                    WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(updateRuta.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
-                        @Override
-                        public void onChanged(WorkInfo workInfo) {
-                            //VOLVEMOS A LA ACTIVIDAD DE VER RUTA
-                            Intent i = new Intent(EditarRuta.this, VerRuta.class);
-                            i.putExtra("idRuta", idRuta);
-                            if (parent.equals("GrabarRuta")) {
-                                i.putExtra("parent", "Main");
-                            } else {
-                                i.putExtra("parent", parent2);
-                            }
-                            startActivity(i);
-                            finish();
-                        }
-                    });
-
-                    WorkManager.getInstance(EditarRuta.this).enqueue(updateRuta);
+                }else{
+                    Toast.makeText(EditarRuta.this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -323,28 +338,34 @@ public class EditarRuta extends AppCompatActivity {
         btn_eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Elimino la info guardada de la ruta hasta el momento
-                Data datos = new Data.Builder()
-                        .putString("accion", "delete")
-                        .putString("consulta", "Rutas")
-                        .putInt("idRuta", idRuta)
-                        .build();
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+                if(connected) {
+                    // Elimino la info guardada de la ruta hasta el momento
+                    Data datos = new Data.Builder()
+                            .putString("accion", "delete")
+                            .putString("consulta", "Rutas")
+                            .putInt("idRuta", idRuta)
+                            .build();
 
-                OneTimeWorkRequest delete = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                        .setInputData(datos)
-                        .build();
+                    OneTimeWorkRequest delete = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                            .setInputData(datos)
+                            .build();
 
-                WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(delete.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-                            System.out.println("Ruta eliminada");
-                            startActivity(new Intent(EditarRuta.this, MainActivity.class));
-                            finish();
+                    WorkManager.getInstance(EditarRuta.this).getWorkInfoByIdLiveData(delete.getId()).observe(EditarRuta.this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState().isFinished()) {
+                                System.out.println("Ruta eliminada");
+                                startActivity(new Intent(EditarRuta.this, MainActivity.class));
+                                finish();
+                            }
                         }
-                    }
-                });
-                WorkManager.getInstance(EditarRuta.this).enqueue(delete);
+                    });
+                    WorkManager.getInstance(EditarRuta.this).enqueue(delete);
+                }else{
+                    Toast.makeText(EditarRuta.this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
+                }
             }
         });
         restaurarCampos();
