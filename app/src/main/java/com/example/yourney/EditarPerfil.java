@@ -20,6 +20,8 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -195,70 +197,76 @@ public class EditarPerfil extends AppCompatActivity {
     }
 
     public void update(View v){
-        // Validar si el correo electrónico es válido utilizando una expresión regular
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        if(connected) {
+            // Validar si el correo electrónico es válido utilizando una expresión regular
 
-        String emailStr = email.getText().toString().trim();
-        boolean isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(emailStr).matches();
+            String emailStr = email.getText().toString().trim();
+            boolean isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(emailStr).matches();
 
-        if (isEmailValid) {
-            // obtener bitmap del imageview actual --> comprimirla --> convertirlo en base64 para subirlo a la bbdd
-            //if (fotoperfil.getDrawable()!=null) {
-            if (fotoen64 == null) {
-                ImageView fotoPerfil = (ImageView) findViewById(R.id.fotoPerfilEditarPerfil);
-                Bitmap img = ((BitmapDrawable) fotoPerfil.getDrawable()).getBitmap();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                img.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                byte[] b = baos.toByteArray();
-                //PARA QUE NO EXISTAN PROBLEMAS CON EL TAMAÑO DE LA IMAGEN
-                b = tratarImagen(b);
-                fotoen64 = Base64.getEncoder().encodeToString(b);
-            }
+            if (isEmailValid) {
+                // obtener bitmap del imageview actual --> comprimirla --> convertirlo en base64 para subirlo a la bbdd
+                //if (fotoperfil.getDrawable()!=null) {
+                if (fotoen64 == null) {
+                    ImageView fotoPerfil = (ImageView) findViewById(R.id.fotoPerfilEditarPerfil);
+                    Bitmap img = ((BitmapDrawable) fotoPerfil.getDrawable()).getBitmap();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    img.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    byte[] b = baos.toByteArray();
+                    //PARA QUE NO EXISTAN PROBLEMAS CON EL TAMAÑO DE LA IMAGEN
+                    b = tratarImagen(b);
+                    fotoen64 = Base64.getEncoder().encodeToString(b);
+                }
 
-            System.out.println("******** BOTON PULSADO ********");
-            System.out.println(fotoen64);
+                System.out.println("******** BOTON PULSADO ********");
+                System.out.println(fotoen64);
 
-            Sesion sesion = new Sesion(this);
-            Data datos;
+                Sesion sesion = new Sesion(this);
+                Data datos;
 
-            datos = new Data.Builder()
-                    .putString("accion", "update")
-                    .putString("consulta", "Usuarios")
-                    .putString("username", sesion.getUsername())
-                    .putString("nombreNew", nombre.getText().toString())
-                    .putString("apellidosNew", apellido.getText().toString())
-                    .putString("passwordNew", password.getText().toString())
-                    .putString("emailNew", email.getText().toString())
-                    .build();
+                datos = new Data.Builder()
+                        .putString("accion", "update")
+                        .putString("consulta", "Usuarios")
+                        .putString("username", sesion.getUsername())
+                        .putString("nombreNew", nombre.getText().toString())
+                        .putString("apellidosNew", apellido.getText().toString())
+                        .putString("passwordNew", password.getText().toString())
+                        .putString("emailNew", email.getText().toString())
+                        .build();
 
-            OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                    .setInputData(datos)
-                    .build();
+                OneTimeWorkRequest update = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                        .setInputData(datos)
+                        .build();
 
-            System.out.println(datos);
+                System.out.println(datos);
 
-            // Actualizo el ususario en la base de datos
-            WorkManager.getInstance(EditarPerfil.this).getWorkInfoByIdLiveData(update.getId()).observe(EditarPerfil.this, new Observer<WorkInfo>() {
-                @Override
-                public void onChanged(WorkInfo workInfo) {
-                    if (workInfo != null && workInfo.getState().isFinished()) {
-                        Data output = workInfo.getOutputData();
-                        if (output.getBoolean("resultado", false)) {
-                            System.out.println("***** PASSWORd " + password.getText().toString());
-                            System.out.println("***** " + fotoen64);
-                            // Paso a la siguiente actividad
-                            Toast.makeText(EditarPerfil.this, "Cambios guardados con exito", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(EditarPerfil.this, MainActivity.class);
-                            startActivity(intent);
+                // Actualizo el ususario en la base de datos
+                WorkManager.getInstance(EditarPerfil.this).getWorkInfoByIdLiveData(update.getId()).observe(EditarPerfil.this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            Data output = workInfo.getOutputData();
+                            if (output.getBoolean("resultado", false)) {
+                                System.out.println("***** PASSWORd " + password.getText().toString());
+                                System.out.println("***** " + fotoen64);
+                                // Paso a la siguiente actividad
+                                Toast.makeText(EditarPerfil.this, "Cambios guardados con exito", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(EditarPerfil.this, MainActivity.class);
+                                startActivity(intent);
 
-                            finish();
+                                finish();
+                            }
                         }
                     }
-                }
-            });
-            WorkManager.getInstance(EditarPerfil.this).enqueue(update);
+                });
+                WorkManager.getInstance(EditarPerfil.this).enqueue(update);
 
-        } else {
-            Toast.makeText(this, "Error al editar los datos", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Error al editar los datos", Toast.LENGTH_LONG).show();
+            }
+        }else{
+            Toast.makeText(this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
         }
     }
 
