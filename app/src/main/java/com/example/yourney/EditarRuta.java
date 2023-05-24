@@ -423,9 +423,9 @@ public class EditarRuta extends AppCompatActivity {
         RadioGroup visibilidadGroup = findViewById(R.id.visibilidadRutaGroup);
 
         tituloEdit.setText(getIntent().getStringExtra("tituloRuta"));
-        dificultadGroup.check(getIntent().getIntExtra("dificultadRuta", 1));
+        dificultadGroup.check(getIntent().getIntExtra("dificultadRuta", 0));
         otrosEdit.setText(getIntent().getStringExtra("infoRuta"));
-        visibilidadGroup.check(getIntent().getIntExtra("visibilidadRuta",  1));
+        visibilidadGroup.check(getIntent().getIntExtra("visibilidadRuta",  0));
     }
 
     @Override

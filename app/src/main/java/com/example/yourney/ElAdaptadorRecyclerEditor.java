@@ -54,6 +54,13 @@ public class ElAdaptadorRecyclerEditor extends RecyclerView.Adapter<ElAdaptadorR
         holder.tvNombre.setText(item.getNombre());
         holder.tvUsername.setText(item.getUsername());
 
+        holder.checkBoxEditor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemClick.itemClick(item);
+            }
+        });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
