@@ -151,6 +151,7 @@ public class EditarRuta extends AppCompatActivity {
                                         ImageView fotoDescRuta = findViewById(R.id.fotoDescRuta);
                                         fotoDescRuta.setImageBitmap(bitmap);
                                     }
+                                    fotoDescriptiva=null;
                                 } catch (Exception e) {
                                     throw new RuntimeException(e);
                                 }
@@ -453,21 +454,30 @@ public class EditarRuta extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        EditText tituloEdit = findViewById(R.id.tituloRutaEdit);
+        EditText otrosEdit = findViewById(R.id.otrosMutilineText);
+        RadioGroup dificultadGroup = findViewById(R.id.dificultadRutaGroup);
+        RadioGroup visibilidadGroup = findViewById(R.id.visibilidadRutaGroup);
 
-        outState.putString("tituloRuta", tituloRuta.getText().toString());
-        outState.putInt("dificultad", dificultad.indexOfChild(dificultad.findViewById(dificultad.getCheckedRadioButtonId())));
-        outState.putString("infoExtra", informacionExtra.getText().toString());
-        outState.putInt("visibilidad", visibilidad.indexOfChild(visibilidad.findViewById(visibilidad.getCheckedRadioButtonId())));
+        outState.putString("tituloRuta", tituloEdit.getText().toString());
+        outState.putInt("dificultad", dificultadGroup.indexOfChild(dificultadGroup.findViewById(dificultadGroup.getCheckedRadioButtonId())));
+        outState.putString("infoExtra", otrosEdit.getText().toString());
+        outState.putInt("visibilidad", visibilidadGroup.indexOfChild(visibilidadGroup.findViewById(visibilidadGroup.getCheckedRadioButtonId())));
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        tituloRuta.setText(outState.getString("tituloRuta"));
-        dificultad.check(outState.getInt("difitultad"));
-        informacionExtra.setText(outState.getString("infoExtra"));
-        visibilidad.check(outState.getInt("visibilidad"));
+        EditText tituloEdit = findViewById(R.id.tituloRutaEdit);
+        EditText otrosEdit = findViewById(R.id.otrosMutilineText);
+        RadioGroup dificultadGroup = findViewById(R.id.dificultadRutaGroup);
+        RadioGroup visibilidadGroup = findViewById(R.id.visibilidadRutaGroup);
+
+        tituloEdit.setText(outState.getString("tituloRuta"));
+        dificultadGroup.check(outState.getInt("difitultad"));
+        otrosEdit.setText(outState.getString("infoExtra"));
+        visibilidadGroup.check(outState.getInt("visibilidad"));
     }
 
     @Override
