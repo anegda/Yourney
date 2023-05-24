@@ -14,11 +14,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,14 +79,20 @@ public class RutasFavoritas extends AppCompatActivity implements ElAdaptadorRecy
         placeholder = findViewById(R.id.placeholder);
         placeholder.setVisibility(View.GONE);
 
-        // Llamada al AsyncTask
-        Sesion sesion = new Sesion(this);
-        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
-        String params = "?consulta=RutasGuardadas&username=" + sesion.getUsername();
-        System.out.println(url + params);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TaskGetRutasGuardadas taskGetRutasGuardadas = new TaskGetRutasGuardadas(url + params, recyclerView, buscadorRutas, RutasFavoritas.this, placeholder);
-        taskGetRutasGuardadas.execute();
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        if(connected) {
+            // Llamada al AsyncTask
+            Sesion sesion = new Sesion(this);
+            String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
+            String params = "?consulta=RutasGuardadas&username=" + sesion.getUsername();
+            System.out.println(url + params);
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
+            TaskGetRutasGuardadas taskGetRutasGuardadas = new TaskGetRutasGuardadas(url + params, recyclerView, buscadorRutas, RutasFavoritas.this, placeholder);
+            taskGetRutasGuardadas.execute();
+        }else{
+            Toast.makeText(this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

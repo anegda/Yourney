@@ -15,11 +15,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.simple.JSONObject;
@@ -76,15 +79,21 @@ public class PublicRoutesActivity extends AppCompatActivity implements ElAdaptad
 
         buscadorRutas.setOnQueryTextListener(this);
 
-        // Llamada al AsyncTask
-        Sesion sesion = new Sesion(this);
-        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
-        String params = "?consulta=RutasPublicas&username=" + sesion.getUsername();
-        System.out.println(url + params);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TaskGetRutasPublicas taskGetRutasPublicas = new TaskGetRutasPublicas(url + params, lalista, searchView,PublicRoutesActivity.this, placeholder);
-        taskGetRutasPublicas.execute();
-
+        //COMPROBAMOS SI EXISTE CONEXIÓN A INTERNET
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        if(connected) {
+            // Llamada al AsyncTask
+            Sesion sesion = new Sesion(this);
+            String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
+            String params = "?consulta=RutasPublicas&username=" + sesion.getUsername();
+            System.out.println(url + params);
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
+            TaskGetRutasPublicas taskGetRutasPublicas = new TaskGetRutasPublicas(url + params, lalista, searchView, PublicRoutesActivity.this, placeholder);
+            taskGetRutasPublicas.execute();
+        }else{
+            Toast.makeText(this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
+        }
 
     }
 

@@ -27,6 +27,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -36,6 +38,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -201,15 +204,21 @@ public class MainActivity extends AppCompatActivity implements ElAdaptadorRecycl
             }
         });
 
-        // Llamada al AsyncTask
-        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
-        String params = "?consulta=MisRutas&username=" + sesion.getUsername();
-        System.out.println(url + params);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
-        TextView placeHolder = (TextView) findViewById(R.id.tvDescrRutPers);
-        TaskGetMisRutas taskGetMisRutas = new TaskGetMisRutas(url + params, recyclerView, MainActivity.this);
-        taskGetMisRutas.execute();
-
+        //COMPROBAMOS SI EXISTE CONEXIÓN A INTERNET
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        if(connected) {
+            // Llamada al AsyncTask
+            String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
+            String params = "?consulta=MisRutas&username=" + sesion.getUsername();
+            System.out.println(url + params);
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.elreciclerview);
+            TextView placeHolder = (TextView) findViewById(R.id.tvDescrRutPers);
+            TaskGetMisRutas taskGetMisRutas = new TaskGetMisRutas(url + params, recyclerView, MainActivity.this);
+            taskGetMisRutas.execute();
+        }else{
+            Toast.makeText(this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
+        }
 
         ArrayList<Integer> imagenes = new ArrayList<Integer>();
         for (String nombreImagen : nombreImagenes) {
