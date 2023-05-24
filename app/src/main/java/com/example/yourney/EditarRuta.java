@@ -83,6 +83,10 @@ public class EditarRuta extends AppCompatActivity {
         }
         idRuta = getIntent().getIntExtra("idRuta", 0);
 
+        System.out.println("####################################");
+        System.out.println(idRuta);
+        System.out.println("####################################");
+
         if(parent.equals("VerRuta")) {
             //OBTENEMOS LOS GENERALES DE LA RUTA (SOLO SI VENIMOS DE VER RUTA)
             int idRuta = getIntent().getIntExtra("idRuta", 0);
@@ -158,6 +162,10 @@ public class EditarRuta extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ArrayList<String> lista = (ArrayList<String>) getIntent().getSerializableExtra("editores");
+                System.out.println("**************************************");
+                System.out.println(lista);
+                System.out.println("**************************************");
+
                 if(lista != null) {
                     for (int i = 0; i < lista.size(); i++) {
                         Data datos = new Data.Builder()
@@ -242,7 +250,11 @@ public class EditarRuta extends AppCompatActivity {
                             //VOLVEMOS A LA ACTIVIDAD DE VER RUTA
                             Intent i = new Intent(EditarRuta.this, VerRuta.class);
                             i.putExtra("idRuta", idRuta);
-                            i.putExtra("parent", parent2);
+                            if (parent.equals("GrabarRuta")) {
+                                i.putExtra("parent", "Main");
+                            } else {
+                                i.putExtra("parent", parent2);
+                            }
                             startActivity(i);
                             finish();
                         }
