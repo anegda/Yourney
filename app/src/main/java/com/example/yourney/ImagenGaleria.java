@@ -16,6 +16,8 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -138,36 +140,43 @@ public class ImagenGaleria extends AppCompatActivity {
         btn_eliminar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //COMPROBAMOS SI EXISTE CONEXIÓN A INTERNET
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+                if(connected) {
 
-                // Borro la imagen de la bd
-                Data datos = new Data.Builder()
-                        .putString("accion", "delete")
-                        .putString("consulta", "Imagenes")
-                        .putInt("idImg", RecyclerViewAdapter.idImgElegida)
-                        .build();
+                    // Borro la imagen de la bd
+                    Data datos = new Data.Builder()
+                            .putString("accion", "delete")
+                            .putString("consulta", "Imagenes")
+                            .putInt("idImg", RecyclerViewAdapter.idImgElegida)
+                            .build();
 
-                // Peticion al Worker
-                OneTimeWorkRequest delete = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                        .setInputData(datos)
-                        .build();
+                    // Peticion al Worker
+                    OneTimeWorkRequest delete = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                            .setInputData(datos)
+                            .build();
 
-                WorkManager.getInstance(ImagenGaleria.this).getWorkInfoByIdLiveData(delete.getId()).observe(ImagenGaleria.this, new Observer<WorkInfo>() {
-                    @Override
-                    public void onChanged(WorkInfo workInfo) {
-                        if (workInfo != null && workInfo.getState().isFinished()) {
-                            System.out.println("Imagen borrada");
+                    WorkManager.getInstance(ImagenGaleria.this).getWorkInfoByIdLiveData(delete.getId()).observe(ImagenGaleria.this, new Observer<WorkInfo>() {
+                        @Override
+                        public void onChanged(WorkInfo workInfo) {
+                            if (workInfo != null && workInfo.getState().isFinished()) {
+                                System.out.println("Imagen borrada");
 
-                            //CERRAMOS LA ACTIVIDAD Y VOLVEMOS A LA GALERÍA
-                            Intent intent = new Intent(ImagenGaleria.this, GaleriaFotosRuta.class);
-                            intent.putExtra("idRuta", idRuta);
-                            intent.putExtra("editor", editor);
-                            intent.putExtra("parent", parent);
-                            startActivity(intent);
-                            finish();
+                                //CERRAMOS LA ACTIVIDAD Y VOLVEMOS A LA GALERÍA
+                                Intent intent = new Intent(ImagenGaleria.this, GaleriaFotosRuta.class);
+                                intent.putExtra("idRuta", idRuta);
+                                intent.putExtra("editor", editor);
+                                intent.putExtra("parent", parent);
+                                startActivity(intent);
+                                finish();
+                            }
                         }
-                    }
-                });
-                WorkManager.getInstance(ImagenGaleria.this).enqueue(delete);
+                    });
+                    WorkManager.getInstance(ImagenGaleria.this).enqueue(delete);
+                }else{
+                    Toast.makeText(ImagenGaleria.this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
+                }
             }
         });
 

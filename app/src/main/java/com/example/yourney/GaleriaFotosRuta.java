@@ -21,6 +21,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -118,12 +120,18 @@ public class GaleriaFotosRuta extends AppCompatActivity {
         imagesRV = findViewById(R.id.imgRV);
         prepareRecyclerView();
 
-        //OBTENEMOS TODAS LAS IMAGENES DE LA BD
-        String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
-        String params = "?consulta=ImagenesRuta&idRuta=" + idRuta;
-        TaskGetImagenes taskGetImagenes = new TaskGetImagenes(url + params, imagesRV, GaleriaFotosRuta.this);
-        taskGetImagenes.execute();
-
+        //COMPROBAMOS SI EXISTE CONEXIÓN A INTERNET
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        if(connected) {
+            //OBTENEMOS TODAS LAS IMAGENES DE LA BD
+            String url = "http://ec2-54-93-62-124.eu-central-1.compute.amazonaws.com/mmerino028/WEB/selectRutas.php";
+            String params = "?consulta=ImagenesRuta&idRuta=" + idRuta;
+            TaskGetImagenes taskGetImagenes = new TaskGetImagenes(url + params, imagesRV, GaleriaFotosRuta.this);
+            taskGetImagenes.execute();
+        }else{
+            Toast.makeText(this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
+        }
         //BOTÓN DE DESCARGAS
         ImageView descargar = findViewById(R.id.btnDescargar);
         descargar.setOnClickListener(new View.OnClickListener() {
@@ -167,20 +175,27 @@ public class GaleriaFotosRuta extends AppCompatActivity {
         btn_anadir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //ABRIMOS EL INTENT DE CAMARA Y GALERÍA
-                try{
-                    Intent i1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                //COMPROBAMOS SI EXISTE CONEXIÓN A INTERNET
+                ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+                if(connected) {
+                    //ABRIMOS EL INTENT DE CAMARA Y GALERÍA
+                    try {
+                        Intent i1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                    Intent i2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        Intent i2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                    Intent chooser = new Intent(Intent.ACTION_CHOOSER);
-                    chooser.putExtra(Intent.EXTRA_INTENT, i1);
+                        Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+                        chooser.putExtra(Intent.EXTRA_INTENT, i1);
 
-                    Intent[] intentArray = { i2 };
-                    chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
-                    startActivityForResult(chooser, 1); //ESTA DEPRECATED PERO FUNCIONA
-                } catch (Exception e){
-                    Log.d("DAS","Error la imagen no se carga correctamente");
+                        Intent[] intentArray = {i2};
+                        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+                        startActivityForResult(chooser, 1); //ESTA DEPRECATED PERO FUNCIONA
+                    } catch (Exception e) {
+                        Log.d("DAS", "Error la imagen no se carga correctamente");
+                    }
+                }else{
+                    Toast.makeText(GaleriaFotosRuta.this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
                 }
             }
         });
