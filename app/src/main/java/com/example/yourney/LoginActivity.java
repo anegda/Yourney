@@ -13,6 +13,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -60,90 +62,96 @@ public class LoginActivity extends AppCompatActivity {
 
     }
     public void login (View v){
+        //COMPROBAMOS SI EXISTE CONEXIÓN A INTERNET
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        if(connected) {
+            String pass = editPass.getText().toString();
+            String user = editUser.getText().toString();
 
-        String pass = editPass.getText().toString();
-        String user = editUser.getText().toString();
 
+            if (!pass.isEmpty() && !user.isEmpty()) {
 
-        if (!pass.isEmpty() && !user.isEmpty()){
+                // Obtengo el nombre de usuario y contraseña introducidos
+                String username = editUser.getText().toString();
+                String password = editPass.getText().toString();
 
-            // Obtengo el nombre de usuario y contraseña introducidos
-            String username = editUser.getText().toString();
-            String password = editPass.getText().toString();
+                // Comprobar credenciales contra la bbdd
+                Data datos = new Data.Builder()
+                        .putString("accion", "selectUsuario")
+                        .putString("consulta", "Login")
+                        .putString("username", username)
+                        .putString("password", password)
+                        .build();
 
-            // Comprobar credenciales contra la bbdd
-            Data datos = new Data.Builder()
-                    .putString("accion", "selectUsuario")
-                    .putString("consulta", "Login")
-                    .putString("username", username)
-                    .putString("password", password)
-                    .build();
+                // Peticion al Worker
+                OneTimeWorkRequest selectLogin = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                        .setInputData(datos)
+                        .build();
 
-            // Peticion al Worker
-            OneTimeWorkRequest selectLogin = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                    .setInputData(datos)
-                    .build();
+                WorkManager.getInstance(LoginActivity.this).getWorkInfoByIdLiveData(selectLogin.getId()).observe(LoginActivity.this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        // Gestiono la respuesta de la peticion
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            Data output = workInfo.getOutputData();
+                            if (!output.getString("resultado").equals("Sin resultado")) {
 
-            WorkManager.getInstance(LoginActivity.this).getWorkInfoByIdLiveData(selectLogin.getId()).observe(LoginActivity.this, new Observer<WorkInfo>() {
-                @Override
-                public void onChanged(WorkInfo workInfo) {
-                    // Gestiono la respuesta de la peticion
-                    if (workInfo != null && workInfo.getState().isFinished()) {
-                        Data output = workInfo.getOutputData();
-                        if(!output.getString("resultado").equals("Sin resultado")) {
-
-                            // Obtengo el token del usuario logueado
-                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                                @Override
-                                public void onComplete(@NonNull Task<String> task) {
-                                    if (!task.isSuccessful()) {
-                                        String token = "";
-                                        return;
-                                    }
-                                    String token = task.getResult();
-
-                                    // Registro el token del usuario en la bd
-                                    Data datos = new Data.Builder()
-                                            .putString("accion", "insert")
-                                            .putString("consulta", "Tokens")
-                                            .putString("username", username)
-                                            .putString("token", token)
-                                            .build();
-
-                                    OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                                            .setInputData(datos)
-                                            .build();
-
-                                    WorkManager.getInstance(LoginActivity.this).getWorkInfoByIdLiveData(insert.getId()).observe(LoginActivity.this, new Observer<WorkInfo>() {
-                                        @Override
-                                        public void onChanged(WorkInfo workInfo) {
-                                            if (workInfo != null && workInfo.getState().isFinished()) {
-                                                // Guardo el usuario en la sesion
-                                                Sesion sesion = new Sesion(LoginActivity.this);
-                                                sesion.setUsername(editUser.getText().toString());
-
-                                                // Paso a la siguiente actividad
-                                                Toast.makeText(LoginActivity.this, getString(R.string.login_correcto) + " " + user + "!", Toast.LENGTH_SHORT).show();
-                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                                startActivity(intent);
-
-                                                finish();
-                                            }
+                                // Obtengo el token del usuario logueado
+                                FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<String> task) {
+                                        if (!task.isSuccessful()) {
+                                            String token = "";
+                                            return;
                                         }
-                                    });
-                                    WorkManager.getInstance(LoginActivity.this).enqueue(insert);
-                                }
-                            });
-                        } else {
-                            Toast.makeText(LoginActivity.this, R.string.login_incorrecto, Toast.LENGTH_SHORT).show();
+                                        String token = task.getResult();
+
+                                        // Registro el token del usuario en la bd
+                                        Data datos = new Data.Builder()
+                                                .putString("accion", "insert")
+                                                .putString("consulta", "Tokens")
+                                                .putString("username", username)
+                                                .putString("token", token)
+                                                .build();
+
+                                        OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                                .setInputData(datos)
+                                                .build();
+
+                                        WorkManager.getInstance(LoginActivity.this).getWorkInfoByIdLiveData(insert.getId()).observe(LoginActivity.this, new Observer<WorkInfo>() {
+                                            @Override
+                                            public void onChanged(WorkInfo workInfo) {
+                                                if (workInfo != null && workInfo.getState().isFinished()) {
+                                                    // Guardo el usuario en la sesion
+                                                    Sesion sesion = new Sesion(LoginActivity.this);
+                                                    sesion.setUsername(editUser.getText().toString());
+
+                                                    // Paso a la siguiente actividad
+                                                    Toast.makeText(LoginActivity.this, getString(R.string.login_correcto) + " " + user + "!", Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                    startActivity(intent);
+
+                                                    finish();
+                                                }
+                                            }
+                                        });
+                                        WorkManager.getInstance(LoginActivity.this).enqueue(insert);
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(LoginActivity.this, R.string.login_incorrecto, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
-                }
-            });
-            WorkManager.getInstance(LoginActivity.this).enqueue(selectLogin);
+                });
+                WorkManager.getInstance(LoginActivity.this).enqueue(selectLogin);
 
+            } else {
+                Toast.makeText(this, R.string.str9, Toast.LENGTH_LONG).show();
+            }
         }else{
-            Toast.makeText(this, R.string.str9, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
         }
     }
 

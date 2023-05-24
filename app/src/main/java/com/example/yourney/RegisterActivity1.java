@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -71,19 +73,24 @@ public class RegisterActivity1 extends AppCompatActivity {
     };
 
     public void siguiente (View v){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        if(connected) {
+            String pass1 = editPass.getText().toString();
+            String pass2 = editPass2.getText().toString();
+            String user = editUser.getText().toString();
 
-        String pass1 = editPass.getText().toString();
-        String pass2 = editPass2.getText().toString();
-        String user = editUser.getText().toString();
 
-
-        if (pass1.equals(pass2) && !pass2.isEmpty() && !user.isEmpty()){
-            Intent intent = new Intent(this, RegisterActivity2.class);
-            intent.putExtra("pass", pass1);
-            intent.putExtra("user", user);
-            startActivity(intent);
+            if (pass1.equals(pass2) && !pass2.isEmpty() && !user.isEmpty()) {
+                Intent intent = new Intent(this, RegisterActivity2.class);
+                intent.putExtra("pass", pass1);
+                intent.putExtra("user", user);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, R.string.str9, Toast.LENGTH_LONG).show();
+            }
         }else{
-            Toast.makeText(this, R.string.str9, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
         }
     }
 

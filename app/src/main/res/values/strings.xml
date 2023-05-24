@@ -103,5 +103,6 @@
     <string name="comienzo">Comienzo</string>
     <string name="fin">Fin</string>
     <string name="mis_solicitudes">Mis solicitudes de amistad</string>
+    <string name="error_conexión">ERROR DE CONEXIÓN: Comprueba el estado de tu conexión a internet</string>
 
 </resources>

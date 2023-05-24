@@ -27,6 +27,8 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -185,140 +187,145 @@ public class RegisterActivity2 extends AppCompatActivity {
     }
 
     public void login(View v){
-        // Validar si el correo electrónico es válido utilizando una expresión regular
-        String email = editEmail.getText().toString().trim();
-        boolean isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean connected = (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||  connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED);
+        if(connected) {
+            // Validar si el correo electrónico es válido utilizando una expresión regular
+            String email = editEmail.getText().toString().trim();
+            boolean isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
 
-        if (isEmailValid) {
-            // obtener bitmap del imageview actual --> comprimirla --> convertirlo en base64 para subirlo a la bbdd
-            //if (fotoperfil.getDrawable()!=null) {
-            if (fotoen64 == null) {
-                ImageView fotoPerfil = (ImageView) findViewById(R.id.fotoperfil);
-                Bitmap img = ((BitmapDrawable) fotoPerfil.getDrawable()).getBitmap();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                img.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                byte[] b = baos.toByteArray();
-                //PARA QUE NO EXISTAN PROBLEMAS CON EL TAMAÑO DE LA IMAGEN
-                b = tratarImagen(b);
-                fotoen64 = Base64.getEncoder().encodeToString(b);
-            }
+            if (isEmailValid) {
+                // obtener bitmap del imageview actual --> comprimirla --> convertirlo en base64 para subirlo a la bbdd
+                //if (fotoperfil.getDrawable()!=null) {
+                if (fotoen64 == null) {
+                    ImageView fotoPerfil = (ImageView) findViewById(R.id.fotoperfil);
+                    Bitmap img = ((BitmapDrawable) fotoPerfil.getDrawable()).getBitmap();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    img.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                    byte[] b = baos.toByteArray();
+                    //PARA QUE NO EXISTAN PROBLEMAS CON EL TAMAÑO DE LA IMAGEN
+                    b = tratarImagen(b);
+                    fotoen64 = Base64.getEncoder().encodeToString(b);
+                }
 
-            System.out.println("******** BOTON PULSADO ********");
-            System.out.println(fotoen64);
+                System.out.println("******** BOTON PULSADO ********");
+                System.out.println(fotoen64);
 
-            // Obtengo los datos a introducir en la BD
-            String nombre = editNombre.getText().toString();
-            String apellidos = editApellido.getText().toString();
+                // Obtengo los datos a introducir en la BD
+                String nombre = editNombre.getText().toString();
+                String apellidos = editApellido.getText().toString();
 
-            // Comprobar credenciales contra la BD
-            Data datos = new Data.Builder()
-                     .putString("accion", "selectUsuario")
-                     .putString("consulta", "Usuarios")
-                     .putString("actividad", "Registro")
-                     .putString("username", user)
-                     .build();
+                // Comprobar credenciales contra la BD
+                Data datos = new Data.Builder()
+                        .putString("accion", "selectUsuario")
+                        .putString("consulta", "Usuarios")
+                        .putString("actividad", "Registro")
+                        .putString("username", user)
+                        .build();
 
-            // Peticion al Worker
-            OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                    .setInputData(datos)
-                    .build();
+                // Peticion al Worker
+                OneTimeWorkRequest select = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                        .setInputData(datos)
+                        .build();
 
-            WorkManager.getInstance(RegisterActivity2.this).getWorkInfoByIdLiveData(select.getId()).observe(RegisterActivity2.this, new Observer<WorkInfo>() {
-                @Override
-                public void onChanged(WorkInfo workInfo) {
-                    // Gestiono la respuesta de la peticion
-                    if (workInfo != null && workInfo.getState().isFinished()) {
-                        Data output = workInfo.getOutputData();
-                        if (!output.getString("resultado").equals("Sin resultado")) {
-                            Toast.makeText(RegisterActivity2.this, R.string.registro_incorrecto, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Data datos = new Data.Builder()
-                                    .putString("accion", "insert")
-                                    .putString("consulta", "Usuarios")
-                                    .putString("username", user.trim())
-                                    .putString("nombre", nombre)
-                                    .putString("apellidos", apellidos)
-                                    .putString("password", pass)
-                                    .putString("email", email)
-                                    .build();
+                WorkManager.getInstance(RegisterActivity2.this).getWorkInfoByIdLiveData(select.getId()).observe(RegisterActivity2.this, new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(WorkInfo workInfo) {
+                        // Gestiono la respuesta de la peticion
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            Data output = workInfo.getOutputData();
+                            if (!output.getString("resultado").equals("Sin resultado")) {
+                                Toast.makeText(RegisterActivity2.this, R.string.registro_incorrecto, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Data datos = new Data.Builder()
+                                        .putString("accion", "insert")
+                                        .putString("consulta", "Usuarios")
+                                        .putString("username", user.trim())
+                                        .putString("nombre", nombre)
+                                        .putString("apellidos", apellidos)
+                                        .putString("password", pass)
+                                        .putString("email", email)
+                                        .build();
 
-                            OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                                    .setInputData(datos)
-                                    .build();
+                                OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                        .setInputData(datos)
+                                        .build();
 
-                            // Introduzco en la BD
-                            WorkManager.getInstance(RegisterActivity2.this).getWorkInfoByIdLiveData(insert.getId()).observe(RegisterActivity2.this, new Observer<WorkInfo>() {
-                                @Override
-                                public void onChanged(WorkInfo workInfo) {
-                                    if (workInfo != null && workInfo.getState().isFinished()) {
-                                        Data output = workInfo.getOutputData();
-                                        if (output.getBoolean("resultado", false)) {
+                                // Introduzco en la BD
+                                WorkManager.getInstance(RegisterActivity2.this).getWorkInfoByIdLiveData(insert.getId()).observe(RegisterActivity2.this, new Observer<WorkInfo>() {
+                                    @Override
+                                    public void onChanged(WorkInfo workInfo) {
+                                        if (workInfo != null && workInfo.getState().isFinished()) {
+                                            Data output = workInfo.getOutputData();
+                                            if (output.getBoolean("resultado", false)) {
 
-                                            // Obtengo el token del usuario registrado
-                                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<String> task) {
-                                                    if (!task.isSuccessful()) {
-                                                        String token = "";
-                                                        return;
-                                                    }
-                                                    String token = task.getResult();
-
-                                                    // Registro el token del usuario en la bd
-                                                    Data datos = new Data.Builder()
-                                                            .putString("accion", "insert")
-                                                            .putString("consulta", "Tokens")
-                                                            .putString("username", user)
-                                                            .putString("token", token)
-                                                            .build();
-
-                                                    OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
-                                                            .setInputData(datos)
-                                                            .build();
-
-                                                    WorkManager.getInstance(RegisterActivity2.this).getWorkInfoByIdLiveData(insert.getId()).observe(RegisterActivity2.this, new Observer<WorkInfo>() {
-                                                        @Override
-                                                        public void onChanged(WorkInfo workInfo) {
-                                                            if (workInfo != null && workInfo.getState().isFinished()) {
-                                                            }
+                                                // Obtengo el token del usuario registrado
+                                                FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<String> task) {
+                                                        if (!task.isSuccessful()) {
+                                                            String token = "";
+                                                            return;
                                                         }
-                                                    });
-                                                    WorkManager.getInstance(RegisterActivity2.this).enqueue(insert);
-                                                }
-                                            });
+                                                        String token = task.getResult();
 
-                                            // Guardo el usuario en la sesion
-                                            Sesion sesion = new Sesion(RegisterActivity2.this);
-                                            sesion.setUsername(user);
+                                                        // Registro el token del usuario en la bd
+                                                        Data datos = new Data.Builder()
+                                                                .putString("accion", "insert")
+                                                                .putString("consulta", "Tokens")
+                                                                .putString("username", user)
+                                                                .putString("token", token)
+                                                                .build();
 
-                                            System.out.println("***** " + fotoen64);
-                                            // Paso a la siguiente actividad
-                                            Toast.makeText(RegisterActivity2.this, getString(R.string.registro_correcto) + " " + user + "!", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(RegisterActivity2.this, MainActivity.class);
-                                            startActivity(intent);
+                                                        OneTimeWorkRequest insert = new OneTimeWorkRequest.Builder(ConexionBD.class)
+                                                                .setInputData(datos)
+                                                                .build();
 
-                                            // Cerramos la anterior actividad
-                                            Intent i = new Intent();
-                                            i.setAction("finish");
-                                            sendBroadcast(i);
+                                                        WorkManager.getInstance(RegisterActivity2.this).getWorkInfoByIdLiveData(insert.getId()).observe(RegisterActivity2.this, new Observer<WorkInfo>() {
+                                                            @Override
+                                                            public void onChanged(WorkInfo workInfo) {
+                                                                if (workInfo != null && workInfo.getState().isFinished()) {
+                                                                }
+                                                            }
+                                                        });
+                                                        WorkManager.getInstance(RegisterActivity2.this).enqueue(insert);
+                                                    }
+                                                });
 
-                                            // Cerramos esta actividad
-                                            finish();
+                                                // Guardo el usuario en la sesion
+                                                Sesion sesion = new Sesion(RegisterActivity2.this);
+                                                sesion.setUsername(user);
+
+                                                System.out.println("***** " + fotoen64);
+                                                // Paso a la siguiente actividad
+                                                Toast.makeText(RegisterActivity2.this, getString(R.string.registro_correcto) + " " + user + "!", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(RegisterActivity2.this, MainActivity.class);
+                                                startActivity(intent);
+
+                                                // Cerramos la anterior actividad
+                                                Intent i = new Intent();
+                                                i.setAction("finish");
+                                                sendBroadcast(i);
+
+                                                // Cerramos esta actividad
+                                                finish();
+                                            }
                                         }
                                     }
-                                }
-                            });
-                            WorkManager.getInstance(RegisterActivity2.this).enqueue(insert);
+                                });
+                                WorkManager.getInstance(RegisterActivity2.this).enqueue(insert);
+                            }
                         }
                     }
-                }
-            });
-            WorkManager.getInstance(RegisterActivity2.this).enqueue(select);
+                });
+                WorkManager.getInstance(RegisterActivity2.this).enqueue(select);
 
-        } else {
-            Toast.makeText(this, "Registro incorrecto", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Registro incorrecto", Toast.LENGTH_LONG).show();
+            }
+        }else{
+            Toast.makeText(this, getString(R.string.error_conexión), Toast.LENGTH_LONG).show();
         }
-
     }
 
     public void setFotopPerfil(View v){
