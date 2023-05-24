@@ -59,6 +59,7 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
     private boolean esFavorito = false;
     String idRuta2;
     private String parent;
+    static String resultadoUbis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -416,15 +417,14 @@ public class VerRuta extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onChanged(WorkInfo workInfo) {
                 if (workInfo != null && workInfo.getState().isFinished()) {
-                    Data output = workInfo.getOutputData();
-                    if(!output.getString("resultado").equals("Sin resultado")) {
+                    if(resultadoUbis!=null) {
                         JSONParser parser = new JSONParser();
                         try {
                             PolylineOptions line = new PolylineOptions().clickable(false);
                             LatLng firstLoc = null;
                             LatLng lastLoc = null;
 
-                            JSONArray jsonResultado = (JSONArray) parser.parse(output.getString("resultado"));
+                            JSONArray jsonResultado = (JSONArray) parser.parse(resultadoUbis);
 
                             Integer i = 0;
                             while(i < jsonResultado.size()){

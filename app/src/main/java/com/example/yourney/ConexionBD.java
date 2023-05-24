@@ -327,7 +327,6 @@ public class ConexionBD extends Worker {
                 }
                 input.close();
 
-                Log.d("DAS", resultado);
                 if (!resultado.equals("Sin resultado")) {
                     switch(consulta) {
                         case "InfoRuta":
@@ -351,6 +350,10 @@ public class ConexionBD extends Worker {
                             EditarRuta.fotoDescriptiva = (String) fila.get("FotoDesc");
                             return output;
                         case "UbisRuta":
+                            Log.d("DAS1", resultado);
+                            VerRuta.resultadoUbis = resultado;
+                            output = new Data.Builder().putString("resultado", "enviando").build();
+                            break;
                         case "UltimaRuta":
                         case "RutasGuardadas2":
                             output = new Data.Builder().putString("resultado", resultado).build();
